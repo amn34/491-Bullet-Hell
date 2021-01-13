@@ -6,7 +6,7 @@ class Player {
         this.animations = [];
 
         // The movespeed for the player unnormalized (you move faster diagonally)
-        this.moveSpeed = 10;
+        this.moveSpeed = 7;
         this.game = game;
 
         // The starting corrdinates
@@ -23,6 +23,11 @@ class Player {
         // currently has a powerup
         // 0 - powerup, 1 - no powerup
         this.powerup = 1;
+
+        // Can shoot once this reaches 10
+        this.canShoot = 9;
+        this.threshHold = 10;
+        this.damage = 5;
 
         this.loadAnimations()           
     }
@@ -55,6 +60,12 @@ class Player {
 
 
     draw(ctx) {
+        this.canShoot++;
+        if (this.canShoot == this.threshHold) {
+            this.game.addEntity(new PlayerBullet(this.game, this.x, this.y, 1, this.x, this.y));
+            this.canShoot = 0;
+        }
+        
         this.animations[this.life][this.powerup].drawFrame(this.game.clockTick, ctx, this.x, this.y, 3);
         
         // Static player animations for testing
@@ -85,7 +96,7 @@ class AltPlayer {
     constructor(game) {
         this.sprite = ASSET_MANAGER.getAsset("./../res/altPlayer.png");
         this.animation = new Animator(this.sprite, 0, 1, 32, 30, 1, 0.1, 0, false, true);
-        this.moveSpeed = 10;
+        this.moveSpeed = 7;
         this.game = game;
         this.x = 400;
         this.y = 300;
@@ -101,10 +112,20 @@ class AltPlayer {
         // 0 - powerup, 1 - no powerup
         this.powerup = 1;
 
-        // this.loadAnimations()           
+        // Can shoot once this reaches 10
+        this.canShoot = 69;
+        this.threshHold = 70;
+
+        this.damage = 35;
     }
 
     draw(ctx) {
+        this.canShoot++;
+        if (this.canShoot == this.threshHold) {
+            this.game.addEntity(new AltPlayerBullet(this.game, this.x, this.y, 1, this.x, this.y));
+            this.canShoot = 0;
+        }
+
         this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);        
     }
 
