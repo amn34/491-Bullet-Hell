@@ -43,3 +43,35 @@ class Brain {
         }
     }
 }
+
+/**
+ * Chululu sprite has potential to be a boss level sprite. Default animation is hovering while tentacles move.
+ */
+class Chutulu {
+    constructor(game, x, y) {
+        Object.assign(this, {game, x, y});
+        this.sprite = ASSET_MANAGER.getAsset("./..res/chutuluSprite.png");
+
+        // May update to include more animations later on depending on damage received, attack moves, etc.
+        this.animations = [];
+        // Default floating animation.
+        this.animations.push(new Animator(this.sprite, 0, 0, 270, 245, 10, 0.2,
+            false, false, true));
+
+        // Control size of sprite (may come up w/ better solution).
+        this.scaleSize = 2;
+    };
+
+    /**
+     * Chutulu update method.
+     */
+    update() {};
+
+    /**
+     * Chutulu draw method. Single default animation.
+     * @param ctx context.
+     */
+    draw(ctx) {
+        this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleSize);
+    };
+}
