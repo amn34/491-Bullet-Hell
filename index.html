@@ -3,6 +3,8 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Game Project Title Goes Here</title>
 
     <script type="text/javascript" src="./src/assetmanager.js"></script>
@@ -16,12 +18,30 @@
     <script type="text/javascript" src="./src/util.js"></script>
     <script type="text/javascript" src="./src/main.js"></script>
     <script type="text/javascript" src="./src/scenemanager.js"></script>
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
-    <canvas id="gameWorld" width="760" height="768" style="background: white; border: 1px solid black"
-        tabindex="1"></canvas>
+    <div class="components screen">
+        <canvas id="gameWorld" width="768" height="760" tabindex="1"></canvas>
+    </div>
+    <div class="components times">
+        <div class="stopwatch">
+            <h4>Level Time</h4>
+            <span id="minutes">00</span> :
+            <span id="seconds">00</span> :
+            <span id="millis">000</span>
+        </div>
+
+        <div class="stopwatch">
+            <h4>Total Time</h4>
+            <span id="tot-minutes">00</span> :
+            <span id="tot-seconds">00</span> :
+            <span id="tot-millis">0</span>
+        </div>
+    </div>
+    
 </body>
 
 </html>

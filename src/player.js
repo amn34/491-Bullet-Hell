@@ -10,12 +10,11 @@ class Player {
         this.game = game;
 
         // The starting corrdinates
-        this.x = 300;
-        this.y = 300;
+        this.x = 328;
+        this.y = 640;
 
         this.speedX = 0;
         this.speedY = 0;
-
 
         // how many hits left before death
         // 0 - full health, 
@@ -26,10 +25,10 @@ class Player {
         
         // currently has a powerup
         // 0 - powerup, 1 - no powerup
-        this.powerup = 1;
+        this.powerup = 0;
 
         // Can shoot once this reaches 10
-        this.canShoot = 9;
+        this.canShoot = 0;
         this.threshHold = 10;
         this.damage = 5;
 
@@ -107,10 +106,10 @@ class AltPlayer {
     constructor(game) {
         this.sprite = ASSET_MANAGER.getAsset("./res/altPlayer.png");
         this.animation = new Animator(this.sprite, 0, 1, 32, 30, 1, 0.1, 0, false, true);
-        this.moveSpeed = 5;
+        this.moveSpeed = 3;
         this.game = game;
         this.x = 400;
-        this.y = 300;
+        this.y = 640;
 
         this.speedX = 0;
         this.speedY = 0;
