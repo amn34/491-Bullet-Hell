@@ -2,7 +2,7 @@ class Player {
     constructor(game) {
 
         // Sprite and animation for the player
-        this.sprite = ASSET_MANAGER.getAsset("./../res/arcadeShooterSpritex32.png");
+        this.sprite = ASSET_MANAGER.getAsset("./res/arcadeShooterSpritex32.png");
         this.animations = [];
 
         // The movespeed for the player unnormalized (you move faster diagonally)
@@ -94,7 +94,7 @@ class Player {
 
 class AltPlayer {
     constructor(game) {
-        this.sprite = ASSET_MANAGER.getAsset("./../res/altPlayer.png");
+        this.sprite = ASSET_MANAGER.getAsset("./res/altPlayer.png");
         this.animation = new Animator(this.sprite, 0, 1, 32, 30, 1, 0.1, 0, false, true);
         this.moveSpeed = 7;
         this.game = game;
