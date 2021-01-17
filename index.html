@@ -16,12 +16,21 @@
     <script type="text/javascript" src="./src/util.js"></script>
     <script type="text/javascript" src="./src/main.js"></script>
     <script type="text/javascript" src="./src/scenemanager.js"></script>
-
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <canvas id="gameWorld" width="760" height="768" style="background: white; border: 1px solid black"
-        tabindex="1"></canvas>
+    <div class="components screen">
+        <canvas id="gameWorld" width="768" height="760" tabindex="1"></canvas>
+    </div>
+    <div class="components">
+        <div class="stopwatch">
+            <span id="minutes">00</span> :
+            <span id="seconds">00</span> :
+            <span id="millis">000</span>
+        </div>
+    </div>
+    
 </body>
 
 </html>

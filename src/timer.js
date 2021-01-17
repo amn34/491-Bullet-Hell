@@ -14,6 +14,23 @@ class Timer {
 
         var gameDelta = Math.min(delta, this.maxStep);
         this.gameTime += gameDelta;
+
+        this.displayTime();
         return gameDelta;
     };
+
+    displayTime() {
+        var time = this.gameTime;
+        const minutes = Math.floor(time / 60);
+
+        time %= 60;
+        const seconds = Math.floor(time);
+        
+        time -= seconds;
+        const millis = Math.floor(time * 10);
+
+        document.getElementById("minutes").textContent = (minutes < 10 ? "0" : "") + minutes;
+        document.getElementById("seconds").textContent = (seconds < 10 ? "0" : "") + seconds;
+        document.getElementById("millis").textContent = millis;
+    }
 };
