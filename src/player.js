@@ -6,12 +6,16 @@ class Player {
         this.animations = [];
 
         // The movespeed for the player unnormalized (you move faster diagonally)
-        this.moveSpeed = 7;
+        this.moveSpeed = 3;
         this.game = game;
 
         // The starting corrdinates
         this.x = 300;
         this.y = 300;
+
+        this.speedX = 0;
+        this.speedY = 0;
+
 
         // how many hits left before death
         // 0 - full health, 
@@ -83,11 +87,18 @@ class Player {
     update() {
         // pressing wasd or arrow keys moves the player
         //  Note: this moves all players at the same time
-        this.x -= this.game.left ? this.moveSpeed : 0;
-        this.x += this.game.right ? this.moveSpeed : 0;
+        this.speedX -= this.game.left ? this.moveSpeed : 0;
+        this.speedX += this.game.right ? this.moveSpeed : 0;
 
-        this.y -= this.game.up ? this.moveSpeed : 0;
-        this.y += this.game.down ? this.moveSpeed : 0;
+        this.speedY -= this.game.up ? this.moveSpeed : 0;
+        this.speedY += this.game.down ? this.moveSpeed : 0;
+
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        this.speedX *= 0.8;
+        this.speedY *= 0.8;
+
     }
 }
 
@@ -96,10 +107,14 @@ class AltPlayer {
     constructor(game) {
         this.sprite = ASSET_MANAGER.getAsset("./res/altPlayer.png");
         this.animation = new Animator(this.sprite, 0, 1, 32, 30, 1, 0.1, 0, false, true);
-        this.moveSpeed = 7;
+        this.moveSpeed = 5;
         this.game = game;
         this.x = 400;
         this.y = 300;
+
+        this.speedX = 0;
+        this.speedY = 0;
+
 
         // how many hits left before death
         // 0 - full health, 
@@ -130,10 +145,16 @@ class AltPlayer {
     }
 
     update() {
-        this.x -= this.game.left ? this.moveSpeed : 0;
-        this.x += this.game.right ? this.moveSpeed : 0;
+        this.speedX -= this.game.left ? this.moveSpeed : 0;
+        this.speedX += this.game.right ? this.moveSpeed : 0;
 
-        this.y -= this.game.up ? this.moveSpeed : 0;
-        this.y += this.game.down ? this.moveSpeed : 0;
+        this.speedY -= this.game.up ? this.moveSpeed : 0;
+        this.speedY += this.game.down ? this.moveSpeed : 0;
+
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        this.speedX *= 0.8;
+        this.speedY *= 0.8;
     }
 }
