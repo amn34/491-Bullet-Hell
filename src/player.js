@@ -2,7 +2,7 @@ class Player {
     constructor(game) {
 
         // Sprite and animation for the player
-        this.sprite = ASSET_MANAGER.getAsset("./../res/arcadeShooterSpritex32.png");
+        this.sprite = ASSET_MANAGER.getAsset("./res/arcadeShooterSpritex32.png");
         this.animations = [];
 
         // The movespeed for the player unnormalized (you move faster diagonally)
@@ -19,7 +19,7 @@ class Player {
         // 2 - 1 hit left, 
         // 3 - dead
         this.life = 0
-        
+
         // currently has a powerup
         // 0 - powerup, 1 - no powerup
         this.powerup = 1;
@@ -29,31 +29,31 @@ class Player {
         this.threshHold = 10;
         this.damage = 5;
 
-        this.loadAnimations()           
+        this.loadAnimations()
     }
 
     loadAnimations() {
         this.animations[0] = [];
         this.animations[1] = [];
         this.animations[2] = [];
-        
+
         // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
 
         // All lives + powerup
         this.animations[0].push(new Animator(this.sprite, 6, 5, 18, 21, 4, 0.1, 14, false, true));
-        
+
         // All lives no powerup
         this.animations[0].push(new Animator(this.sprite, 6, 37, 18, 21, 4, 0.1, 14, false, true));
 
         // 2 lives + powerup
         this.animations[1].push(new Animator(this.sprite, 6, 69, 18, 21, 4, 0.1, 14, false, true));
-        
+
         // 2 lives no powerup
         this.animations[1].push(new Animator(this.sprite, 6, 101, 18, 21, 4, 0.1, 14, false, true));
 
         // 1 life powerup
         this.animations[2].push(new Animator(this.sprite, 6, 133, 18, 21, 4, 0.1, 14, false, true));
-        
+
         // 1 life no powerup
         this.animations[2].push(new Animator(this.sprite, 6, 165, 18, 21, 4, 0.1, 14, false, true));
     }
@@ -65,9 +65,9 @@ class Player {
             this.game.addEntity(new PlayerBullet(this.game, this.x, this.y, 1, this.x, this.y));
             this.canShoot = 0;
         }
-        
+
         this.animations[this.life][this.powerup].drawFrame(this.game.clockTick, ctx, this.x, this.y, 3);
-        
+
         // Static player animations for testing
 
         // this.animations[0][0].drawFrame(this.game.clockTick, ctx, 0, 0, 4);
@@ -94,7 +94,7 @@ class Player {
 
 class AltPlayer {
     constructor(game) {
-        this.sprite = ASSET_MANAGER.getAsset("./../res/altPlayer.png");
+        this.sprite = ASSET_MANAGER.getAsset("./res/altPlayer.png");
         this.animation = new Animator(this.sprite, 0, 1, 32, 30, 1, 0.1, 0, false, true);
         this.moveSpeed = 7;
         this.game = game;
@@ -107,7 +107,7 @@ class AltPlayer {
         // 2 - 1 hit left, 
         // 3 - dead
         this.life = 0
-        
+
         // currently has a powerup
         // 0 - powerup, 1 - no powerup
         this.powerup = 1;
@@ -126,7 +126,7 @@ class AltPlayer {
             this.canShoot = 0;
         }
 
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);        
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
     }
 
     update() {

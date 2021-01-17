@@ -1,6 +1,6 @@
 class Brain {
     constructor(game) {
-        this.sprite = ASSET_MANAGER.getAsset("./../res/enemy.png");
+        this.sprite = ASSET_MANAGER.getAsset("./res/enemy.png");
         // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
         this.animation = new Animator(this.sprite, 0, 1, 31, 30, 1, 0.5, 0, false, true);
 
@@ -49,8 +49,8 @@ class Brain {
  */
 class Chutulu {
     constructor(game, x, y) {
-        Object.assign(this, {game, x, y});
-        this.sprite = ASSET_MANAGER.getAsset("./..res/chutuluSprite.png");
+        Object.assign(this, { game, x, y });
+        this.sprite = ASSET_MANAGER.getAsset("./res/chutuluSprite.png");
 
         // May update to include more animations later on depending on damage received, attack moves, etc.
         this.animations = [];
@@ -65,7 +65,7 @@ class Chutulu {
     /**
      * Chutulu update method.
      */
-    update() {};
+    update() { };
 
     /**
      * Chutulu draw method. Single default animation.

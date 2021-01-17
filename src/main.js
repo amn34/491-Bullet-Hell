@@ -4,10 +4,10 @@ var ASSET_MANAGER = new AssetManager();
 
 // Load assets here
 // Might need a separate load manager here
-ASSET_MANAGER.queueDownload("./../res/arcadeShooterSpritex32.png");
-ASSET_MANAGER.queueDownload("./../res/altPlayer.png");
-ASSET_MANAGER.queueDownload("./../res/enemy.png");
-ASSET_MANAGER.queueDownload("./../res/chutuluSprite.png");
+ASSET_MANAGER.queueDownload("./res/arcadeShooterSpritex32.png");
+ASSET_MANAGER.queueDownload("./res/altPlayer.png");
+ASSET_MANAGER.queueDownload("./res/enemy.png");
+ASSET_MANAGER.queueDownload("./res/chutuluSprite.png");
 
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
@@ -25,6 +25,6 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(new AltPlayer(gameEngine));
 	gameEngine.addEntity(new Brain(gameEngine));
 
-	
+
 	gameEngine.start();
 });
