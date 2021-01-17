@@ -11,8 +11,14 @@ class SceneManager {
      */
     buildLevel() {
 
-        // this.chutulu = new Chutulu(this.game, 100, 100);
-        // this.game.addEntity(this.chutulu);
+
+        this.game.addEntity(new Background(this.game, 0, -760, "./res/cavebg.png"));
+        this.game.addEntity(new Background(this.game, 0, 0, "./res/cavebg.png"));
+
+        this.game.addEntity(new Player(this.game));
+        this.game.addEntity(new AltPlayer(this.game));
+        this.game.addEntity(new Brain(this.game));
+        this.game.addEntity(new Cthulhu(this.game));
     };
 
     update() {};
