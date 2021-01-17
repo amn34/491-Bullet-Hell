@@ -7,12 +7,13 @@ var ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./../res/arcadeShooterSpritex32.png");
 ASSET_MANAGER.queueDownload("./../res/altPlayer.png");
 ASSET_MANAGER.queueDownload("./../res/enemy.png");
+ASSET_MANAGER.queueDownload("./../res/chutuluSprite.png");
 
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
 
-	// Focusses the canvas automatically so the user 
+	// Focuses the canvas automatically so the user
 	// does not need to click on the screen.
 	// If the user clicks outside the screen , the focus is lost
 	canvas.focus();
