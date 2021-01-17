@@ -20,7 +20,7 @@ class Brain {
     draw(ctx) {
         this.canShoot++;
 
-        if (this.canShoot == this.threshHold) {
+        if (this.canShoot === this.threshHold) {
             this.game.addEntity(new BrainBullet(this.game, this.x, this.y, 1));
             this.canShoot = 0;
         }
@@ -35,10 +35,10 @@ class Brain {
             this.x--;
         }
 
-        if (this.x == 100 && this.goRight) {
+        if (this.x === 100 && this.goRight) {
             this.goRight = !this.goRight;
 
-        } else if (this.x == 0 && !this.goRight) {
+        } else if (this.x === 0 && !this.goRight) {
             this.goRight = !this.goRight;
         }
     }
@@ -47,7 +47,7 @@ class Brain {
 /**
  * Chululu sprite has potential to be a boss level sprite. Default animation is hovering while tentacles move.
  */
-class Chutulu {
+class Cthulhu {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
         this.sprite = ASSET_MANAGER.getAsset("./res/chutuluSprite.png");
@@ -55,11 +55,18 @@ class Chutulu {
         // May update to include more animations later on depending on damage received, attack moves, etc.
         this.animations = [];
         // Default floating animation.
-        this.animations.push(new Animator(this.sprite, 0, 0, 270, 245, 10, 0.2,
+        this.animations.push(new Animator(this.sprite, 0, 0, 270, 245, 10, 0.3,
             false, false, true));
 
         // Control size of sprite (may come up w/ better solution).
-        this.scaleSize = 2;
+        this.scaleSize = 1;
+
+        // Location of sprite
+        this.x = 375;
+        this.y = 40;
+
+        this.goRight = true;
+
     };
 
     /**
@@ -72,6 +79,7 @@ class Chutulu {
      * @param ctx context.
      */
     draw(ctx) {
+
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleSize);
     };
 }
