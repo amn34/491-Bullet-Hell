@@ -23,7 +23,7 @@ class Timer {
         var time = this.gameTime;
         const minutes = Math.floor(time / 60);
 
-        time %= 60;
+        time -= (minutes * 60);
         const seconds = Math.floor(time);
         
         time -= seconds;
