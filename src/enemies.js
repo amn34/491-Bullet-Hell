@@ -60,8 +60,8 @@ class Brain {
  */
 class Cthulhu {
     constructor(game, x, y) {
-        Object.assign(this, {game, x, y});
-        this.sprite = ASSET_MANAGER.getAsset("./res/cthulhuSprite.png");
+        Object.assign(this, { game, x, y });
+        this.sprite = ASSET_MANAGER.getAsset("./res/chutuluSprite.png");
 
         // May update to include more animations later on depending on damage received, attack moves, etc.
         this.animations = [];
@@ -83,22 +83,7 @@ class Cthulhu {
     /**
      * Chutulu update method.
      */
-    update() {
-
-
-        if (this.x <= 550 && this.goRight) {
-            this.x++;
-        } else {
-            this.x--;
-        }
-
-        if (this.x === 550 && this.goRight) {
-            this.goRight = !this.goRight;
-
-        } else if (this.x === 200 && !this.goRight) {
-            this.goRight = !this.goRight;
-        }
-    }
+    update() { };
 
     /**
      * Chutulu draw method. Single default animation.
