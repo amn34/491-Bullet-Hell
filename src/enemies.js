@@ -1,12 +1,21 @@
 class Brain {
     constructor(game) {
-        this.sprite = ASSET_MANAGER.getAsset("./res/enemy.png");
-        // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
-        this.animation = new Animator(this.sprite, 0, 1, 31, 30, 1, 0.5, 0, false, true);
 
         this.game = game;
+
+        this.frameWidth = 31;
+        this.frameHeight = 30;
+
+        this.sprite = ASSET_MANAGER.getAsset("./res/enemy.png");
+        // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
+        this.animation = new Animator(this.sprite, 0, 1, this.frameWidth, this.frameHeight, 1, 0.5, 0, false, true);
+
         this.x = 50;
         this.y = 50
+        this.scale = 3;
+
+        this.width = 31 * this.scale;
+        this.height = 30 * this.scale;
 
         // Can shoot once this reaches 100
         this.canShoot = 9;
@@ -15,17 +24,19 @@ class Brain {
 
         // Determines the path of the enemy
         this.goRight = true;
+
     }
 
     draw(ctx) {
         this.canShoot++;
 
         if (this.canShoot === this.threshHold) {
-            this.game.addEntity(new BrainBullet(this.game, this.x, this.y, 1));
+            let center = this.x + (this.width / 2);
+            this.game.addEntity(new BrainBullet(this.game, center, this.y + this.height, 1));
             this.canShoot = 0;
         }
 
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, 3);
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
     }
 
     update() {
