@@ -16,12 +16,14 @@ class SceneManager {
         this.game.addEntity(new Background(this.game, 0, 0, "./res/cavebg.png"));
 
         this.game.addEntity(new Player(this.game));
-        //this.game.addEntity(new AltPlayer(this.game));
+        this.game.addEntity(new AltPlayer(this.game));
         this.game.addEntity(new Brain(this.game));
         this.game.addEntity(new Cthulhu(this.game));
     };
 
-    update() {};
+    update() {
+        PARAMS.DEBUG = document.getElementById("debug").checked;
+    };
 
     draw(ctx) {};
 }

@@ -92,4 +92,9 @@ class BrainBullet {
     updateBB() {
         this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
     };
+
+    destroy() {
+        this.removeFromWorld = true;
+        console.log('destroying item');
+    }
 }
