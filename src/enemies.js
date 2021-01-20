@@ -61,7 +61,7 @@ class Brain {
 class Cthulhu {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
-        this.sprite = ASSET_MANAGER.getAsset("./res/chutuluSprite.png");
+        this.sprite = ASSET_MANAGER.getAsset("./res/cthulhuSprite.png");
 
         // May update to include more animations later on depending on damage received, attack moves, etc.
         this.animations = [];

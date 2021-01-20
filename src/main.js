@@ -7,7 +7,8 @@ var ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./res/arcadeShooterSpritex32.png");
 ASSET_MANAGER.queueDownload("./res/altPlayer.png");
 ASSET_MANAGER.queueDownload("./res/enemy.png");
-ASSET_MANAGER.queueDownload("./res/chutuluSprite.png");
+ASSET_MANAGER.queueDownload("./res/cthulhuSprite.png");
+ASSET_MANAGER.queueDownload("./res/cavebg.png");
 
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
@@ -19,11 +20,15 @@ ASSET_MANAGER.downloadAll(function () {
 	canvas.focus();
 	gameEngine.init(ctx);
 
+	gameEngine.addEntity(new Background(gameEngine, 0, -760, "./res/cavebg.png"));
+	gameEngine.addEntity(new Background(gameEngine, 0, 0, "./res/cavebg.png"));
+
 	// This is where we will add the scene manager to handle
 	// the adding and removing of entities
 	gameEngine.addEntity(new Player(gameEngine));
 	gameEngine.addEntity(new AltPlayer(gameEngine));
 	gameEngine.addEntity(new Brain(gameEngine));
+	gameEngine.addEntity(new Cthulhu(gameEngine));
 
 
 	gameEngine.start();
