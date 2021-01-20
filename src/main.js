@@ -10,6 +10,14 @@ ASSET_MANAGER.queueDownload("./res/brain.png");
 ASSET_MANAGER.queueDownload("./res/cthulhuSprite.png");
 ASSET_MANAGER.queueDownload("./res/eye.png");
 ASSET_MANAGER.queueDownload("./res/cavebg.png");
+ASSET_MANAGER.queueDownload("./res/enemy.png");
+ASSET_MANAGER.queueDownload("./res/ap1_pu.png");
+ASSET_MANAGER.queueDownload("./res/ap2_pu.png");
+ASSET_MANAGER.queueDownload("./res/fire_rate_pu.png");
+ASSET_MANAGER.queueDownload("./res/health_pu.png");
+ASSET_MANAGER.queueDownload("./res/power_pu.png");
+ASSET_MANAGER.queueDownload("./res/shield_pu.png");
+ASSET_MANAGER.queueDownload("./res/finger_gun_dude.png");
 
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
@@ -21,17 +29,9 @@ ASSET_MANAGER.downloadAll(function () {
 	canvas.focus();
 	gameEngine.init(ctx);
 
-	gameEngine.addEntity(new Background(gameEngine, 0, -760, "./res/cavebg.png"));
-	gameEngine.addEntity(new Background(gameEngine, 0, 0, "./res/cavebg.png"));
-
 	// This is where we will add the scene manager to handle
 	// the adding and removing of entities
-	gameEngine.addEntity(new Player(gameEngine));
-	gameEngine.addEntity(new AltPlayer(gameEngine));
-	gameEngine.addEntity(new Brain(gameEngine));
-	gameEngine.addEntity(new Cthulhu(gameEngine));
-	gameEngine.addEntity(new EyeMinion(gameEngine));
-
+	gameEngine.addEntity(new SceneManager(gameEngine));
 
 	gameEngine.start();
 });
