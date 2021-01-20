@@ -55,7 +55,7 @@ class AltPlayerBullet {
         this.y -= this.bulletSpeed;
 
         // If the bullet leaves the screen remove it 
-        if (this.y > 675 || this.y < 0 || (this.x == this.playerX && this.y == this.playerY)) {
+        if (this.y > 740 || this.y < 0 || (this.x == this.playerX && this.y == this.playerY)) {
             this.removeFromWorld = true;
         }
     }
@@ -83,9 +83,53 @@ class BrainBullet {
         this.y += this.bulletSpeed;
 
         // If the bullet leaves the screen remove it 
-        if (this.y > 675 || this.y < 0) {
+        if (this.y > 760 || this.y < 0) {
             this.removeFromWorld = true;
         }
+        this.updateBB();
+    }
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
+    };
+
+    destroy() {
+        this.removeFromWorld = true;
+        console.log('destroying item');
+    }
+}
+
+
+class FingerGunDudeBullet {
+    constructor(game, x, y, scale) {
+        Object.assign(this, {game, x, y, scale});
+
+        this.width = 10;
+        this.height = 30;
+
+        this.bulletSpeed = 4;
+        
+        this.updateBB();
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = "Red";
+        ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
+    
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Black';
+            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+        }
+    }
+
+    update() {
+        this.y += this.bulletSpeed;
+        this.x += Math.cos(this.y * this.bulletSpeed / 120);
+        // If the bullet leaves the screen remove it 
+        if (this.y > 760 || this.y < 0) {
+            this.removeFromWorld = true;
+        }
+
         this.updateBB();
     }
 

@@ -8,8 +8,9 @@ class BoundingBox {
         this.bottom = this.top + this.height;
     };
 
+    // Returns true if there is a collision between 2 bounding boxes
+    // Returns false otherwise
     collide(oth) {
-        if (this.right > oth.left && this.left < oth.right && this.top < oth.bottom && this.bottom > oth.top) return true;
-        return false;
+        return this.right > oth.left && this.left < oth.right && this.top < oth.bottom && this.bottom > oth.top
     };
 };

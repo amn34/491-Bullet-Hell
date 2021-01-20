@@ -49,21 +49,18 @@ class Player {
         // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
 
         // All lives + powerup
-
         this.animations[0].push(new Animator(this.sprite, 6, 5, this.width, this.height, 4, 0.1, 14, false, true));
 
         // All lives no powerup
         this.animations[0].push(new Animator(this.sprite, 6, 37, this.width, this.height, 4, 0.1, 14, false, true));
 
         // 2 lives + powerup
-
         this.animations[1].push(new Animator(this.sprite, 6, 69, this.width, this.height, 4, 0.1, 14, false, true));
 
         // 2 lives no powerup
         this.animations[1].push(new Animator(this.sprite, 6, 101, this.width, this.height, 4, 0.1, 14, false, true));
 
         // 1 life powerup
-
         this.animations[2].push(new Animator(this.sprite, 6, 133, this.width, this.height, 4, 0.1, 14, false, true));
 
         // 1 life no powerup
@@ -111,15 +108,34 @@ class Player {
      */
     checkCollision(entities) {
         let player = this;
+        let takeBulletDamage = (entity) => {
+            return entity instanceof BrainBullet || 
+                   entity instanceof FingerGunDudeBullet;
+        }
+
+        let takeEnemyCollisionDamage = (entity) => {
+            return entity instanceof Brain || 
+                   entity instanceof Cthulhu ||
+                   entity instanceof FungerGunDude;
+        } 
+
+        let takePowerup = (entity) => {
+            return entity instanceof PowerUp;
+        }
 
         entities.forEach(entity => {
             if (entity.BB && player.BB.collide(entity.BB)) {
-                if ((entity instanceof BrainBullet)) {
-                    console.log('hit');
+                if (takeBulletDamage(entity)) {
+                    console.log("hit");
+                    entity.destroy();
+                    this.life = (this.life + 1) % 3;
+                } else if (takePowerup(entity)) {
+                    console.log("power up");
                     entity.destroy();
                 }
+                
             }
-        })
+        });
     }
 
     updateBB() {
