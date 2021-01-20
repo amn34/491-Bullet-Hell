@@ -11,7 +11,6 @@ class SceneManager {
      */
     buildLevel() {
 
-
         this.game.addEntity(new Background(this.game, 0, -760, "./res/cavebg.png"));
         this.game.addEntity(new Background(this.game, 0, 0, "./res/cavebg.png"));
 
