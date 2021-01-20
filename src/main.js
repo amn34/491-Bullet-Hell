@@ -6,8 +6,9 @@ var ASSET_MANAGER = new AssetManager();
 // Might need a separate load manager here
 ASSET_MANAGER.queueDownload("./res/arcadeShooterSpritex32.png");
 ASSET_MANAGER.queueDownload("./res/altPlayer.png");
-ASSET_MANAGER.queueDownload("./res/enemy.png");
+ASSET_MANAGER.queueDownload("./res/brain.png");
 ASSET_MANAGER.queueDownload("./res/cthulhuSprite.png");
+ASSET_MANAGER.queueDownload("./res/eye.png");
 ASSET_MANAGER.queueDownload("./res/cavebg.png");
 
 ASSET_MANAGER.downloadAll(function () {
@@ -29,6 +30,7 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(new AltPlayer(gameEngine));
 	gameEngine.addEntity(new Brain(gameEngine));
 	gameEngine.addEntity(new Cthulhu(gameEngine));
+	gameEngine.addEntity(new EyeMinion(gameEngine));
 
 
 	gameEngine.start();
