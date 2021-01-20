@@ -96,3 +96,28 @@ class Cthulhu {
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleSize);
     };
 }
+
+class EyeMinion {
+    constructor(game) {
+        this.game = game;
+
+        this.sprite = ASSET_MANAGER.getAsset("./res/eye.png");
+
+        this.animations = [];
+
+        this.animations.push(new Animator(this.sprite, 0, 0, 32, 32, 8, 0.2, 0, false, true));
+
+        this.x = 50;
+        this.y = 300;
+        this.scale = 3;
+
+    }
+
+    draw(ctx) {
+        this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+    }
+
+    update() {
+
+    }
+}
