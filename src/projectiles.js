@@ -63,20 +63,20 @@ class AltPlayerBullet {
 
 
 class BrainBullet {
-    constructor(game, x, y, size) {
-        Object.assign(this, {game, x, y, size});
+    constructor(game, x, y, scale) {
+        Object.assign(this, {game, x, y, scale});
 
         this.width = 10;
         this.height = 30;
-        this.xOffSet = 40;
-        this.yOffSet = 80;
 
         this.bulletSpeed = 3;
+        
+        this.updateBB();
     }
 
     draw(ctx) {
         ctx.fillStyle = "Red";
-        ctx.fillRect(this.x + this.xOffSet, this.y + this.yOffSet, this.width * this.size, this.height * this.size);
+        ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
     }
 
     update() {
@@ -86,5 +86,15 @@ class BrainBullet {
         if (this.y > 675 || this.y < 0) {
             this.removeFromWorld = true;
         }
+        this.updateBB();
+    }
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
+    };
+
+    destroy() {
+        this.removeFromWorld = true;
+        console.log('destroying item');
     }
 }

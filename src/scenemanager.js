@@ -21,7 +21,9 @@ class SceneManager {
         this.game.addEntity(new Cthulhu(this.game));
     };
 
-    update() {};
+    update() {
+        PARAMS.DEBUG = document.getElementById("debug").checked;
+    };
 
     draw(ctx) {};
 }

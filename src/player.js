@@ -13,6 +13,11 @@ class Player {
         this.x = 328;
         this.y = 640;
 
+        //size
+        this.width = 18;
+        this.height = 21;
+        this.scale = 3;
+
         this.speedX = 0;
         this.speedY = 0;
 
@@ -32,7 +37,8 @@ class Player {
         this.threshHold = 10;
         this.damage = 5;
 
-        this.loadAnimations()
+        this.loadAnimations()      
+        this.updateBB();     
     }
 
     loadAnimations() {
@@ -43,22 +49,25 @@ class Player {
         // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
 
         // All lives + powerup
-        this.animations[0].push(new Animator(this.sprite, 6, 5, 18, 21, 4, 0.1, 14, false, true));
+
+        this.animations[0].push(new Animator(this.sprite, 6, 5, this.width, this.height, 4, 0.1, 14, false, true));
 
         // All lives no powerup
-        this.animations[0].push(new Animator(this.sprite, 6, 37, 18, 21, 4, 0.1, 14, false, true));
+        this.animations[0].push(new Animator(this.sprite, 6, 37, this.width, this.height, 4, 0.1, 14, false, true));
 
         // 2 lives + powerup
-        this.animations[1].push(new Animator(this.sprite, 6, 69, 18, 21, 4, 0.1, 14, false, true));
+
+        this.animations[1].push(new Animator(this.sprite, 6, 69, this.width, this.height, 4, 0.1, 14, false, true));
 
         // 2 lives no powerup
-        this.animations[1].push(new Animator(this.sprite, 6, 101, 18, 21, 4, 0.1, 14, false, true));
+        this.animations[1].push(new Animator(this.sprite, 6, 101, this.width, this.height, 4, 0.1, 14, false, true));
 
         // 1 life powerup
-        this.animations[2].push(new Animator(this.sprite, 6, 133, 18, 21, 4, 0.1, 14, false, true));
+
+        this.animations[2].push(new Animator(this.sprite, 6, 133, this.width, this.height, 4, 0.1, 14, false, true));
 
         // 1 life no powerup
-        this.animations[2].push(new Animator(this.sprite, 6, 165, 18, 21, 4, 0.1, 14, false, true));
+        this.animations[2].push(new Animator(this.sprite, 6, 165, this.width, this.height, 4, 0.1, 14, false, true));
     }
 
 
@@ -69,23 +78,17 @@ class Player {
             this.canShoot = 0;
         }
 
-        this.animations[this.life][this.powerup].drawFrame(this.game.clockTick, ctx, this.x, this.y, 3);
+        
+        this.animations[this.life][this.powerup].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
 
-        // Static player animations for testing
 
-        // this.animations[0][0].drawFrame(this.game.clockTick, ctx, 0, 0, 4);
-        // this.animations[0][1].drawFrame(this.game.clockTick, ctx, 100, 0, 4);
-
-        // this.animations[1][0].drawFrame(this.game.clockTick, ctx, 0, 100, 4);
-        // this.animations[1][1].drawFrame(this.game.clockTick, ctx, 100, 100, 4);
-
-        // this.animations[2][0].drawFrame(this.game.clockTick, ctx, 0, 200, 4);
-        // this.animations[2][1].drawFrame(this.game.clockTick, ctx, 100, 200, 4);
+        if(PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+        }
     }
 
     update() {
-        // pressing wasd or arrow keys moves the player
-        //  Note: this moves all players at the same time
         this.speedX -= this.game.left ? this.moveSpeed : 0;
         this.speedX += this.game.right ? this.moveSpeed : 0;
 
@@ -97,9 +100,42 @@ class Player {
 
         this.speedX *= 0.8;
         this.speedY *= 0.8;
-
+        this.updateBB();
+        this.checkCollision(this.game.entities);
     }
+
+    /**
+     * Checks if the player has collided with any of the enemies 
+     * or enemy bullets in the game. 
+     * @param {List[Object]} entities 
+     */
+    checkCollision(entities) {
+        let player = this;
+
+        entities.forEach(entity => {
+            if(entity.BB && player.BB.collide(entity.BB)) {
+                if((entity instanceof BrainBullet)) {
+                    console.log('hit');
+                    entity.destroy();
+                }
+            }
+        })
+    }
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
+    };
 }
+
+
+
+
+
+
+
+
+
+
 
 
 class AltPlayer {
