@@ -3,19 +3,21 @@ class Brain {
 
         this.game = game;
 
-        this.frameWidth = 31;
-        this.frameHeight = 30;
+        this.frameWidth = 32;
+        this.frameHeight = 32;
 
-        this.sprite = ASSET_MANAGER.getAsset("./res/enemy.png");
+        this.sprite = ASSET_MANAGER.getAsset("./res/brain.png");
         // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
-        this.animation = new Animator(this.sprite, 0, 1, this.frameWidth, this.frameHeight, 1, 0.5, 0, false, true);
+        this.animations = [];
+
+        this.animations.push(new Animator(this.sprite, 0, 0, this.frameWidth, this.frameHeight, 12, 0.2, 0, false, true));
 
         this.x = 50;
-        this.y = 50
+        this.y = 50;
         this.scale = 3;
 
-        this.width = 31 * this.scale;
-        this.height = 30 * this.scale;
+        this.width = 32 * this.scale;
+        this.height = 32 * this.scale;
 
         // Can shoot once this reaches 100
         this.canShoot = 9;
@@ -36,7 +38,7 @@ class Brain {
             this.canShoot = 0;
         }
 
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
     }
 
     update() {

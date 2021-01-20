@@ -37,8 +37,8 @@ class Player {
         this.threshHold = 10;
         this.damage = 5;
 
-        this.loadAnimations()      
-        this.updateBB();     
+        this.loadAnimations()
+        this.updateBB();
     }
 
     loadAnimations() {
@@ -78,11 +78,11 @@ class Player {
             this.canShoot = 0;
         }
 
-        
+
         this.animations[this.life][this.powerup].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
 
 
-        if(PARAMS.DEBUG) {
+        if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
         }
@@ -113,8 +113,8 @@ class Player {
         let player = this;
 
         entities.forEach(entity => {
-            if(entity.BB && player.BB.collide(entity.BB)) {
-                if((entity instanceof BrainBullet)) {
+            if (entity.BB && player.BB.collide(entity.BB)) {
+                if ((entity instanceof BrainBullet)) {
                     console.log('hit');
                     entity.destroy();
                 }
@@ -127,21 +127,10 @@ class Player {
     };
 }
 
-
-
-
-
-
-
-
-
-
-
-
 class AltPlayer {
     constructor(game) {
         this.sprite = ASSET_MANAGER.getAsset("./res/altPlayer.png");
-        this.animation = new Animator(this.sprite, 0, 1, 32, 30, 1, 0.1, 0, false, true);
+        this.animation = new Animator(this.sprite, 0, 1, 32, 30, 8, 0.1, 0, false, true);
         this.moveSpeed = 3;
         this.game = game;
         this.x = 400;
