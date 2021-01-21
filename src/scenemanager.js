@@ -27,12 +27,20 @@ class SceneManager {
         this.game.addEntity(new AltPlayer(this.game));
 
         // Add powerups for testing
-        this.game.addEntity(new PowerUp(this.game, 100, 300, "./res/ap1_pu.png"));
-        this.game.addEntity(new PowerUp(this.game, 140, 300, "./res/ap2_pu.png"));
-        this.game.addEntity(new PowerUp(this.game, 180, 300, "./res/fire_rate_pu.png"));
-        this.game.addEntity(new PowerUp(this.game, 220, 300, "./res/health_pu.png"));
-        this.game.addEntity(new PowerUp(this.game, 260, 300, "./res/power_pu.png"));
-        this.game.addEntity(new PowerUp(this.game, 300, 300, "./res/shield_pu.png"));
+
+        // Additional projectile 1
+        this.game.addEntity(new PowerUp(this.game, 100, 1, "./res/ap1_pu.png"));
+        // Additional projectile 2
+        this.game.addEntity(new PowerUp(this.game, 140, 1, "./res/ap2_pu.png"));
+        // Shield Powerup
+        this.game.addEntity(new PowerUp(this.game, 300, 1, "./res/shield_pu.png"));
+
+        // Implemented
+        this.game.addEntity(new IncreaseFireRatePowerUp(this.game, 180, 1, "./res/fire_rate_pu.png"));
+        this.game.addEntity(new IncreaseFireRatePowerUp(this.game, 180, 40, "./res/fire_rate_pu.png"));
+        this.game.addEntity(new IncreaseFireRatePowerUp(this.game, 180, 80, "./res/fire_rate_pu.png"));
+        this.game.addEntity(new IncreaseHealthPowerUp(this.game, 220, 1, "./res/health_pu.png"));
+        this.game.addEntity(new IncreasePowerPowerUp(this.game, 260, 1, "./res/power_pu.png"));
     };
 
     update() {
