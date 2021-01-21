@@ -5,17 +5,23 @@
 class Bullet {
     /**
      * 
-     * @param {Object} game - The Game Engine 
+     * @param {GameEngine} game - The Game Engine 
      * @param {Number} x - The X position to create the bullet
      * @param {Number} y - The Y position to create the bullet 
      * @param {Number} scale - The image scaling to apply to the bullet sprite
+     * @param {Number} width - The width of the bullet
+     * @param {Number} height - The height of the bullet 
+     * @param {Number} bulletSpeed - The dy of the bullet 
      * @param {Number} bulletType - Type, {1: Enemy, 2: Player}
      */
-    constructor(game, x, y, scale, bulletType) {
-        Object.assign(this, {game, x, y, scale, bulletType});
+    constructor(game, x, y, scale, width, height, bulletSpeed, bulletType) {
+        Object.assign(this, {game, x, y, scale, width, height, bulletSpeed, bulletType});
+        this.updateBB();
     }
 
-
+    /**
+     * Updates the bounding box and checks if the bullet should be removed 
+     */
     update() {
         this.checkBounds();
         this.updateBB();
@@ -33,7 +39,6 @@ class Bullet {
      */
     destroy() {
         this.removeFromWorld = true;
-        console.log('destroying item');
     }
 
     /**
@@ -44,70 +49,85 @@ class Bullet {
             this.removeFromWorld = true;
         }
     }
+
+    /**
+     * Draws the bounding box of the bullet. 
+     * @param {Context2D} ctx - 2D context of the canvas 
+     */
+    drawBB(ctx) {
+        ctx.strokeStyle = 'Black';
+        ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+    }
 }
 
 class PlayerBullet extends Bullet {
     constructor(game, x, y, scale) {
-
-        super(game, x, y, scale);
-        // Use these variables to define the player bullet
-        this.width = 10;
-        this.height = 30;
-        this.bulletSpeed = 12;
-        this.updateBB();
+        const width = 10;
+        const height = 30;
+        const bulletSpeed = 12;
+        const bulletType = 2; //player bullet
+        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
     }
 
     draw(ctx) {
         // Use yellow rectangles to keep the theme of the sprite
         ctx.fillStyle = "#F9DC5C";
         ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
+
+        if(PARAMS.DEBUG) {
+            this.drawBB(ctx);
+        }
     }
 
     update() {
         this.y -= this.bulletSpeed;
         super.update();
-        console.log(this.x, this.y);
     }
 }
 
 class AltPlayerBullet extends Bullet {
     constructor(game, x, y, scale) {
-
-        super(game, x, y, scale);
-        // Use these variables to define the player bullet
-        this.width = 10;
-        this.height = 30;
-        this.bulletSpeed = 12;
-        this.updateBB();
+        const width = 10;
+        const height = 30;
+        const bulletSpeed = 12;
+        const bulletType = 2; //player bullet 
+        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
     }
 
     draw(ctx) {
         // Use yellow rectangles to keep the theme of the sprite
         ctx.fillStyle = "black";
         ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
+
+        if(PARAMS.DEBUG) {
+            this.drawBB(ctx);
+        }
+
     }
 
     update() {
         this.y -= this.bulletSpeed;
         super.update();
-        console.log(this.x, this.y);
     }
 }
 
 
 class BrainBullet extends Bullet {
     constructor(game, x, y, scale) {
-        super(game, x, y, scale, 1);
-
-        this.width = 10;
-        this.height = 30;
-        this.bulletSpeed = 3;
-        this.updateBB();
+        const width = 10;
+        const height = 30;
+        const bulletSpeed = 3;
+        const bulletType = 1; //enemy bullet
+        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
     }
 
     draw(ctx) {
         ctx.fillStyle = "Red";
         ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
+
+        if (PARAMS.DEBUG) {
+            this.drawBB(ctx);
+        }
     }
 
     update() {
@@ -119,22 +139,19 @@ class BrainBullet extends Bullet {
 
 class FingerGunDudeBullet extends Bullet {
     constructor(game, x, y, scale) {
-
-        super(game, x, y, scale, 1);
-        
-        this.width = 10;
-        this.height = 30;
-        this.bulletSpeed = 4; 
-        this.updateBB();
+        const width = 10;
+        const height = 30;
+        const bulletSpeed = 4;
+        const bulletType = 1; //enemy bullet
+        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
     }
 
     draw(ctx) {
         ctx.fillStyle = "Red";
         ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
-    
-        if (PARAMS.DEBUG) {
-            ctx.strokeStyle = 'Black';
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+        
+        if(PARAMS.DEBUG) {
+            this.drawBB(ctx);
         }
     }
 
