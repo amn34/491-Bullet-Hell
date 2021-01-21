@@ -31,14 +31,6 @@ class Brain {
     }
 
     draw(ctx) {
-        this.canShoot++;
-
-        if (this.canShoot === this.threshHold) {
-            let center = this.x + (this.width / 2);
-            this.game.addEntity(new BrainBullet(this.game, center, this.y + this.height, 1));
-            this.canShoot = 0;
-        }
-
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
 
         if (PARAMS.DEBUG) {
@@ -48,6 +40,16 @@ class Brain {
     }
 
     update() {
+
+        this.canShoot++;
+
+        if (this.canShoot === this.threshHold) {
+            let center = this.x + (this.width / 2);
+            this.game.addEntity(new BrainBullet(this.game, center, this.y + this.height, 1));
+            this.canShoot = 0;
+        }
+
+
         if (this.x <= this.startX + 50 && this.goRight) {
             this.x++;
         } else {
@@ -67,6 +69,7 @@ class Brain {
     updateBB() {
         this.BB = new BoundingBox(this.x, this.y, this.width, this.height);
     };
+
 }
 
 /**
