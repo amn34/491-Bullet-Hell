@@ -45,8 +45,7 @@ class Brain {
 
         if (this.canShoot === this.threshHold) {
             let center = this.x + (this.width / 2);
-            //this.game.addEntity(new BrainBullet(this.game, center, this.y + this.height, 1));
-            this.game.addEntity(new EnemyBullet(this.game, center, this.y + this.height, 1, this.bulletUpdate, this.bulletDraw));
+            this.game.addEntity(new BrainBullet(this.game, center, this.y + this.height, 1));
             this.canShoot = 0;
         }
 
@@ -71,19 +70,6 @@ class Brain {
         this.BB = new BoundingBox(this.x, this.y, this.width, this.height);
     };
 
-    bulletDraw(ctx, bullet) {
-        ctx.fillStyle = "Red";
-        ctx.fillRect(bullet.x, bullet.y, bullet.width * bullet.scale, bullet.height * bullet.scale);
-    }
-
-    bulletUpdate(bullet) {
-        bullet.y += bullet.bulletSpeed;
-
-        // If the bullet leaves the screen remove it 
-        if (bullet.y > 760 || bullet.y < 0) {
-            bullet.removeFromWorld = true;
-        }
-    }
 }
 
 /**

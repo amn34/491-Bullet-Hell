@@ -61,71 +61,56 @@ class AltPlayerBullet {
 }
 
 /**
- * Class that creates enemy bullets. 
+ * Generic Bullet class. 
+ * Sub-Classes should implement update() and draw()
  */
-class EnemyBullet {
+class Bullet {
     /**
      * 
      * @param {Object} game - The Game Engine 
-     * @param {Number} x - The X position to create the bullet
-     * @param {Number} y - The Y position to create the bullet
-     * @param {Number} scale - The image scaling to apply on the bullet image
-     * @param {Function(bullet)} bulletUpdate - Function to update the bullet
-     * @param {Function(ctx, bullet)} bulletDraw - Function to draw the bullet
+     * @param {*} x - The X position to create the bullet
+     * @param {*} y - The Y position to create the bullet 
+     * @param {*} scale - The image scaling to apply to the bullet sprite
+     * @param {*} bulletType - Type, {1: Enemy, 2: Player}
      */
-    constructor(game, x, y, scale, bulletUpdate, bulletDraw) {
-        Object.assign(this, {game, x, y, scale, bulletUpdate, bulletDraw});
-
-        this.width = 10;
-        this.height = 30;
-
-        this.bulletSpeed = 3;
-        
-        this.updateBB();
+    constructor(game, x, y, scale, bulletType) {
+        Object.assign(this, {game, x, y, scale, bulletType});
     }
 
     /**
-     * Draws the bullet to the screen using the passed in draw function. 
-     * @param {Object} ctx - 2D context of the canvas 
-     */
-    draw(ctx) {
-        this.bulletDraw(ctx, this);
-    }
-
-    /**
-     * Updates the bullet using the passed in update function.
-     * Updates bounding box.    
-     */
-    update() {
-        this.bulletUpdate(this);
-        this.updateBB();
-    }
-
-    /**
-     * Updates the Bounding Box of the bullet to match its updated position. 
+     * Updates the BoundingBox of the bullet to match its updated position. 
      */
     updateBB() {
         this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
     };
 
     /**
-     * Marks the bullet to be removed by the GameEngine 
+     * Marks the bullet to be removed by the GameEngine. 
      */
     destroy() {
         this.removeFromWorld = true;
         console.log('destroying item');
     }
+
+    /**
+     * Marks the bullet to be removed by the GameEngine 
+     * if it leaves the bounds of the screen. 
+     */
+    checkBounds() {
+        if (this.y > 760 || this.y < 0) {
+            this.removeFromWorld = true;
+        }
+    }
 }
 
-class BrainBullet {
+
+class BrainBullet extends Bullet {
     constructor(game, x, y, scale) {
-        Object.assign(this, {game, x, y, scale});
+        super(game, x, y, scale, 1);
 
         this.width = 10;
         this.height = 30;
-
         this.bulletSpeed = 3;
-        
         this.updateBB();
     }
 
@@ -137,20 +122,8 @@ class BrainBullet {
     update() {
         this.y += this.bulletSpeed;
 
-        // If the bullet leaves the screen remove it 
-        if (this.y > 760 || this.y < 0) {
-            this.removeFromWorld = true;
-        }
+        this.checkBounds();
         this.updateBB();
-    }
-
-    updateBB() {
-        this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
-    };
-
-    destroy() {
-        this.removeFromWorld = true;
-        console.log('destroying item');
     }
 }
 
