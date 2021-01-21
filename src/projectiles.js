@@ -30,7 +30,6 @@ class PlayerBullet {
     }
 }
 
-
 class AltPlayerBullet {
     constructor(game, x, y, size) {
         Object.assign(this, {game, x, y, size});
@@ -61,6 +60,62 @@ class AltPlayerBullet {
     }
 }
 
+/**
+ * Class that creates enemy bullets. 
+ */
+class EnemyBullet {
+    /**
+     * 
+     * @param {Object} game - The Game Engine 
+     * @param {Number} x - The X position to create the bullet
+     * @param {Number} y - The Y position to create the bullet
+     * @param {Number} scale - The image scaling to apply on the bullet image
+     * @param {Function(bullet)} bulletUpdate - Function to update the bullet
+     * @param {Function(ctx, bullet)} bulletDraw - Function to draw the bullet
+     */
+    constructor(game, x, y, scale, bulletUpdate, bulletDraw) {
+        Object.assign(this, {game, x, y, scale, bulletUpdate, bulletDraw});
+
+        this.width = 10;
+        this.height = 30;
+
+        this.bulletSpeed = 3;
+        
+        this.updateBB();
+    }
+
+    /**
+     * Draws the bullet to the screen using the passed in draw function. 
+     * @param {Object} ctx - 2D context of the canvas 
+     */
+    draw(ctx) {
+        this.bulletDraw(ctx, this);
+    }
+
+    /**
+     * Updates the bullet using the passed in update function.
+     * Updates bounding box.    
+     */
+    update() {
+        this.bulletUpdate(this);
+        this.updateBB();
+    }
+
+    /**
+     * Updates the Bounding Box of the bullet to match its updated position. 
+     */
+    updateBB() {
+        this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
+    };
+
+    /**
+     * Marks the bullet to be removed by the GameEngine 
+     */
+    destroy() {
+        this.removeFromWorld = true;
+        console.log('destroying item');
+    }
+}
 
 class BrainBullet {
     constructor(game, x, y, scale) {
