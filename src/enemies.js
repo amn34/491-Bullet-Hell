@@ -1,6 +1,6 @@
 class Brain {
     constructor(game, x, y) {
-        Object.assign(this, {game, x, y});
+        Object.assign(this, { game, x, y });
 
         this.frameWidth = 32;
         this.frameHeight = 32;
@@ -27,6 +27,7 @@ class Brain {
         // Determines the path of the enemy
         this.goRight = true;
 
+        this.updateBB();
     }
 
     draw(ctx) {
@@ -39,6 +40,11 @@ class Brain {
         }
 
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+        }
     }
 
     update() {
@@ -54,7 +60,13 @@ class Brain {
         } else if (this.x === this.startX - 50 && !this.goRight) {
             this.goRight = !this.goRight;
         }
+
+        this.updateBB();
     }
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x, this.y, this.width, this.height);
+    };
 }
 
 /**
@@ -95,7 +107,7 @@ class Cthulhu {
         } else if (this.x === this.startX - 125 && !this.goRight) {
             this.goRight = !this.goRight;
         }
-    }
+    };
 
     /**
      * Chutulu draw method. Single default animation.
@@ -108,7 +120,7 @@ class Cthulhu {
 
 class EyeMinion {
     constructor(game, x, y) {
-        Object.assign(this, {game, x, y});
+        Object.assign(this, { game, x, y });
 
         this.sprite = ASSET_MANAGER.getAsset("./res/eye.png");
 
@@ -116,21 +128,32 @@ class EyeMinion {
         this.animations.push(new Animator(this.sprite, 0, 0, 32, 32, 8, 0.2, 0, false, true));
 
         this.scale = 3;
-    }
+
+        this.updateBB();
+    };
 
     draw(ctx) {
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-    }
+
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+        }
+    };
 
     update() {
+        this.updateBB();
+    };
 
-    }
+    updateBB() {
+        this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
+    };
 }
 
 
 class FingerGunDudue {
     constructor(game, x, y) {
-        Object.assign(this, {game, x, y});
+        Object.assign(this, { game, x, y });
 
         this.width = 32;
         this.height = 28;
@@ -179,7 +202,7 @@ class FingerGunDudue {
 
         if (this.animations[this.animationIndex].isDone()) {
             this.animationIndex = (this.animationIndex + 1) % 3;
-        } 
+        }
     }
 
     update() {
