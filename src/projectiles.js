@@ -70,35 +70,30 @@ class PlayerBullet extends Bullet {
     }
 }
 
-class AltPlayerBullet {
-    constructor(game, x, y, size) {
-        Object.assign(this, {game, x, y, size});
+class AltPlayerBullet extends Bullet {
+    constructor(game, x, y, scale) {
 
-        this.playerX = this.x;
-        this.playerY = this.y;
-
+        super(game, x, y, scale);
+        // Use these variables to define the player bullet
         this.width = 10;
         this.height = 30;
-        this.xOffSet = 27;
-        this.yOffSet = 24;
-
         this.bulletSpeed = 12;
+        this.updateBB();
     }
 
     draw(ctx) {
-        ctx.fillStyle = "Black";
-        ctx.fillRect(this.x + this.xOffSet, this.y - this.yOffSet, this.width * this.size, this.height * this.size);
+        // Use yellow rectangles to keep the theme of the sprite
+        ctx.fillStyle = "black";
+        ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
     }
 
     update() {
         this.y -= this.bulletSpeed;
-
-        // If the bullet leaves the screen remove it 
-        if (this.y > 740 || this.y < 0 || (this.x == this.playerX && this.y == this.playerY)) {
-            this.removeFromWorld = true;
-        }
+        super.update();
+        console.log(this.x, this.y);
     }
 }
+
 
 class BrainBullet extends Bullet {
     constructor(game, x, y, scale) {
@@ -122,15 +117,14 @@ class BrainBullet extends Bullet {
 }
 
 
-class FingerGunDudeBullet {
+class FingerGunDudeBullet extends Bullet {
     constructor(game, x, y, scale) {
-        Object.assign(this, {game, x, y, scale});
 
+        super(game, x, y, scale, 1);
+        
         this.width = 10;
         this.height = 30;
-
-        this.bulletSpeed = 4;
-        
+        this.bulletSpeed = 4; 
         this.updateBB();
     }
 
@@ -147,20 +141,6 @@ class FingerGunDudeBullet {
     update() {
         this.y += this.bulletSpeed;
         this.x += Math.cos(this.y * this.bulletSpeed / 120);
-        // If the bullet leaves the screen remove it 
-        if (this.y > 760 || this.y < 0) {
-            this.removeFromWorld = true;
-        }
-
-        this.updateBB();
-    }
-
-    updateBB() {
-        this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
-    };
-
-    destroy() {
-        this.removeFromWorld = true;
-        console.log('destroying item');
+        super.update();
     }
 }

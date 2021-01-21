@@ -110,7 +110,7 @@ class Player {
     checkCollision(entities) {
         let player = this;
         let takeBulletDamage = (entity) => {
-            return entity instanceof Bullet && entity.type == 1;
+            return entity instanceof Bullet && entity.bulletType == 1;
         }
 
         let takeEnemyCollisionDamage = (entity) => {
@@ -152,6 +152,13 @@ class AltPlayer {
         this.x = 400;
         this.y = 640;
 
+        this.frameWidth = 32;
+        this.frameHeight = 30;
+        this.scale = 2;
+
+        this.width = this.frameWidth * this.scale;
+        this.height = this.frameHeight * this.scale;
+
         this.speedX = 0;
         this.speedY = 0;
 
@@ -177,11 +184,12 @@ class AltPlayer {
     draw(ctx) {
         this.canShoot++;
         if (this.canShoot == this.threshHold) {
-            this.game.addEntity(new AltPlayerBullet(this.game, this.x, this.y, 1, this.x, this.y));
+            let center = this.x + (this.width / 2) - 5;
+            this.game.addEntity(new AltPlayerBullet(this.game, center, this.y, 1));
             this.canShoot = 0;
         }
 
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
     }
 
     update() {
