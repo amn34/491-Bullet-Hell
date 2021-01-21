@@ -71,7 +71,8 @@ class Player {
     draw(ctx) {
         this.canShoot++;
         if (this.canShoot == this.threshHold) {
-            this.game.addEntity(new PlayerBullet(this.game, this.x, this.y, 1, this.x, this.y));
+            let center = this.x + (this.width * this.scale / 2) - 3;
+            this.game.addEntity(new PlayerBullet(this.game, center, this.y, 1));
             this.canShoot = 0;
         }
 
@@ -109,8 +110,7 @@ class Player {
     checkCollision(entities) {
         let player = this;
         let takeBulletDamage = (entity) => {
-            return entity instanceof BrainBullet || 
-                   entity instanceof FingerGunDudeBullet;
+            return entity instanceof Bullet && entity.type == 1;
         }
 
         let takeEnemyCollisionDamage = (entity) => {
