@@ -18,10 +18,15 @@ ASSET_MANAGER.queueDownload("./res/health_pu.png");
 ASSET_MANAGER.queueDownload("./res/power_pu.png");
 ASSET_MANAGER.queueDownload("./res/shield_pu.png");
 ASSET_MANAGER.queueDownload("./res/finger_gun_dude.png");
-
+ASSET_MANAGER.queueDownload("./res/cth_minion_float.png");
+ASSET_MANAGER.queueDownload("./res/cth_minion_attack.png");
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
+
+	// Get canvas width & height
+	PARAMS.CANVAS_WIDTH = canvas.width;
+	PARAMS.CANVAS_HEIGHT = canvas.height;
 
 	// Focuses the canvas automatically so the user
 	// does not need to click on the screen.
