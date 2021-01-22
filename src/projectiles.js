@@ -61,12 +61,13 @@ class Bullet {
 }
 
 class PlayerBullet extends Bullet {
-    constructor(game, x, y, scale) {
+    constructor(game, x, y, scale, damage) {
         const width = 10;
         const height = 30;
         const bulletSpeed = 12;
         const bulletType = 2; //player bullet
         super(game, x, y, scale, width, height, bulletSpeed, bulletType);
+        this.damage = damage;
     }
 
     draw(ctx) {
@@ -86,12 +87,13 @@ class PlayerBullet extends Bullet {
 }
 
 class AltPlayerBullet extends Bullet {
-    constructor(game, x, y, scale) {
+    constructor(game, x, y, scale, damage) {
         const width = 10;
         const height = 30;
         const bulletSpeed = 12;
         const bulletType = 2; //player bullet 
         super(game, x, y, scale, width, height, bulletSpeed, bulletType);
+        this.damage = damage;
     }
 
     draw(ctx) {
@@ -141,7 +143,7 @@ class FingerGunDudeBullet extends Bullet {
     constructor(game, x, y, scale) {
         const width = 10;
         const height = 30;
-        const bulletSpeed = 4;
+        const bulletSpeed = 5;
         const bulletType = 1; //enemy bullet
         super(game, x, y, scale, width, height, bulletSpeed, bulletType);
     }
@@ -157,7 +159,7 @@ class FingerGunDudeBullet extends Bullet {
 
     update() {
         this.y += this.bulletSpeed;
-        this.x += Math.cos(this.y * this.bulletSpeed / 120);
+        this.x += Math.sin(this.y * this.bulletSpeed / 90) * 4;
         super.update();
     }
 }
