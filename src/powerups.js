@@ -10,7 +10,7 @@ class PowerUp {
         this.animation = new Animator(this.sprite, 0, 0, this.width, this.height, 1, 1, 0, false, true);
         this.updateBB();
     }
-
+    
     draw(ctx) {
         this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, 1);
         

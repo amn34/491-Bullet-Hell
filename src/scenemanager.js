@@ -16,10 +16,8 @@ class SceneManager {
 
         // Add enemies next 
         this.game.addEntity(new Brain(this.game, 50, 50));
-        this.game.addEntity(new Player(this.game));
-        this.game.addEntity(new AltPlayer(this.game));
         this.game.addEntity(new EyeMinion(this.game, 50, 300));
-        this.game.addEntity(new FingerGunDudue(this.game, 400, 300));
+        this.game.addEntity(new FingerGunDude(this.game, 400, 300));
         this.game.addEntity(new Cthulhu(this.game, 375, 40));
 
         // Add players last so they appear on top of all enemies

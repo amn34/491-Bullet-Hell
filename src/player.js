@@ -78,7 +78,7 @@ class Player {
         this.canShoot++;
         if (this.canShoot >= (this.fireRate - this.fireRateFromPowerUp)) {
             let center = this.x + (this.width * this.scale / 2) - 3;
-            this.game.addEntity(new PlayerBullet(this.game, center, this.y, 1));
+            this.game.addEntity(new PlayerBullet(this.game, center, this.y, 1, this.power + this.powerFromPowerUp));
             this.canShoot = 0;
         }
 
@@ -113,28 +113,29 @@ class Player {
      */
     checkCollision(entities) {
         let player = this;
-        let takeBulletDamage = (entity) => {
+        let collideWithEnemyBullet = (entity) => {
             return entity instanceof Bullet && entity.bulletType == 1;
         }
 
-        let takeEnemyCollisionDamage = (entity) => {
-            return entity instanceof Brain || 
-                   entity instanceof Cthulhu ||
-                   entity instanceof FingerGunDude;
+        let collideWithEnemy = (entity) => {
+            return entity instanceof Enemy;
         } 
 
-        let takePowerup = (entity) => {
+        let collideWithPowerup = (entity) => {
             return entity instanceof PowerUp;
         }
 
         entities.forEach(entity => {
             if (entity.BB && player.BB.collide(entity.BB)) {
-                if (takeBulletDamage(entity)) {
+                if (collideWithEnemyBullet(entity)) {
                     this.life = (this.life + 1) % 3;
                     entity.destroy();
-                } else if (takePowerup(entity)) {
+                } else if (collideWithPowerup(entity)) {
                     this.handlePowerUp(entity);
                     entity.destroy();
+                } else if (collideWithEnemy(entity)) {
+                    // console.log(entity);
+                    this.life = (this.life + 1) % 3;
                 }
                 
             }
@@ -206,14 +207,14 @@ class AltPlayer {
         this.canShoot = 69;
         this.threshHold = 70;
 
-        this.damage = 35;
+        this.damage = 2;
     }
 
     draw(ctx) {
         this.canShoot++;
         if (this.canShoot == this.threshHold) {
             let center = this.x + (this.width / 2) - 5;
-            this.game.addEntity(new AltPlayerBullet(this.game, center, this.y, 1));
+            this.game.addEntity(new AltPlayerBullet(this.game, center, this.y, 1, this.damage));
             this.canShoot = 0;
         }
 

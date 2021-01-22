@@ -1,46 +1,100 @@
-class Brain {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
-
-        this.frameWidth = 32;
-        this.frameHeight = 32;
-
-        this.sprite = ASSET_MANAGER.getAsset("./res/brain.png");
-        // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
+class Enemy {
+    constructor(game, x, y, width, height, scale) {
+        Object.assign(this, {game, x, y, width, height, scale});
         this.animations = [];
-
-        this.animations.push(new Animator(this.sprite, 0, 0, this.frameWidth, this.frameHeight, 12, 0.2, 0, false, true));
-
-        this.scale = 3;
-
-        this.width = this.frameWidth * this.scale;
-        this.height = this.frameHeight * this.scale;
-
         this.startX = this.x;
         this.startY = this.y;
-
-        // Can shoot once this reaches 100
-        this.canShoot = 9;
-        this.threshHold = 200;
+        
         this.damage = 1;
-
+        this.life = 100;
         // Determines the path of the enemy
         this.goRight = true;
-
-        this.updateBB();
     }
 
     draw(ctx) {
-        this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-
-        if (PARAMS.DEBUG) {
+        if (PARAMS.DEBUG && this.BB) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
         }
     }
 
-    update() {
+    updateBB() {
+        this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
+    }
 
+    destroy() {
+        this.removeFromWorld = true;
+    }
+
+    /**
+     * Checks if the player has collided with any of the enemies 
+     * or enemy bullets in the game. 
+     * @param {List[Object]} entities 
+     */
+    checkCollision(entities) {
+        let enemy = this;
+        let collideWithPlayerBullet = (entity) => {
+            return entity instanceof Bullet && entity.bulletType === 2;
+        }
+
+        entities.forEach(entity => {
+            if (entity.BB && enemy.BB.collide(entity.BB)) {
+                if (collideWithPlayerBullet(entity)) {
+                    // Bullet already destroyed when colliding with enemy, 
+                    // would be redundant to add here again.
+                    if (this.life <= 0 || this.life === NaN) {
+                        this.chanceForDrop();
+                        this.destroy();
+                    } else {
+                        this.life -= entity.damage;
+                    }
+                    
+                } 
+            }
+        });
+    }
+
+    chanceForDrop() {
+        let powerups = [[IncreaseFireRatePowerUp, "./res/fire_rate_pu.png"], [AdditionalProjectilePowerUp, "./res/ap1_pu.png"],
+                        [IncreaseHealthPowerUp, "./res/health_pu.png"], [MultipleProjectilePowerUp, "./res/ap2_pu.png"],
+                        [IncreasePowerPowerUp, "./res/power_pu.png"], [IncreaseShieldPowerUp, "./res/shield_pu.png"]];
+        
+        // if roll === 1 drop a powerup
+        let roll = Math.floor(Math.random() * 10);
+
+        if (roll <= 2) {
+            let ind = Math.floor(Math.random() * powerups.length);
+            this.game.addEntity(new powerups[ind][0](this.game, this.x, this.y, powerups[ind][1]));
+        }
+
+    } 
+
+}
+
+class Brain extends Enemy {
+    constructor(game, x, y) {
+        const scale = 3;
+        const width = 32;
+        const height = 32;
+        super(game, x, y, width, height, scale);
+
+        // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
+        this.sprite = ASSET_MANAGER.getAsset("./res/brain.png");
+        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 12, 0.2, 0, false, true));
+
+        // Can shoot once this reaches 100
+        this.life = 200;
+        this.canShoot = 9;
+        this.threshHold = 200;
+        this.updateBB();
+    }
+
+    draw(ctx) {
+        this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        super.draw(ctx);
+    }
+
+    update() {
         this.canShoot++;
 
         if (this.canShoot === this.threshHold) {
@@ -48,7 +102,6 @@ class Brain {
             this.game.addEntity(new BrainBullet(this.game, center, this.y + this.height, 1));
             this.canShoot = 0;
         }
-
 
         if (this.x <= this.startX + 50 && this.goRight) {
             this.x++;
@@ -63,39 +116,33 @@ class Brain {
             this.goRight = !this.goRight;
         }
 
-        this.updateBB();
+        super.updateBB();
+        super.checkCollision(this.game.entities);
     }
-
-    updateBB() {
-        this.BB = new BoundingBox(this.x, this.y, this.width, this.height);
-    };
 
 }
 
 /**
  * Chululu sprite has potential to be a boss level sprite. Default animation is hovering while tentacles move.
  */
-class Cthulhu {
+class Cthulhu extends Enemy {
     constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
-        this.sprite = ASSET_MANAGER.getAsset("./res/cthulhuSprite.png");
-
-        this.startX = this.x;
-        this.startY = this.y;
+        const scale = 1;
+        const width = 270;
+        const height = 245;
+        super(game, x, y, width, height, scale);
 
         // TODO - May update to include more animations later on depending on damage received, attack moves, etc.
-        this.animations = [];
         // Default floating animation.
-        this.animations.push(new Animator(this.sprite, 0, 0, 270, 245, 10, 0.3,
+        this.sprite = ASSET_MANAGER.getAsset("./res/cthulhuSprite.png");
+        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 10, 0.3,
             false, false, true));
-
-        this.scale = 1;
-        this.goRight = true;
 
         // Functionality to control the spawning of minions.
         this.minion_count = 0;
         this.startTimer = Math.floor(Date.now()/1000);
         this.oldTime = 0;
+        this.life = 20000;
     };
 
     /**
@@ -122,6 +169,8 @@ class Cthulhu {
         this.elapsedTime = this.endTimer - this.startTimer;
         // Spawn the minion.
         this.spawnMinion(this.x, this.y , 3, 15);
+        super.updateBB();
+        super.checkCollision(this.game.entities);
     };
 
 
@@ -160,63 +209,50 @@ class Cthulhu {
      */
     draw(ctx) {
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        super.draw(ctx);
     };
 }
 
-class EyeMinion {
+class EyeMinion extends Enemy {
     constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+        const scale = 3;
+        const width = 32;
+        const height = 32;
+        super(game, x, y, width, height, scale);
 
         this.sprite = ASSET_MANAGER.getAsset("./res/eye.png");
-
-        this.animations = [];
-        this.animations.push(new Animator(this.sprite, 0, 0, 32, 32, 8, 0.2, 0, false, true));
-
-        this.scale = 3;
-
-        this.updateBB();
+        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 8, 0.2, 0, false, true));
+        this.life = 50;
+        super.updateBB();
     };
 
     draw(ctx) {
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-
-        if (PARAMS.DEBUG) {
-            ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
-        }
+        super.draw(ctx);
     };
 
     update() {
-        this.updateBB();
-    };
-
-    updateBB() {
-        this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
+        super.updateBB();
+        super.checkCollision(this.game.entities);
     };
 }
 
 
-class FingerGunDudue {
+class FingerGunDude extends Enemy {
     constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+        const scale = 3;
+        const width = 32;
+        const height = 28;
 
-        this.width = 32;
-        this.height = 28;
-
-        this.startX = this.x;
-        this.startY = this.y;
+        super(game, x, y, width, height, scale);
 
         this.sprite = ASSET_MANAGER.getAsset("./res/finger_gun_dude.png");
-        this.animations = [];
 
         this.canShoot = 0;
         this.threshHold = 100;
         this.animationIndex = 0;
 
-        // Determines the path of the enemy
-        this.goRight = true;
-        this.scale = 3;
-
+        this.life = 200;
         this.loadAnimations();
     }
 
@@ -231,8 +267,9 @@ class FingerGunDudue {
     }
 
     draw(ctx) {
+        
         this.animations[this.animationIndex].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-
+        
         if (this.animationIndex === 1) {
             let center = this.x + (this.width / 1.5);
             this.game.addEntity(new FingerGunDudeBullet(this.game, center, this.y + this.height * 3, 1));
@@ -244,10 +281,12 @@ class FingerGunDudue {
         } else {
             this.animations[2] = new Animator(this.sprite, 32, 32, this.width, this.height, 0.3, 1, 0, false, false);
         }
-
+        
         if (this.animations[this.animationIndex].isDone()) {
             this.animationIndex = (this.animationIndex + 1) % 3;
         }
+
+        super.draw(ctx);
     }
 
     update() {
@@ -263,6 +302,9 @@ class FingerGunDudue {
         } else if (this.x === this.startX - 50 && !this.goRight) {
             this.goRight = !this.goRight;
         }
+
+        super.updateBB();
+        super.checkCollision(this.game.entities);
     }
 }
 
@@ -273,14 +315,15 @@ class FingerGunDudue {
  * The number of minions spawned and the interval at which they are spawned are controlled by the Cthulhu class
  * update method.
  */
-class CthulhuMinion {
+class CthulhuMinion extends Enemy {
     constructor(game, x, y) {
-        Object.assign(this, {game, x, y});
+        super(game, x, y);
 
         this.spriteFloat = ASSET_MANAGER.getAsset("./res/cth_minion_float.png");
         this.spriteAttack = ASSET_MANAGER.getAsset("./res/cth_minion_attack.png");
-        this.animations = [];
 
+        this.width = 96;
+        this.height = 80;
         this.scale = 1;
 
         this.animationType = 1;
@@ -291,19 +334,17 @@ class CthulhuMinion {
         // Timer for Sin/Cos functions.
         this.moveTimer = 0;
 
+        this.life = 50;
+
         this.loadAnimations();
-        this.updateBB();
+        super.updateBB();
     };
 
     loadAnimations() {
-        this.animations.push(new Animator(this.spriteFloat, 0, 0, 96, 80, 5, 0.2,
+        this.animations.push(new Animator(this.spriteFloat, 0, 0, this.width, this.height, 5, 0.2,
             0, false, true));
-        this.animations.push(new Animator(this.spriteAttack, 0, 0, 96, 80, 6, 0.2,
+        this.animations.push(new Animator(this.spriteAttack, 0, 0, this.width, this.height, 6, 0.2,
             0, false, true));
-    };
-
-    updateBB() {
-        this.BB = new BoundingBox(this.x, this.y, 96, 80);
     };
 
     update() {
@@ -370,7 +411,8 @@ class CthulhuMinion {
         // Update sprite position.
         this.x += this.velocity.x * TICK * this.scale;
         this.y += this.velocity.y * TICK * this.scale;
-        this.updateBB();
+        super.updateBB();
+        super.checkCollision(this.game.entities);
     };
 
     /**
@@ -385,11 +427,8 @@ class CthulhuMinion {
     };
 
     draw(ctx) {
+        super.draw(ctx);
         this.animations[this.animationType].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-        if (PARAMS.DEBUG) {
-            ctx.strokeStyle = "RED";
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
-        }
     };
 
 }
