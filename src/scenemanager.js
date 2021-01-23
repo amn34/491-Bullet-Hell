@@ -25,15 +25,9 @@ class SceneManager {
         this.game.addEntity(new AltPlayer(this.game));
 
         // Add powerups for testing
-
-        // Additional projectile 1
-        this.game.addEntity(new PowerUp(this.game, 100, 1, "./res/ap1_pu.png"));
-        // Additional projectile 2
-        this.game.addEntity(new PowerUp(this.game, 140, 1, "./res/ap2_pu.png"));
-        // Shield Powerup
-        this.game.addEntity(new PowerUp(this.game, 300, 1, "./res/shield_pu.png"));
-
-        // Implemented
+        this.game.addEntity(new AdditionalProjectilePowerUp(this.game, 100, 1, "./res/ap1_pu.png"));
+        this.game.addEntity(new MultipleProjectilePowerUp(this.game, 140, 1, "./res/ap2_pu.png"));
+        this.game.addEntity(new IncreaseShieldPowerUp(this.game, 300, 1, "./res/shield_pu.png"));
         this.game.addEntity(new IncreaseFireRatePowerUp(this.game, 180, 1, "./res/fire_rate_pu.png"));
         this.game.addEntity(new IncreaseFireRatePowerUp(this.game, 180, 40, "./res/fire_rate_pu.png"));
         this.game.addEntity(new IncreaseFireRatePowerUp(this.game, 180, 80, "./res/fire_rate_pu.png"));
