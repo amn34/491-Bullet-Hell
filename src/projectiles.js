@@ -168,3 +168,27 @@ class FingerGunDudeBullet extends Bullet {
         super.update();
     }
 }
+
+class CthulhuMinionBullet extends Bullet {
+    constructor(game, x, y, scale) {
+        const width = 10;
+        const height = 30;
+        const bulletSpeed = 5;
+        const bulletType = 1;
+        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = "Red";
+        ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
+
+        if (PARAMS.DEBUG) {
+            this.drawBB(ctx);
+        }
+    }
+
+    update() {
+        this.y += this.bulletSpeed;
+        super.update();
+    }
+}
