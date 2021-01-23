@@ -40,8 +40,10 @@ class Enemy {
         entities.forEach(entity => {
             if (entity.BB && enemy.BB.collide(entity.BB)) {
                 if (collideWithPlayerBullet(entity)) {
-                    // Bullet already destroyed when colliding with enemy, 
-                    // would be redundant to add here again.
+                    //destroys the bullet
+                    entity.destroy();
+                    //creates a particle effect
+                    this.game.addEntity(new BulletExplosion(this.game, entity.x, entity.y));
                     if (this.life <= 0 || this.life === NaN) {
                         this.chanceForDrop();
                         this.destroy();
