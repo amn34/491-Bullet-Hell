@@ -18,10 +18,12 @@ class Player {
         this.width = 18;
         this.height = 21;
         this.scale = 3;
+        this.center = (this.width * this.scale / 2) - 3;
 
         // how many hits left before death
         // 0 = full health | 1 = 2 hits left | 2 = 1 hits left | 3 = dead
-        this.life = 0
+        this.life = 0;
+        this.shield = 0;
 
         // currently has a powerup
         // 0 = powerup, 1 = no powerup
@@ -30,6 +32,10 @@ class Player {
         // Can shoot once 20 ticks have passed
         this.canShoot = 0;
         this.fireRate = 20;
+
+        // The array bullets the player will shoot
+        // Store the positions relative to the center
+        this.bullets = [this.center];
 
         // The damage the player does to an enemy
         this.power = 5;
@@ -43,7 +49,7 @@ class Player {
         this.shieldFromPowerUp = 0;
         this.projectilesFromPowerUp = 0;
 
-        this.loadAnimations()
+        this.loadAnimations();
         this.updateBB();
     }
 
@@ -77,8 +83,12 @@ class Player {
     draw(ctx) {
         this.canShoot++;
         if (this.canShoot >= (this.fireRate - this.fireRateFromPowerUp)) {
-            let center = this.x + (this.width * this.scale / 2) - 3;
-            this.game.addEntity(new PlayerBullet(this.game, center, this.y, 1, this.power + this.powerFromPowerUp));
+            this.bullets.forEach(bulletPos => {
+                this.game.addEntity(new PlayerBullet(this.game, this.x + bulletPos, this.y, 1, this.power + this.powerFromPowerUp));
+            });
+            // Go back to shooting 1 bullet
+            //let center = this.x + this.center;
+            // this.game.addEntity(new PlayerBullet(this.game, center, this.y, 1, this.power + this.powerFromPowerUp));
             this.canShoot = 0;
         }
 
@@ -128,7 +138,12 @@ class Player {
         entities.forEach(entity => {
             if (entity.BB && player.BB.collide(entity.BB)) {
                 if (collideWithEnemyBullet(entity)) {
-                    this.life = (this.life + 1) % 3;
+                    // Remove 1 shield regardless of the damage of the enemy bullet
+                    if (this.shield) {
+                        this.shield--;
+                    } else {
+                        this.life = (this.life + 1) % 3;
+                    }
                     entity.destroy();
                 } else if (collideWithPowerup(entity)) {
                     this.handlePowerUp(entity);
@@ -147,9 +162,11 @@ class Player {
     };
 
     handlePowerUp(entity) {
+        let len = 0;
         switch(entity.constructor) {
             case IncreaseFireRatePowerUp:
-                this.fireRateFromPowerUp += ((this.fireRate - this.fireRateFromPowerUp) * 0.15);
+                const increase = (this.fireRate - this.fireRateFromPowerUp) * 0.15;
+                this.fireRateFromPowerUp += this.fireRateFromPowerUp + increase > 13 ? 0 : increase;
                 break;
             case IncreaseHealthPowerUp:
                 this.healthFromPowerUp -= this.life > 0 ? 1 : 0;
@@ -158,13 +175,24 @@ class Player {
                 this.powerFromPowerUp += 1;
                 break;
             case IncreaseShieldPowerUp:
-                // Add functionality
+                this.shield += 1;
                 break;    
             case AdditionalProjectilePowerUp:
-                // Add functionality
+                len = this.bullets.length;
+                if (len === 1) {
+                    this.bullets.push(this.bullets[0] - 15, this.bullets[0] + 15);
+                } else if (len + 2 < 10) {
+                    this.bullets.push(this.bullets[len - 2] - 15, this.bullets[len - 1] + 15);
+                }
                 break;
             case MultipleProjectilePowerUp:
-                // Add functionality
+                len = this.bullets.length;
+                if (len === 1) {
+                    this.bullets.push(this.bullets[0] - 15, this.bullets[0] + 15, this.bullets[0] - 30, this.bullets[0] + 30);
+                    // this.bullets.push(this.bullets[0] + 15);
+                } else if (len + 4 < 10) {
+                    this.bullets.push(this.bullets[len - 2] - 15, this.bullets[len - 1] + 15, this.bullets[len - 2] + 30, this.bullets[len - 1] + 30);
+                }
                 break;
             default:
                 break;

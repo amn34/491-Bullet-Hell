@@ -64,7 +64,7 @@ class Enemy {
         // if roll === 1 drop a powerup
         let roll = Math.floor(Math.random() * 10);
 
-        if (roll <= 2) {
+        if (roll <= 3) {
             let ind = Math.floor(Math.random() * powerups.length);
             this.game.addEntity(new powerups[ind][0](this.game, this.x, this.y, powerups[ind][1]));
         }
