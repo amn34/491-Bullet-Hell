@@ -68,12 +68,17 @@ class PlayerBullet extends Bullet {
         const bulletType = 2; //player bullet
         super(game, x, y, scale, width, height, bulletSpeed, bulletType);
         this.damage = damage;
+
+        this.spritesheet = ASSET_MANAGER.getAsset("./res/bullet.png");
+        this.animations = [];
+        this.animations.push(new Animator(this.spritesheet, 0, 0, this.width, this.height, 1, 0.2, 0, false, true));
     }
 
     draw(ctx) {
         // Use yellow rectangles to keep the theme of the sprite
-        ctx.fillStyle = "#F9DC5C";
-        ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
+        // ctx.fillStyle = "#F9DC5C";
+        // ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
+        this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
 
         if(PARAMS.DEBUG) {
             this.drawBB(ctx);

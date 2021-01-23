@@ -20,6 +20,9 @@ ASSET_MANAGER.queueDownload("./res/shield_pu.png");
 ASSET_MANAGER.queueDownload("./res/finger_gun_dude.png");
 ASSET_MANAGER.queueDownload("./res/cth_minion_float.png");
 ASSET_MANAGER.queueDownload("./res/cth_minion_attack.png");
+ASSET_MANAGER.queueDownload("./res/bullet.png");
+ASSET_MANAGER.queueDownload("./res/explosion.png");
+
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
