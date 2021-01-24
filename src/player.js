@@ -108,19 +108,12 @@ class Player {
         this.speedY -= this.game.up ? this.moveSpeed : 0;
         this.speedY += this.game.down ? this.moveSpeed : 0;
 
+        const size = this.width * this.scale;
         this.x += this.speedX;
-        if(this.speedX < 0) {
-            this.x = Math.max(0, this.x);
-        } else {
-            this.x = Math.min(PARAMS.WIDTH - (this.width * this.scale), this.x);
-        }
+        this.x = this.speedX < 0 ? Math.max(0, this.x) : Math.min(PARAMS.WIDTH - size, this.x);
 
         this.y += this.speedY;
-        if(this.speedY < 0) {
-            this.y = Math.max(0, this.y);
-        } else {
-            this.y = Math.min(PARAMS.HEIGHT - (this.width * this.scale), this.y);
-        }
+        this.y = this.speedY < 0 ? Math.max(0, this.y) : Math.min(PARAMS.HEIGHT - size, this.y);
 
         this.speedX *= 0.8;
         this.speedY *= 0.8;
