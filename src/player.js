@@ -129,7 +129,7 @@ class Player {
 
         let collideWithEnemy = (entity) => {
             return entity instanceof Enemy;
-        } 
+        }
 
         let collideWithPowerup = (entity) => {
             return entity instanceof PowerUp;
@@ -152,18 +152,18 @@ class Player {
                     // console.log(entity);
                     this.life = (this.life + 1) % 3;
                 }
-                
+
             }
         });
     }
 
     updateBB() {
-        this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
+        this.BB = new BoundingBox(this.x + 19, this.y + 18, this.width, this.height);
     };
 
     handlePowerUp(entity) {
         let len = 0;
-        switch(entity.constructor) {
+        switch (entity.constructor) {
             case IncreaseFireRatePowerUp:
                 const increase = (this.fireRate - this.fireRateFromPowerUp) * 0.15;
                 this.fireRateFromPowerUp += this.fireRateFromPowerUp + increase > 13 ? 0 : increase;
@@ -176,7 +176,7 @@ class Player {
                 break;
             case IncreaseShieldPowerUp:
                 this.shield += 1;
-                break;    
+                break;
             case AdditionalProjectilePowerUp:
                 len = this.bullets.length;
                 if (len === 1) {
