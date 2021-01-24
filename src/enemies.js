@@ -1,10 +1,10 @@
 class Enemy {
     constructor(game, x, y, width, height, scale) {
-        Object.assign(this, {game, x, y, width, height, scale});
+        Object.assign(this, { game, x, y, width, height, scale });
         this.animations = [];
         this.startX = this.x;
         this.startY = this.y;
-        
+
         this.damage = 1;
         this.life = 100;
         // Determines the path of the enemy
@@ -50,17 +50,17 @@ class Enemy {
                     } else {
                         this.life -= entity.damage;
                     }
-                    
-                } 
+
+                }
             }
         });
     }
 
     chanceForDrop() {
         let powerups = [[IncreaseFireRatePowerUp, "./res/fire_rate_pu.png"], [AdditionalProjectilePowerUp, "./res/ap1_pu.png"],
-                        [IncreaseHealthPowerUp, "./res/health_pu.png"], [MultipleProjectilePowerUp, "./res/ap2_pu.png"],
-                        [IncreasePowerPowerUp, "./res/power_pu.png"], [IncreaseShieldPowerUp, "./res/shield_pu.png"]];
-        
+        [IncreaseHealthPowerUp, "./res/health_pu.png"], [MultipleProjectilePowerUp, "./res/ap2_pu.png"],
+        [IncreasePowerPowerUp, "./res/power_pu.png"], [IncreaseShieldPowerUp, "./res/shield_pu.png"]];
+
         // if roll === 1 drop a powerup
         let roll = Math.floor(Math.random() * 10);
 
@@ -69,7 +69,7 @@ class Enemy {
             this.game.addEntity(new powerups[ind][0](this.game, this.x, this.y, powerups[ind][1]));
         }
 
-    } 
+    }
 
 }
 
@@ -155,7 +155,7 @@ class Cthulhu extends Enemy {
         this.life = 20000;
         this.totalLife = this.life;
 
-        this.startTimer = Math.floor(Date.now()/100);
+        this.startTimer = Math.floor(Date.now() / 100);
         this.oldTime = 0;
     };
 
@@ -165,7 +165,7 @@ class Cthulhu extends Enemy {
      */
     update() {
         // Timer that determines spawning intervals.
-        this.endTimer = Math.floor(Date.now()/100);
+        this.endTimer = Math.floor(Date.now() / 100);
         this.elapsedTime = this.endTimer - this.startTimer; // elapsed time in centiseconds.
 
         // Default movement.
@@ -184,16 +184,16 @@ class Cthulhu extends Enemy {
 
 
         // Controls regular minion spawn behavior. Dependent on Cthulhu life remaining.
-        if (this.life >= this.totalLife * 3/4) { // Life greater than a quarter of original life.
+        if (this.life >= this.totalLife * 3 / 4) { // Life greater than a quarter of original life.
             this.spawnFrequency = 5; // 1 minion every 50 centiseconds
             this.spawnMax = 150;
-        } else if (this.life >= this.totalLife * 1/2) { // Life less then Quarter but greater than 1/2 of original life.
+        } else if (this.life >= this.totalLife * 1 / 2) { // Life less then Quarter but greater than 1/2 of original life.
             this.spawnFrequency = 2; // 1 minion every 25 milliseconds
             this.spawnMax = 300;
-        } else if (this.life >= this.totalLife * 1/4) {
+        } else if (this.life >= this.totalLife * 1 / 4) {
             this.spawnFrequency = 1; // 1 minion every 10 milliseconds
             this.spawnMax = 1000;
-        } else if (this.life >= this.totalLife * 1/8) { // Life very low - go crazy.
+        } else if (this.life >= this.totalLife * 1 / 8) { // Life very low - go crazy.
             this.spawnFrequency = 1; // Ultimate -  1 minion every millisecond
             this.spawnMax = 100000; // Ultimate
         }
@@ -202,7 +202,7 @@ class Cthulhu extends Enemy {
         this.xMinionPosition = Math.floor((Math.random() * PARAMS.CANVAS_WIDTH - 96) + 96);
 
         this.spawnMillipedeCreature(250, 1);
-        this.spawnMinion(this.xMinionPosition,  - 100, this.spawnFrequency, this.spawnMax);
+        this.spawnMinion(this.xMinionPosition, - 100, this.spawnFrequency, this.spawnMax);
 
         super.updateBB();
         super.checkCollision(this.game.entities);
@@ -218,7 +218,7 @@ class Cthulhu extends Enemy {
      */
     spawnMillipedeCreature(millipedeLength, distanceBetween) {
         // The frequency of the millipede is dependent on the length of millipede.
-        let millipedeFrequency = 2 * millipedeLength + (millipedeLength/2)
+        let millipedeFrequency = 2 * millipedeLength + (millipedeLength / 2)
         if (this.elapsedTime % millipedeFrequency === 0 && this.oldTime > 0) {
             this.spawnMillipede = true;
             this.resetCount = true;
@@ -278,7 +278,7 @@ class Cthulhu extends Enemy {
     spawn(x, y) {
         this.game.addEntity(new CthulhuMinion(this.game, x, y));
         this.minion_count++;
-   };
+    };
 
     /**
      * Cthulhu draw method. Single default animation.
@@ -300,7 +300,7 @@ class EyeMinion extends Enemy {
         this.sprite = ASSET_MANAGER.getAsset("./res/eye.png");
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 8, 0.2, 0, false, true));
         this.life = 50;
-        super.updateBB();
+        this.updateBB();
     };
 
     draw(ctx) {
@@ -309,9 +309,13 @@ class EyeMinion extends Enemy {
     };
 
     update() {
-        super.updateBB();
+        this.updateBB();
         super.checkCollision(this.game.entities);
     };
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x + 40, this.y + 24, this.width - 16, this.height - 16);
+    }
 }
 
 
@@ -344,9 +348,9 @@ class FingerGunDude extends Enemy {
     }
 
     draw(ctx) {
-        
+
         this.animations[this.animationIndex].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-        
+
         if (this.animationIndex === 1) {
             let center = this.x + (this.width / 1.5);
             this.game.addEntity(new FingerGunDudeBullet(this.game, center, this.y + this.height * 3, 1));
@@ -358,7 +362,7 @@ class FingerGunDude extends Enemy {
         } else {
             this.animations[2] = new Animator(this.sprite, 32, 32, this.width, this.height, 0.3, 1, 0, false, false);
         }
-        
+
         if (this.animations[this.animationIndex].isDone()) {
             this.animationIndex = (this.animationIndex + 1) % 3;
         }
@@ -405,7 +409,7 @@ class CthulhuMinion extends Enemy {
         this.scale = 1;
 
         this.animationType = 1;
-        this.velocity = {x: 0, y: 0};
+        this.velocity = { x: 0, y: 0 };
 
         // Starting direction of minion movement.
         this.direction = 3;
@@ -429,16 +433,16 @@ class CthulhuMinion extends Enemy {
     update() {
 
         // Enums objects for legibility.
-        const Mode = { FLOAT: 0, ATTACK: 1}; // Two animations types (uses attack only so far - will likely remove).
+        const Mode = { FLOAT: 0, ATTACK: 1 }; // Two animations types (uses attack only so far - will likely remove).
         // Keep track of direction
         const Direction = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 };
         // Movement type (tied to moveFunction).
-        const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4};
+        const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4 };
 
         // Physics
         const TICK = this.game.clockTick;
         // Velocity based on movement
-        const VELOCITY = { SUPERFAST: 600, FAST: 400, REGULAR: 100, SLOW: 50, SUPERSLOW: 10}
+        const VELOCITY = { SUPERFAST: 600, FAST: 400, REGULAR: 100, SLOW: 50, SUPERSLOW: 10 }
 
         // Sprite velocity
         this.velocity.x = 0;
@@ -454,7 +458,7 @@ class CthulhuMinion extends Enemy {
                 this.velocity.x += this.moveFunction(VELOCITY.REGULAR, Movement.UP);
                 // y axis movement.
                 let amplitude = 100;
-                let angularFrequency = 1/120;
+                let angularFrequency = 1 / 120;
                 this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.COS);
             }
         }
@@ -469,23 +473,23 @@ class CthulhuMinion extends Enemy {
                 this.velocity.x += this.moveFunction(VELOCITY.REGULAR, Movement.RIGHT);
                 // y axis movement.
                 let amplitude = 100;
-                let angularFrequency = 1/60;
+                let angularFrequency = 1 / 60;
                 this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.SIN);
             }
         }
 
-       /*
-       Controls the behavior of the minion [300] pixels before the bottom of the canvas.
-       Minions will begin to slow down until they reverse.
-        */
-       if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - 300) {
-            this.velocity.y -= 1 ;
+        /*
+        Controls the behavior of the minion [300] pixels before the bottom of the canvas.
+        Minions will begin to slow down until they reverse.
+         */
+        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - 300) {
+            this.velocity.y -= 1;
             this.y -= 1;
-       }
+        }
 
-       /*
-       If the minion flies too far beyond the top of the canvas reverse their velocity.
-        */
+        /*
+        If the minion flies too far beyond the top of the canvas reverse their velocity.
+         */
         if (this.BB.top < -200) {
             this.velocity.y = -this.velocity.y;
         }
@@ -522,11 +526,11 @@ class CthulhuMinion extends Enemy {
         this.elapsedTime = this.startTimer - this.endTimer;
         // Special fire interval.
         if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - distance && this.elapsedTime % fireIntervalSpecial === 0) {
-            this.game.addEntity(new CthulhuMinionBullet(this.game, this.x + this.width/2, this.y + this.height - 15, 1));
+            this.game.addEntity(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 15, 1));
         }
         // Regular fire interval.
         else if (this.elapsedTime % fireInterval === 0) {
-            this.game.addEntity(new CthulhuMinionBullet(this.game, this.x + this.width/2, this.y + this.height - 15, 1));
+            this.game.addEntity(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 15, 1));
         }
     }
 
@@ -537,7 +541,7 @@ class CthulhuMinion extends Enemy {
      * @returns {number|*|number}
      */
     moveFunction(velocity, direction) {
-        let movementFunctions = [-velocity, velocity, velocity*velocity, -Math.sin(velocity), Math.cos(velocity)];
+        let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
         return movementFunctions[direction];
     }
 
