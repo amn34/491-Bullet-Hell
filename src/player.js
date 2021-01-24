@@ -162,7 +162,7 @@ class Player {
     };
 
     handlePowerUp(entity) {
-        let len = 0;
+        const len = this.bullets.length;
         switch (entity.constructor) {
             case IncreaseFireRatePowerUp:
                 const increase = (this.fireRate - this.fireRateFromPowerUp) * 0.15;
@@ -178,7 +178,6 @@ class Player {
                 this.shield += 1;
                 break;
             case AdditionalProjectilePowerUp:
-                len = this.bullets.length;
                 if (len === 1) {
                     this.bullets.push(this.bullets[0] - 15, this.bullets[0] + 15);
                 } else if (len + 2 < 10) {
@@ -186,10 +185,8 @@ class Player {
                 }
                 break;
             case MultipleProjectilePowerUp:
-                len = this.bullets.length;
                 if (len === 1) {
                     this.bullets.push(this.bullets[0] - 15, this.bullets[0] + 15, this.bullets[0] - 30, this.bullets[0] + 30);
-                    // this.bullets.push(this.bullets[0] + 15);
                 } else if (len + 4 < 10) {
                     this.bullets.push(this.bullets[len - 2] - 15, this.bullets[len - 1] + 15, this.bullets[len - 2] + 30, this.bullets[len - 1] + 30);
                 }
