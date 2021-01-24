@@ -62,9 +62,9 @@ class Enemy {
         [IncreasePowerPowerUp, "./res/power_pu.png"], [IncreaseShieldPowerUp, "./res/shield_pu.png"]];
 
         // if roll === 1 drop a powerup
-        let roll = Math.floor(Math.random() * 10);
+        let roll = Math.floor(Math.random() * 100);
 
-        if (roll <= 3) {
+        if (roll <= 10) {
             let ind = Math.floor(Math.random() * powerups.length);
             this.game.addEntity(new powerups[ind][0](this.game, this.x, this.y, powerups[ind][1]));
         }
