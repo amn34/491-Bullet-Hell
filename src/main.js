@@ -26,6 +26,7 @@ ASSET_MANAGER.queueDownload("./res/explosion.png");
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
+	ctx.imageSmoothingEnabled = false;
 
 	// Get canvas width & height
 	PARAMS.CANVAS_WIDTH = canvas.width;
