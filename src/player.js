@@ -101,6 +101,7 @@ class Player {
     }
 
     update() {
+
         this.speedX -= this.game.left ? this.moveSpeed : 0;
         this.speedX += this.game.right ? this.moveSpeed : 0;
 
@@ -108,7 +109,18 @@ class Player {
         this.speedY += this.game.down ? this.moveSpeed : 0;
 
         this.x += this.speedX;
+        if(this.speedX < 0) {
+            this.x = Math.max(0, this.x);
+        } else {
+            this.x = Math.min(PARAMS.WIDTH - (this.width * this.scale), this.x);
+        }
+
         this.y += this.speedY;
+        if(this.speedY < 0) {
+            this.y = Math.max(0, this.y);
+        } else {
+            this.y = Math.min(PARAMS.HEIGHT - (this.width * this.scale), this.y);
+        }
 
         this.speedX *= 0.8;
         this.speedY *= 0.8;
