@@ -205,9 +205,13 @@ class EyeMinion extends Enemy {
         super.draw(ctx);
     };
 
+    updateBB() {
+        this.BB = new BoundingBox(this.x + 40, this.y + 24, this.width - 16, this.height - 16);
+    }
+
     update() {
 
-        super.updateBB();
+        this.updateBB();
         super.checkCollision(this.game.entities);
 
         // For movement
