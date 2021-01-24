@@ -73,6 +73,7 @@ class Enemy {
 
 }
 
+
 class Brain extends Enemy {
     constructor(game, x, y) {
         const scale = 3;
@@ -85,10 +86,19 @@ class Brain extends Enemy {
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 12, 0.2, 0, false, true));
 
         // Can shoot once this reaches 100
-        this.life = 200;
+        this.life = 2000;
         this.canShoot = 9;
         this.threshHold = 200;
         this.updateBB();
+
+        // Functionality to control the spawning of minions.
+        this.minion_count = 0;
+        this.spawnFrequency = 1;
+        this.spawnMax = 50;
+
+        this.startTimer = Math.floor(Date.now()/100);
+        this.oldTime = 0;
+        this.totalLife = this.life;
     }
 
     draw(ctx) {
@@ -118,14 +128,163 @@ class Brain extends Enemy {
             this.goRight = !this.goRight;
         }
 
+        // Timer that determines spawning intervals.
+        this.endTimer = Math.floor(Date.now()/100);
+        this.elapsedTime = this.endTimer - this.startTimer; // elapsed time in centiseconds.
+
+        // Functionality to control the spawning of minions.
+        this.minion_count = 0;
+        this.spawnFrequency = 1;
+        this.spawnMax = 50;
+
+        // Controls regular minion spawn behavior. Dependent on Brain life remaining.
+        if (this.life >= this.totalLife * 3/4) {
+            this.spawnFrequency = 5;
+            this.spawnMax = 150;
+        } else if (this.life >= this.totalLife * 1/2) {
+            this.spawnFrequency = 2;
+            this.spawnMax = 300;
+        } else if (this.life >= this.totalLife * 1/4) {
+            this.spawnFrequency = 1;
+            this.spawnMax = 1000;
+        } else if (this.life >= this.totalLife * 1/8) { // Life very low - go crazy.
+            this.spawnFrequency = 1; // Ultimate
+            this.spawnMax = 100000; // Ultimate
+        }
+
+        // Randomize x-coordinate for minion.
+        this.xMinionPosition = Math.floor((Math.random() * PARAMS.CANVAS_WIDTH - 96) + 96);
+
+        this.spawnMinion(this.xMinionPosition,  - 100, this.spawnFrequency, this.spawnMax);
+
         super.updateBB();
         super.checkCollision(this.game.entities);
     }
 
+    spawnMinion(xStart, yStart, spawnFrequency, spawnMax) {
+        if (this.minion_count < spawnMax) {
+            if (this.elapsedTime % spawnFrequency === 0 && this.elapsedTime !== this.oldTime) {
+                this.spawn(xStart, yStart)
+                this.oldTime = this.elapsedTime;
+            }
+        }
+    }
+
+    spawn(x, y) {
+        this.game.addEntity(new EyeMinion(this.game, x, y));
+        this.minion_count++;
+    };
+
 }
 
+class EyeMinion extends Enemy {
+    constructor(game, x, y) {
+        const scale = 3;
+        const width = 32;
+        const height = 32;
+        super(game, x, y, width, height, scale);
+
+        this.sprite = ASSET_MANAGER.getAsset("./res/eye.png");
+        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 8, 0.2, 0, false, true));
+        this.life = 50;
+        super.updateBB();
+
+        // For movement
+        this.velocity = {x: 0, y: 0};
+        // Starting direction of minion movement.
+        this.direction = 3;
+        // Timer for Sin/Cos functions.
+        this.moveTimer = 0;
+
+        this.life = 50;
+        this.startTimer = Date.now()
+    };
+
+    draw(ctx) {
+        this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        super.draw(ctx);
+    };
+
+    update() {
+
+        super.updateBB();
+        super.checkCollision(this.game.entities);
+
+        // For movement
+
+        const Direction = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 };
+        const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4};
+
+        // Physics
+        const TICK = this.game.clockTick;
+        // Velocity based on movement
+        const VELOCITY = { SUPERFAST: 600, FAST: 400, REGULAR: 100, SLOW: 50, SUPERSLOW: 10}
+
+        // Sprite velocity
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+
+        // SPRITE MOVING LEFT
+        if (this.velocity.x <= 0 && this.direction === Direction.LEFT) {
+            if (this.BB.left < 0) {
+                this.direction = Direction.RIGHT;
+            } else {
+
+                // Params to adjust wave.
+                let amplitude = 50;
+                let angularFrequency = 1/10;
+
+                // x axis movement.
+                this.velocity.x += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.SIN);
+
+                // y axis movement.
+                this.velocity.y += this.moveFunction(VELOCITY.SLOW, Movement.DOWN);
+            }
+        }
+
+        // SPRITE MOVING RIGHT ( and/or UP/DOWN)
+        else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) {
+            if (this.BB.right > PARAMS.CANVAS_WIDTH) {
+                this.direction = Direction.LEFT;
+            } else {
+
+                let amplitude = 50;
+                let angularFrequency = 1/10;
+
+                // x axis movement.
+                this.velocity.x += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.COS);
+
+                // y axis movement.
+                this.velocity.y += this.moveFunction(VELOCITY.SLOW, Movement.DOWN);
+            }
+        }
+
+        // Reset move timer so not to overflow.
+        if (this.moveTimer > 10000) {
+            this.moveTimer = 1;
+        }
+
+        // Update sprite position.
+        this.x += this.velocity.x * TICK * this.scale;
+        this.y += this.velocity.y * TICK * this.scale;
+    };
+
+    /**
+     * Controls the velocity of the sprite.
+     * @param velocity
+     * @param direction
+     * @returns {number|*|number}
+     */
+    moveFunction(velocity, direction) {
+        let movementFunctions = [-velocity, velocity, velocity*velocity, -Math.sin(velocity), Math.cos(velocity)];
+        return movementFunctions[direction];
+    }
+
+}
+
+
 /**
- * Chululu sprite has potential to be a boss level sprite. Default animation is hovering while tentacles move.
+ * Chululu sprite is a boss level sprite. Default animation is hovering while tentacles move.
  */
 class Cthulhu extends Enemy {
     constructor(game, x, y) {
@@ -294,106 +453,6 @@ class Cthulhu extends Enemy {
     };
 }
 
-class EyeMinion extends Enemy {
-    constructor(game, x, y) {
-        const scale = 3;
-        const width = 32;
-        const height = 32;
-        super(game, x, y, width, height, scale);
-
-        this.sprite = ASSET_MANAGER.getAsset("./res/eye.png");
-        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 8, 0.2, 0, false, true));
-        this.life = 50;
-        this.updateBB();
-    };
-
-    draw(ctx) {
-        this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-        super.draw(ctx);
-    };
-
-    update() {
-        this.updateBB();
-        super.checkCollision(this.game.entities);
-    };
-
-    updateBB() {
-        this.BB = new BoundingBox(this.x + 40, this.y + 24, this.width - 16, this.height - 16);
-    }
-}
-
-
-class FingerGunDude extends Enemy {
-    constructor(game, x, y) {
-        const scale = 3;
-        const width = 32;
-        const height = 28;
-
-        super(game, x, y, width, height, scale);
-
-        this.sprite = ASSET_MANAGER.getAsset("./res/finger_gun_dude.png");
-
-        this.canShoot = 0;
-        this.threshHold = 100;
-        this.animationIndex = 0;
-
-        this.life = 200;
-        this.loadAnimations();
-    }
-
-    loadAnimations() {
-        // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
-        // Idle Animation
-        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 3, 1, 0, false, false));
-        // Finger 1 
-        this.animations.push(new Animator(this.sprite, 0, 32, this.width, this.height, 0.3, 1, 0, false, false));
-        // Finger 2
-        this.animations.push(new Animator(this.sprite, 32, 32, this.width, this.height, 0.3, 1, 0, false, false));
-    }
-
-    draw(ctx) {
-
-        this.animations[this.animationIndex].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-
-        if (this.animationIndex === 1) {
-            let center = this.x + (this.width / 1.5);
-            this.game.addEntity(new FingerGunDudeBullet(this.game, center, this.y + this.height * 3, 1));
-            this.animations[0] = new Animator(this.sprite, 0, 0, this.width, this.height, 3, 1, 0, false, false);
-        } else if (this.animationIndex === 2) {
-            let center = this.x + (this.width * 3 / 1.5);
-            this.game.addEntity(new FingerGunDudeBullet(this.game, center, this.y + this.height * 3, 1));
-            this.animations[1] = new Animator(this.sprite, 0, 32, this.width, this.height, 0.3, 1, 0, false, false);
-        } else {
-            this.animations[2] = new Animator(this.sprite, 32, 32, this.width, this.height, 0.3, 1, 0, false, false);
-        }
-
-        if (this.animations[this.animationIndex].isDone()) {
-            this.animationIndex = (this.animationIndex + 1) % 3;
-        }
-
-        super.draw(ctx);
-    }
-
-    update() {
-        if (this.x <= this.startX + 50 && this.goRight) {
-            this.x++;
-        } else {
-            this.x--;
-        }
-
-        if (this.x === this.startX + 50 && this.goRight) {
-            this.goRight = !this.goRight;
-
-        } else if (this.x === this.startX - 50 && !this.goRight) {
-            this.goRight = !this.goRight;
-        }
-
-        super.updateBB();
-        super.checkCollision(this.game.entities);
-    }
-}
-
-
 /**
  * Cthulhu Minion that has two different default animations: Float & Attack. Movement is automatic based on a time
  * interval. Spawning of this character is controlled by the Cthulhu class.
@@ -422,7 +481,9 @@ class CthulhuMinion extends Enemy {
 
         this.life = 50;
 
-        this.startTimer = Date.now();
+        this.startTimer = Date.now()
+
+
         this.loadAnimations();
         this.updateBB();
     }
@@ -453,7 +514,7 @@ class CthulhuMinion extends Enemy {
         this.velocity.y = 0;
 
         // SPRITE MOVING LEFT ( and/or UP/DOWN)
-        if (this.velocity.x <= 0 && this.direction === Direction.LEFT) { // moving left
+        if (this.velocity.x <= 0 && this.direction === Direction.LEFT) {
             if (this.BB.left < 0) { // check if we need to reverse
                 this.direction = Direction.RIGHT; // Switch directions and go right.
             } else { // We know we are going left.
@@ -468,7 +529,7 @@ class CthulhuMinion extends Enemy {
         }
 
         // SPRITE MOVING RIGHT ( and/or UP/DOWN)
-        else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) { // moving right
+        else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) {
             if (this.BB.right > PARAMS.CANVAS_WIDTH) { // check if we have gone off the right side of canvas
                 this.direction = Direction.LEFT; // go left
             } else { // We know we are going right.
@@ -487,7 +548,7 @@ class CthulhuMinion extends Enemy {
         Minions will begin to slow down until they reverse.
          */
         if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - 300) {
-            this.velocity.y -= 1;
+            this.velocity.y -= 1 ;
             this.y -= 1;
         }
 
@@ -558,4 +619,75 @@ class CthulhuMinion extends Enemy {
         this.animations[this.animationType].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
     }
 
+}
+
+
+class FingerGunDude extends Enemy {
+    constructor(game, x, y) {
+        const scale = 3;
+        const width = 32;
+        const height = 28;
+
+        super(game, x, y, width, height, scale);
+
+        this.sprite = ASSET_MANAGER.getAsset("./res/finger_gun_dude.png");
+
+        this.canShoot = 0;
+        this.threshHold = 100;
+        this.animationIndex = 0;
+
+        this.life = 200;
+        this.loadAnimations();
+    }
+
+    loadAnimations() {
+        // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
+        // Idle Animation
+        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 3, 1, 0, false, false));
+        // Finger 1 
+        this.animations.push(new Animator(this.sprite, 0, 32, this.width, this.height, 0.3, 1, 0, false, false));
+        // Finger 2
+        this.animations.push(new Animator(this.sprite, 32, 32, this.width, this.height, 0.3, 1, 0, false, false));
+    }
+
+    draw(ctx) {
+        
+        this.animations[this.animationIndex].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        
+        if (this.animationIndex === 1) {
+            let center = this.x + (this.width / 1.5);
+            this.game.addEntity(new FingerGunDudeBullet(this.game, center, this.y + this.height * 3, 1));
+            this.animations[0] = new Animator(this.sprite, 0, 0, this.width, this.height, 3, 1, 0, false, false);
+        } else if (this.animationIndex === 2) {
+            let center = this.x + (this.width * 3 / 1.5);
+            this.game.addEntity(new FingerGunDudeBullet(this.game, center, this.y + this.height * 3, 1));
+            this.animations[1] = new Animator(this.sprite, 0, 32, this.width, this.height, 0.3, 1, 0, false, false);
+        } else {
+            this.animations[2] = new Animator(this.sprite, 32, 32, this.width, this.height, 0.3, 1, 0, false, false);
+        }
+        
+        if (this.animations[this.animationIndex].isDone()) {
+            this.animationIndex = (this.animationIndex + 1) % 3;
+        }
+
+        super.draw(ctx);
+    }
+
+    update() {
+        if (this.x <= this.startX + 50 && this.goRight) {
+            this.x++;
+        } else {
+            this.x--;
+        }
+
+        if (this.x === this.startX + 50 && this.goRight) {
+            this.goRight = !this.goRight;
+
+        } else if (this.x === this.startX - 50 && !this.goRight) {
+            this.goRight = !this.goRight;
+        }
+
+        super.updateBB();
+        super.checkCollision(this.game.entities);
+    }
 }
