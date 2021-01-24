@@ -267,7 +267,16 @@ class EyeMinion extends Enemy {
         // Update sprite position.
         this.x += this.velocity.x * TICK * this.scale;
         this.y += this.velocity.y * TICK * this.scale;
+
+
+        if (this.y >= PARAMS.CANVAS_HEIGHT) {
+            this.removeFromWorld = true;
+        }
+
     };
+
+
+
 
     /**
      * Controls the velocity of the sprite.
