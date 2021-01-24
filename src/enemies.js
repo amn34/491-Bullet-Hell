@@ -204,9 +204,13 @@ class Cthulhu extends Enemy {
         this.spawnMillipedeCreature(250, 1);
         this.spawnMinion(this.xMinionPosition, - 100, this.spawnFrequency, this.spawnMax);
 
-        super.updateBB();
+        this.updateBB();
         super.checkCollision(this.game.entities);
     };
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x + 60, this.y, this.width - 130, this.height - 40);
+    }
 
     /**
      * Determines when to spawn the minion millipede formation. When it is time to spawn the millipede the regular
@@ -420,7 +424,7 @@ class CthulhuMinion extends Enemy {
 
         this.startTimer = Date.now();
         this.loadAnimations();
-        super.updateBB();
+        this.updateBB();
     }
 
     loadAnimations() {
@@ -502,13 +506,17 @@ class CthulhuMinion extends Enemy {
         // Update sprite position.
         this.x += this.velocity.x * TICK * this.scale;
         this.y += this.velocity.y * TICK * this.scale;
-        super.updateBB();
+        this.updateBB();
 
         // Bullet firing mechanism
         this.bulletPattern(200, 250, 50);
 
         // Collision
         super.checkCollision(this.game.entities);
+    }
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x + 36, this.y + 24, this.width - 68, this.height - 48);
     }
 
     /**
