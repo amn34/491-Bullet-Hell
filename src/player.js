@@ -101,6 +101,16 @@ class Player {
     }
 
     update() {
+        if (this.x < 50) {
+            this.game.left = false;
+        } else if (this.x > 650) {
+            this.game.right = false;
+        } else if (this.y < 50) {
+            this.game.up = false;
+        } else if (this.y > 650) {
+            this.game.down = false;
+        }
+
         this.speedX -= this.game.left ? this.moveSpeed : 0;
         this.speedX += this.game.right ? this.moveSpeed : 0;
 
