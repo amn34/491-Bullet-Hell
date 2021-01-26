@@ -25,6 +25,10 @@ class Player {
         this.life = 0;
         this.shield = 0;
 
+        // Take damage then decrease until we reach 0 before taking damage again
+        this.timeInvincible = 80;
+        this.canTakeDamage = true;
+
         // currently has a powerup
         // 0 = powerup, 1 = no powerup
         this.powerup = 0;
@@ -86,9 +90,7 @@ class Player {
             this.bullets.forEach(bulletPos => {
                 this.game.addEntity(new PlayerBullet(this.game, this.x + bulletPos, this.y, 1, this.power + this.powerFromPowerUp));
             });
-            // Go back to shooting 1 bullet
-            //let center = this.x + this.center;
-            // this.game.addEntity(new PlayerBullet(this.game, center, this.y, 1, this.power + this.powerFromPowerUp));
+
             this.canShoot = 0;
         }
 
@@ -124,6 +126,16 @@ class Player {
 
         this.speedX *= 0.8;
         this.speedY *= 0.8;
+
+        if (!this.canTakeDamage) {
+            if (this.timeInvincible <= 0) {
+                this.canTakeDamage = true;
+                this.timeInvincible = 80;
+            } else {
+                this.timeInvincible--;
+            }
+        }
+
         this.updateBB();
         this.checkCollision(this.game.entities);
     }
@@ -149,22 +161,25 @@ class Player {
 
         entities.forEach(entity => {
             if (entity.BB && player.BB.collide(entity.BB)) {
-                if (collideWithEnemyBullet(entity)) {
-                    // Remove 1 shield regardless of the damage of the enemy bullet
-                    if (this.shield) {
-                        this.shield--;
-                    } else {
-                        this.life = (this.life + 1) % 3;
+                if (collideWithEnemyBullet(entity) || collideWithEnemy(entity)) {
+                    if (this.canTakeDamage) {
+                        this.canTakeDamage = false;
+
+                        // Remove 1 shield regardless of the damage of the enemy bullet
+                        if (this.shield) {
+                            this.shield--;
+                        } else {
+                            this.life = (this.life + 1) % 3;
+                        }
                     }
-                    entity.destroy();
+                    
+                    if (collideWithEnemyBullet(entity)) {
+                        entity.destroy();
+                    }
                 } else if (collideWithPowerup(entity)) {
                     this.handlePowerUp(entity);
                     entity.destroy();
-                } else if (collideWithEnemy(entity)) {
-                    // console.log(entity);
-                    this.life = (this.life + 1) % 3;
-                }
-
+                } 
             }
         });
     }
