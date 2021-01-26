@@ -57,9 +57,9 @@ class Enemy {
     }
 
     chanceForDrop() {
-        let powerups = [[IncreaseFireRatePowerUp, "./res/fire_rate_pu.png"], [AdditionalProjectilePowerUp, "./res/ap1_pu.png"],
-        [IncreaseHealthPowerUp, "./res/health_pu.png"], [MultipleProjectilePowerUp, "./res/ap2_pu.png"],
-        [IncreasePowerPowerUp, "./res/power_pu.png"], [IncreaseShieldPowerUp, "./res/shield_pu.png"]];
+        let powerups = [[IncreaseFireRatePowerUp, "./res/powerups/fire_rate_pu.png"], [AdditionalProjectilePowerUp, "./res/powerups/ap1_pu.png"],
+        [IncreaseHealthPowerUp, "./res/powerups/health_pu.png"], [MultipleProjectilePowerUp, "./res/powerups/ap2_pu.png"],
+        [IncreasePowerPowerUp, "./res/powerups/power_pu.png"], [IncreaseShieldPowerUp, "./res/powerups/shield_pu.png"]];
 
         // if roll === 1 drop a powerup
         let roll = Math.floor(Math.random() * 100);
@@ -82,7 +82,7 @@ class Brain extends Enemy {
         super(game, x, y, width, height, scale);
 
         // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
-        this.sprite = ASSET_MANAGER.getAsset("./res/brain.png");
+        this.sprite = ASSET_MANAGER.getAsset("./res/enemies/brain.png");
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 12, 0.2, 0, false, true));
 
         // Can shoot once this reaches 100
@@ -96,7 +96,7 @@ class Brain extends Enemy {
         this.spawnFrequency = 1;
         this.spawnMax = 50;
 
-        this.startTimer = Math.floor(Date.now()/100);
+        this.startTimer = Math.floor(Date.now() / 100);
         this.oldTime = 0;
         this.totalLife = this.life;
     }
@@ -129,7 +129,7 @@ class Brain extends Enemy {
         }
 
         // Timer that determines spawning intervals.
-        this.endTimer = Math.floor(Date.now()/100);
+        this.endTimer = Math.floor(Date.now() / 100);
         this.elapsedTime = this.endTimer - this.startTimer; // elapsed time in centiseconds.
 
         // Functionality to control the spawning of minions.
@@ -138,16 +138,16 @@ class Brain extends Enemy {
         this.spawnMax = 50;
 
         // Controls regular minion spawn behavior. Dependent on Brain life remaining.
-        if (this.life >= this.totalLife * 3/4) {
+        if (this.life >= this.totalLife * 3 / 4) {
             this.spawnFrequency = 5;
             this.spawnMax = 150;
-        } else if (this.life >= this.totalLife * 1/2) {
+        } else if (this.life >= this.totalLife * 1 / 2) {
             this.spawnFrequency = 2;
             this.spawnMax = 300;
-        } else if (this.life >= this.totalLife * 1/4) {
+        } else if (this.life >= this.totalLife * 1 / 4) {
             this.spawnFrequency = 1;
             this.spawnMax = 1000;
-        } else if (this.life >= this.totalLife * 1/8) { // Life very low - go crazy.
+        } else if (this.life >= this.totalLife * 1 / 8) { // Life very low - go crazy.
             this.spawnFrequency = 1; // Ultimate
             this.spawnMax = 100000; // Ultimate
         }
@@ -155,7 +155,7 @@ class Brain extends Enemy {
         // Randomize x-coordinate for minion.
         this.xMinionPosition = Math.floor((Math.random() * PARAMS.CANVAS_WIDTH - 96) + 96);
 
-        this.spawnMinion(this.xMinionPosition,  - 100, this.spawnFrequency, this.spawnMax);
+        this.spawnMinion(this.xMinionPosition, - 100, this.spawnFrequency, this.spawnMax);
 
         super.updateBB();
         super.checkCollision(this.game.entities);
@@ -184,13 +184,13 @@ class EyeMinion extends Enemy {
         const height = 32;
         super(game, x, y, width, height, scale);
 
-        this.sprite = ASSET_MANAGER.getAsset("./res/eye.png");
+        this.sprite = ASSET_MANAGER.getAsset("./res/enemies/eye.png");
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 8, 0.2, 0, false, true));
         this.life = 50;
         super.updateBB();
 
         // For movement
-        this.velocity = {x: 0, y: 0};
+        this.velocity = { x: 0, y: 0 };
         // Starting direction of minion movement.
         this.direction = 3;
         // Timer for Sin/Cos functions.
@@ -217,12 +217,12 @@ class EyeMinion extends Enemy {
         // For movement
 
         const Direction = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 };
-        const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4};
+        const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4 };
 
         // Physics
         const TICK = this.game.clockTick;
         // Velocity based on movement
-        const VELOCITY = { SUPERFAST: 600, FAST: 400, REGULAR: 100, SLOW: 50, SUPERSLOW: 10}
+        const VELOCITY = { SUPERFAST: 600, FAST: 400, REGULAR: 100, SLOW: 50, SUPERSLOW: 10 }
 
         // Sprite velocity
         this.velocity.x = 0;
@@ -236,7 +236,7 @@ class EyeMinion extends Enemy {
 
                 // Params to adjust wave.
                 let amplitude = 50;
-                let angularFrequency = 1/10;
+                let angularFrequency = 1 / 10;
 
                 // x axis movement.
                 this.velocity.x += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.SIN);
@@ -253,7 +253,7 @@ class EyeMinion extends Enemy {
             } else {
 
                 let amplitude = 50;
-                let angularFrequency = 1/10;
+                let angularFrequency = 1 / 10;
 
                 // x axis movement.
                 this.velocity.x += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.COS);
@@ -289,7 +289,7 @@ class EyeMinion extends Enemy {
      * @returns {number|*|number}
      */
     moveFunction(velocity, direction) {
-        let movementFunctions = [-velocity, velocity, velocity*velocity, -Math.sin(velocity), Math.cos(velocity)];
+        let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
         return movementFunctions[direction];
     }
 
@@ -307,7 +307,7 @@ class Cthulhu extends Enemy {
         super(game, x, y, width, height, scale);
 
         // Default floating animation.
-        this.sprite = ASSET_MANAGER.getAsset("./res/cthulhuSprite.png");
+        this.sprite = ASSET_MANAGER.getAsset("./res/enemies/cthulhuSprite.png");
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 10, 0.3,
             false, false, true));
 
@@ -477,8 +477,8 @@ class CthulhuMinion extends Enemy {
     constructor(game, x, y) {
         super(game, x, y);
 
-        this.spriteFloat = ASSET_MANAGER.getAsset("./res/cth_minion_float.png");
-        this.spriteAttack = ASSET_MANAGER.getAsset("./res/cth_minion_attack.png");
+        this.spriteFloat = ASSET_MANAGER.getAsset("./res/enemies/cth_minion_float.png");
+        this.spriteAttack = ASSET_MANAGER.getAsset("./res/enemies/cth_minion_attack.png");
 
         this.width = 96;
         this.height = 80;
@@ -520,7 +520,7 @@ class CthulhuMinion extends Enemy {
         // Physics
         const TICK = this.game.clockTick;
         // Velocity based on movement
-        const VELOCITY = { SUPERFAST: 600, FAST: 400, REGULAR: 100, SLOW: 50, SUPERSLOW: 10 }
+        const VELOCITY = { SUPERFAST: 150, FAST: 100, REGULAR: 75, SLOW: 50, SUPERSLOW: 25 }
 
         // Sprite velocity
         this.velocity.x = 0;
@@ -561,7 +561,7 @@ class CthulhuMinion extends Enemy {
         Minions will begin to slow down until they reverse.
          */
         if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - 300) {
-            this.velocity.y -= 1 ;
+            this.velocity.y -= 1;
             this.y -= 1;
         }
 
@@ -643,7 +643,7 @@ class FingerGunDude extends Enemy {
 
         super(game, x, y, width, height, scale);
 
-        this.sprite = ASSET_MANAGER.getAsset("./res/finger_gun_dude.png");
+        this.sprite = ASSET_MANAGER.getAsset("./res/enemies/finger_gun_dude.png");
 
         this.canShoot = 0;
         this.threshHold = 100;
@@ -664,9 +664,9 @@ class FingerGunDude extends Enemy {
     }
 
     draw(ctx) {
-        
+
         this.animations[this.animationIndex].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-        
+
         if (this.animationIndex === 1) {
             let center = this.x + (this.width / 1.5);
             this.game.addEntity(new FingerGunDudeBullet(this.game, center, this.y + this.height * 3, 1));
@@ -678,7 +678,7 @@ class FingerGunDude extends Enemy {
         } else {
             this.animations[2] = new Animator(this.sprite, 32, 32, this.width, this.height, 0.3, 1, 0, false, false);
         }
-        
+
         if (this.animations[this.animationIndex].isDone()) {
             this.animationIndex = (this.animationIndex + 1) % 3;
         }
@@ -702,5 +702,231 @@ class FingerGunDude extends Enemy {
 
         super.updateBB();
         super.checkCollision(this.game.entities);
+    }
+}
+
+class MouthMinion extends Enemy {
+    constructor(game, x, y) {
+        const scale = 3;
+        const width = 32;
+        const height = 32;
+        super(game, x, y, width, height, scale);
+
+        this.sprite = ASSET_MANAGER.getAsset("./res/enemies/mouth.png");
+        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 1, 1, 0, false, true));
+        this.life = 50;
+        super.updateBB();
+
+        // For movement
+        this.velocity = { x: 0, y: 0 };
+        // Starting direction of minion movement.
+        this.direction = 3;
+        // Timer for Sin/Cos functions.
+        this.moveTimer = 0;
+
+        this.life = 50;
+        this.startTimer = Date.now()
+    }
+
+    draw(ctx) {
+        this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        super.draw(ctx);
+    }
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x + 24, this.y + 32, this.width + 20, this.height + 12);
+    }
+
+    update() {
+
+        this.updateBB();
+        super.checkCollision(this.game.entities);
+
+        // For movement
+        const Direction = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 };
+        const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4 };
+
+        // Physics
+        const TICK = this.game.clockTick;
+        // Velocity based on movement
+        const VELOCITY = { SUPERFAST: 150, FAST: 100, REGULAR: 75, SLOW: 50, SUPERSLOW: 25 }
+
+        // Sprite velocity
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+
+        // SPRITE MOVING LEFT
+        if (this.velocity.x <= 0 && this.direction === Direction.LEFT) {
+            if (this.BB.left < 0) {
+                this.direction = Direction.RIGHT;
+            } else {
+
+                // Params to adjust wave.
+                let amplitude = 50;
+                let angularFrequency = 0;
+
+                // x axis movement.
+                this.velocity.x += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.SIN);
+
+                // y axis movement.
+                this.velocity.y += this.moveFunction(VELOCITY.REGULAR, Movement.DOWN);
+            }
+        }
+
+        // SPRITE MOVING RIGHT ( and/or UP/DOWN)
+        else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) {
+            if (this.BB.right > PARAMS.CANVAS_WIDTH) {
+                this.direction = Direction.LEFT;
+            } else {
+
+                let amplitude = 50;
+                let angularFrequency = 1 / 10;
+
+                // x axis movement.
+                this.velocity.x += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.COS);
+
+                // y axis movement.
+                this.velocity.y += this.moveFunction(VELOCITY.REGULAR, Movement.DOWN);
+            }
+        }
+
+        // Reset move timer so not to overflow.
+        if (this.moveTimer > 10000) {
+            this.moveTimer = 1;
+        }
+
+        // Update sprite position.
+        this.x += this.velocity.x * TICK * this.scale;
+        this.y += this.velocity.y * TICK * this.scale;
+
+
+        if (this.y >= PARAMS.CANVAS_HEIGHT) {
+            this.removeFromWorld = true;
+        }
+
+    };
+
+    /**
+     * Controls the velocity of the sprite.
+     * @param velocity
+     * @param direction
+     * @returns {number|*|number}
+     */
+    moveFunction(velocity, direction) {
+        let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
+        return movementFunctions[direction];
+    }
+}
+
+class NoseMinion extends Enemy {
+    constructor(game, x, y) {
+        const scale = 3;
+        const width = 32;
+        const height = 32;
+        super(game, x, y, width, height, scale);
+
+        this.sprite = ASSET_MANAGER.getAsset("./res/enemies/nose.png");
+        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 1, 1, 0, false, true));
+        this.life = 50;
+        super.updateBB();
+
+        // For movement
+        this.velocity = { x: 0, y: 0 };
+        // Starting direction of minion movement.
+        this.direction = 3;
+        // Timer for Sin/Cos functions.
+        this.moveTimer = 0;
+
+        this.life = 50;
+        this.startTimer = Date.now()
+    }
+
+    draw(ctx) {
+        this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        super.draw(ctx);
+    }
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x + 36, this.y + 24, this.width - 8, this.height + 16);
+    }
+
+    update() {
+
+        this.updateBB();
+        super.checkCollision(this.game.entities);
+
+        // For movement
+        const Direction = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 };
+        const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4 };
+
+        // Physics
+        const TICK = this.game.clockTick;
+        // Velocity based on movement
+        const VELOCITY = { SUPERFAST: 150, FAST: 100, REGULAR: 75, SLOW: 50, SUPERSLOW: 25 }
+
+        // Sprite velocity
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+
+        // SPRITE MOVING LEFT
+        if (this.velocity.x <= 0 && this.direction === Direction.LEFT) {
+            if (this.BB.left < 0) {
+                this.direction = Direction.RIGHT;
+            } else {
+
+                // Params to adjust wave.
+                let amplitude = 50;
+                let angularFrequency = 0;
+
+                // x axis movement.
+                this.velocity.x += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.SIN);
+
+                // y axis movement.
+                this.velocity.y += this.moveFunction(VELOCITY.SUPERSLOW, Movement.DOWN);
+            }
+        }
+
+        // SPRITE MOVING RIGHT ( and/or UP/DOWN)
+        else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) {
+            if (this.BB.right > PARAMS.CANVAS_WIDTH) {
+                this.direction = Direction.LEFT;
+            } else {
+
+                let amplitude = 50;
+                let angularFrequency = 1 / 10;
+
+                // x axis movement.
+                this.velocity.x += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.COS);
+
+                // y axis movement.
+                this.velocity.y += this.moveFunction(VELOCITY.SUPERSLOW, Movement.DOWN);
+            }
+        }
+
+        // Reset move timer so not to overflow.
+        if (this.moveTimer > 10000) {
+            this.moveTimer = 1;
+        }
+
+        // Update sprite position.
+        this.x += this.velocity.x * TICK * this.scale;
+        this.y += this.velocity.y * TICK * this.scale;
+
+
+        if (this.y >= PARAMS.CANVAS_HEIGHT) {
+            this.removeFromWorld = true;
+        }
+
+    };
+
+    /**
+     * Controls the velocity of the sprite.
+     * @param velocity
+     * @param direction
+     * @returns {number|*|number}
+     */
+    moveFunction(velocity, direction) {
+        let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
+        return movementFunctions[direction];
     }
 }
