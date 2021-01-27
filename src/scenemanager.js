@@ -32,11 +32,11 @@ class CaveLevel extends Level {
             // Add background first so everything fits on top
             new Background(this.game, 0, -760, "./res/cavebg.png"),
             new Background(this.game, 0, 0, "./res/cavebg.png"),
-            
-            new Player(this.game),            
 
-            new EyeMinion(this.game, 50, 300),
-            new EyeMinion(this.game, 150, 300),
+            new Player(this.game),
+
+            new MouthMinion(this.game, 50, 300),
+            new NoseMinion(this.game, 150, 300),
             new EyeMinion(this.game, 250, 300),
             new EyeMinion(this.game, 350, 300),
             new EyeMinion(this.game, 450, 300),

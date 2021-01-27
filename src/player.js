@@ -1,7 +1,7 @@
 class Player {
     constructor(game) {
         // Sprite and animation for the player
-        this.sprite = ASSET_MANAGER.getAsset("./res/arcadeShooterSpritex32.png");
+        this.sprite = ASSET_MANAGER.getAsset("./res/player.png");
         this.animations = [];
 
         // The movespeed for the player unnormalized (you move faster diagonally)
@@ -111,14 +111,14 @@ class Player {
         this.speedY += this.game.down ? this.moveSpeed : 0;
 
         this.x += this.speedX;
-        if(this.speedX < 0) {
+        if (this.speedX < 0) {
             this.x = Math.max(0, this.x);
         } else {
             this.x = Math.min(PARAMS.WIDTH - (this.width * this.scale), this.x);
         }
 
         this.y += this.speedY;
-        if(this.speedY < 0) {
+        if (this.speedY < 0) {
             this.y = Math.max(0, this.y);
         } else {
             this.y = Math.min(PARAMS.HEIGHT - (this.width * this.scale), this.y);
@@ -172,14 +172,14 @@ class Player {
                             this.life = (this.life + 1) % 3;
                         }
                     }
-                    
+
                     if (collideWithEnemyBullet(entity)) {
                         entity.destroy();
                     }
                 } else if (collideWithPowerup(entity)) {
                     this.handlePowerUp(entity);
                     entity.destroy();
-                } 
+                }
             }
         });
     }
