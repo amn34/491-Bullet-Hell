@@ -42,7 +42,7 @@ class Player {
         this.bullets = [this.center];
 
         // The damage the player does to an enemy
-        this.power = 5;
+        this.damage = 1;
 
         // Additional States from the power up picked
         // Use these so we can always reset the stats of the player easily when needed
@@ -88,7 +88,7 @@ class Player {
         this.canShoot++;
         if (this.canShoot >= (this.fireRate - this.fireRateFromPowerUp)) {
             this.bullets.forEach(bulletPos => {
-                this.game.addEntity(new PlayerBullet(this.game, this.x + bulletPos, this.y, 1, this.power + this.powerFromPowerUp));
+                this.game.addEntity(new PlayerBullet(this.game, this.x + bulletPos, this.y, 1, this.damage + this.powerFromPowerUp));
             });
 
             this.canShoot = 0;
@@ -124,8 +124,8 @@ class Player {
             this.y = Math.min(PARAMS.HEIGHT - (this.width * this.scale), this.y);
         }
 
-        this.speedX *= 0.8;
-        this.speedY *= 0.8;
+        this.speedX *= 0.5;
+        this.speedY *= 0.5;
 
         if (!this.canTakeDamage) {
             if (this.timeInvincible <= 0) {
@@ -211,6 +211,7 @@ class Player {
                     this.bullets.push(this.bullets[len - 2] - 15, this.bullets[len - 1] + 15);
                 }
                 break;
+            /*
             case MultipleProjectilePowerUp:
                 if (len === 1) {
                     this.bullets.push(this.bullets[0] - 15, this.bullets[0] + 15, this.bullets[0] - 30, this.bullets[0] + 30);
@@ -218,6 +219,7 @@ class Player {
                     this.bullets.push(this.bullets[len - 2] - 15, this.bullets[len - 1] + 15, this.bullets[len - 2] + 30, this.bullets[len - 1] + 30);
                 }
                 break;
+            */
             default:
                 break;
         }
