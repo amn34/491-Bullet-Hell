@@ -710,6 +710,8 @@ class MouthMinion extends Enemy {
         this.moveTimer = 0;
 
         this.life = 3;
+        this.canShoot = 0;
+        this.threshHold = 36;
         this.startTimer = Date.now()
     }
 
@@ -726,6 +728,14 @@ class MouthMinion extends Enemy {
 
         this.updateBB();
         super.checkCollision(this.game.entities);
+
+        this.canShoot++;
+        if (this.canShoot === this.threshHold) {
+            let center = this.x + (this.width / 2);
+            this.game.addEntity(new MouthBullet(this.game, center, this.y + this.height, 1, true));
+            this.game.addEntity(new MouthBullet(this.game, center, this.y + this.height, 1, false));
+            this.canShoot = 0;
+        }
 
         // For movement
         const Direction = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 };
