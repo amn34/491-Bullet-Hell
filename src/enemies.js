@@ -6,7 +6,7 @@ class Enemy {
         this.startY = this.y;
 
         this.damage = 1;
-        this.life = 100;
+        this.life = 1;
         // Determines the path of the enemy
         this.goRight = true;
     }
@@ -44,13 +44,11 @@ class Enemy {
                     entity.destroy();
                     //creates a particle effect
                     this.game.addEntity(new BulletExplosion(this.game, entity.x, entity.y));
+                    this.life -= entity.damage;
                     if (this.life <= 0 || this.life === NaN) {
                         this.chanceForDrop();
                         this.destroy();
-                    } else {
-                        this.life -= entity.damage;
                     }
-
                 }
             }
         });
@@ -58,13 +56,13 @@ class Enemy {
 
     chanceForDrop() {
         let powerups = [[IncreaseFireRatePowerUp, "./res/powerups/fire_rate_pu.png"], [AdditionalProjectilePowerUp, "./res/powerups/ap1_pu.png"],
-        [IncreaseHealthPowerUp, "./res/powerups/health_pu.png"], [MultipleProjectilePowerUp, "./res/powerups/ap2_pu.png"],
-        [IncreasePowerPowerUp, "./res/powerups/power_pu.png"], [IncreaseShieldPowerUp, "./res/powerups/shield_pu.png"]];
+        [IncreaseHealthPowerUp, "./res/powerups/health_pu.png"], [IncreasePowerPowerUp, "./res/powerups/power_pu.png"],
+        [IncreaseShieldPowerUp, "./res/powerups/shield_pu.png"]];
 
         // if roll === 1 drop a powerup
         let roll = Math.floor(Math.random() * 100);
 
-        if (roll <= 2) {
+        if (roll <= 15) {
             let ind = Math.floor(Math.random() * powerups.length);
             this.game.addEntity(new powerups[ind][0](this.game, this.x, this.y, powerups[ind][1]));
         }
@@ -86,15 +84,10 @@ class Brain extends Enemy {
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 12, 0.2, 0, false, true));
 
         // Can shoot once this reaches 100
-        this.life = 2000;
+        this.life = 15;
         this.canShoot = 9;
         this.threshHold = 200;
         this.updateBB();
-
-        // Functionality to control the spawning of minions.
-        this.minion_count = 0;
-        this.spawnFrequency = 1;
-        this.spawnMax = 50;
 
         this.startTimer = Math.floor(Date.now() / 100);
         this.oldTime = 0;
@@ -134,22 +127,22 @@ class Brain extends Enemy {
 
         // Functionality to control the spawning of minions.
         this.minion_count = 0;
-        this.spawnFrequency = 1;
-        this.spawnMax = 50;
+        this.spawnFrequency = 0;
+        this.spawnMax = 0;
 
         // Controls regular minion spawn behavior. Dependent on Brain life remaining.
         if (this.life >= this.totalLife * 3 / 4) {
-            this.spawnFrequency = 5;
-            this.spawnMax = 150;
+            this.spawnFrequency = 10;
+            this.spawnMax = 5;
         } else if (this.life >= this.totalLife * 1 / 2) {
-            this.spawnFrequency = 2;
-            this.spawnMax = 300;
+            this.spawnFrequency = 9;
+            this.spawnMax = 5;
         } else if (this.life >= this.totalLife * 1 / 4) {
-            this.spawnFrequency = 1;
-            this.spawnMax = 1000;
+            this.spawnFrequency = 8;
+            this.spawnMax = 5;
         } else if (this.life >= this.totalLife * 1 / 8) { // Life very low - go crazy.
-            this.spawnFrequency = 1; // Ultimate
-            this.spawnMax = 100000; // Ultimate
+            this.spawnFrequency = 5; // Ultimate
+            this.spawnMax = 5; // Ultimate
         }
 
         // Randomize x-coordinate for minion.
@@ -186,7 +179,6 @@ class EyeMinion extends Enemy {
 
         this.sprite = ASSET_MANAGER.getAsset("./res/enemies/eye.png");
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 8, 0.2, 0, false, true));
-        this.life = 50;
         super.updateBB();
 
         // For movement
@@ -196,7 +188,7 @@ class EyeMinion extends Enemy {
         // Timer for Sin/Cos functions.
         this.moveTimer = 0;
 
-        this.life = 50;
+        this.life = 1;
         this.startTimer = Date.now()
     };
 
@@ -210,19 +202,17 @@ class EyeMinion extends Enemy {
     }
 
     update() {
-
         this.updateBB();
         super.checkCollision(this.game.entities);
 
         // For movement
-
         const Direction = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 };
         const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4 };
 
         // Physics
         const TICK = this.game.clockTick;
         // Velocity based on movement
-        const VELOCITY = { SUPERFAST: 600, FAST: 400, REGULAR: 100, SLOW: 50, SUPERSLOW: 10 }
+        const VELOCITY = { SUPERFAST: 600, FAST: 400, REGULAR: 100, SLOW: 50, SUPERSLOW: 25 }
 
         // Sprite velocity
         this.velocity.x = 0;
@@ -242,7 +232,7 @@ class EyeMinion extends Enemy {
                 this.velocity.x += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.SIN);
 
                 // y axis movement.
-                this.velocity.y += this.moveFunction(VELOCITY.SLOW, Movement.DOWN);
+                this.velocity.y += this.moveFunction(VELOCITY.SUPERSLOW, Movement.DOWN);
             }
         }
 
@@ -259,7 +249,7 @@ class EyeMinion extends Enemy {
                 this.velocity.x += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.COS);
 
                 // y axis movement.
-                this.velocity.y += this.moveFunction(VELOCITY.SLOW, Movement.DOWN);
+                this.velocity.y += this.moveFunction(VELOCITY.SUPERSLOW, Movement.DOWN);
             }
         }
 
@@ -278,9 +268,6 @@ class EyeMinion extends Enemy {
         }
 
     };
-
-
-
 
     /**
      * Controls the velocity of the sprite.
@@ -324,7 +311,7 @@ class Cthulhu extends Enemy {
         this.restoreCount = 0;
 
         // Life of enemy
-        this.life = 20000;
+        this.life = 5000;
         this.totalLife = this.life;
 
         this.startTimer = Math.floor(Date.now() / 100);
@@ -358,16 +345,16 @@ class Cthulhu extends Enemy {
         // Controls regular minion spawn behavior. Dependent on Cthulhu life remaining.
         if (this.life >= this.totalLife * 3 / 4) { // Life greater than a quarter of original life.
             this.spawnFrequency = 5; // 1 minion every 50 centiseconds
-            this.spawnMax = 150;
+            this.spawnMax = 100;
         } else if (this.life >= this.totalLife * 1 / 2) { // Life less then Quarter but greater than 1/2 of original life.
             this.spawnFrequency = 2; // 1 minion every 25 milliseconds
-            this.spawnMax = 300;
+            this.spawnMax = 200;
         } else if (this.life >= this.totalLife * 1 / 4) {
             this.spawnFrequency = 1; // 1 minion every 10 milliseconds
-            this.spawnMax = 1000;
+            this.spawnMax = 500;
         } else if (this.life >= this.totalLife * 1 / 8) { // Life very low - go crazy.
             this.spawnFrequency = 1; // Ultimate -  1 minion every millisecond
-            this.spawnMax = 100000; // Ultimate
+            this.spawnMax = 1000; // Ultimate
         }
 
         // Randomize x-coordinate for minion.
@@ -492,7 +479,7 @@ class CthulhuMinion extends Enemy {
         // Timer for Sin/Cos functions.
         this.moveTimer = 0;
 
-        this.life = 50;
+        this.life = 1;
 
         this.startTimer = Date.now()
 
@@ -634,7 +621,6 @@ class CthulhuMinion extends Enemy {
 
 }
 
-
 class FingerGunDude extends Enemy {
     constructor(game, x, y) {
         const scale = 3;
@@ -649,7 +635,7 @@ class FingerGunDude extends Enemy {
         this.threshHold = 100;
         this.animationIndex = 0;
 
-        this.life = 200;
+        this.life = 10;
         this.loadAnimations();
     }
 
@@ -714,7 +700,6 @@ class MouthMinion extends Enemy {
 
         this.sprite = ASSET_MANAGER.getAsset("./res/enemies/mouth.png");
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 1, 1, 0, false, true));
-        this.life = 50;
         super.updateBB();
 
         // For movement
@@ -724,7 +709,7 @@ class MouthMinion extends Enemy {
         // Timer for Sin/Cos functions.
         this.moveTimer = 0;
 
-        this.life = 50;
+        this.life = 3;
         this.startTimer = Date.now()
     }
 
@@ -827,7 +812,6 @@ class NoseMinion extends Enemy {
 
         this.sprite = ASSET_MANAGER.getAsset("./res/enemies/nose.png");
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 1, 1, 0, false, true));
-        this.life = 50;
         super.updateBB();
 
         // For movement
@@ -837,7 +821,7 @@ class NoseMinion extends Enemy {
         // Timer for Sin/Cos functions.
         this.moveTimer = 0;
 
-        this.life = 50;
+        this.life = 5;
         this.startTimer = Date.now()
     }
 
