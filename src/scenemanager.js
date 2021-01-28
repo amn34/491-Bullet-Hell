@@ -1,7 +1,8 @@
 class Level {
-
     constructor(game) {
         this.game = game;
+        this.game.camera = this;
+        this.life = 0;
         this.level = {};
     }
 
@@ -18,7 +19,21 @@ class Level {
         }
     };
 
-    draw(ctx) { };
+    draw(ctx) {
+        ctx.fillStyle = "black";
+        ctx.fillRect(210, 720, 310, 30);
+        ctx.fillStyle = "red";
+        ctx.fillRect(215, 725, 300 - 100 * this.life, 20);
+        ctx.strokeStyle = "black";
+        ctx.beginPath();
+        ctx.moveTo(315, 720);
+        ctx.lineTo(315, 750);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(415, 720);
+        ctx.lineTo(415, 750);
+        ctx.stroke();
+    };
 }
 
 class CaveLevel extends Level {
@@ -32,7 +47,6 @@ class CaveLevel extends Level {
             // Add background first so everything fits on top
             new Background(this.game, 0, -760, "./res/cavebg.png"),
             new Background(this.game, 0, 0, "./res/cavebg.png"),
-
             new Player(this.game),
         ];
         this.level[1] = [

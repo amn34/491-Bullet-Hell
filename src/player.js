@@ -170,6 +170,7 @@ class Player {
                             this.shield--;
                         } else {
                             this.life = (this.life + 1) % 3;
+                            this.game.camera.life = this.life;
                         }
                     }
 
@@ -247,9 +248,9 @@ class AltPlayer {
 
 
         // how many hits left before death
-        // 0 - full health, 
-        // 1 - 2 hits left, 
-        // 2 - 1 hit left, 
+        // 0 - full health,
+        // 1 - 2 hits left,
+        // 2 - 1 hit left,
         // 3 - dead
         this.life = 0
 
