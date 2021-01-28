@@ -2,7 +2,8 @@ class Level {
     constructor(game) {
         this.game = game;
         this.game.camera = this;
-        this.life = 0;
+        this.life = 3;
+        this.totalLife = 3;
         this.level = {};
     }
 
@@ -23,7 +24,7 @@ class Level {
         ctx.fillStyle = "black";
         ctx.fillRect(210, 720, 310, 30);
         ctx.fillStyle = "red";
-        ctx.fillRect(215, 725, 300 - 100 * this.life, 20);
+        ctx.fillRect(215, 725, 300 - 100 * (this.totalLife - this.life), 20);
         ctx.strokeStyle = "black";
         ctx.beginPath();
         ctx.moveTo(315, 720);

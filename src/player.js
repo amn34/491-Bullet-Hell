@@ -21,8 +21,9 @@ class Player {
         this.center = (this.width * this.scale / 2) - 3;
 
         // how many hits left before death
-        // 0 = full health | 1 = 2 hits left | 2 = 1 hits left | 3 = dead
-        this.life = 0;
+        // 3 = full health | 2 = 2 hits left | 1 = 1 hits left | 0 = dead
+        this.life = 3;
+        this.totalLife = 3;
         this.shield = 0;
 
         // Take damage then decrease until we reach 0 before taking damage again
@@ -49,7 +50,7 @@ class Player {
         this.fireRateFromPowerUp = 0;
         this.powerFromPowerUp = 0;
         this.bulletSpeedFromPowerUp = 0;
-        this.healthFromPowerUp = 0;
+        // this.healthFromPowerUp = 0;
         this.shieldFromPowerUp = 0;
         this.projectilesFromPowerUp = 0;
 
@@ -94,7 +95,8 @@ class Player {
             this.canShoot = 0;
         }
 
-        this.animations[this.life][this.powerup].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        let animationIndex = this.life == 0 ? 0 : this.totalLife - this.life;
+        this.animations[animationIndex][this.powerup].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
@@ -169,7 +171,7 @@ class Player {
                         if (this.shield) {
                             this.shield--;
                         } else {
-                            this.life = (this.life + 1) % 3;
+                            this.life = this.life > 0 ? this.life - 1 : 0;
                             this.game.camera.life = this.life;
                         }
                     }
@@ -197,7 +199,8 @@ class Player {
                 this.fireRateFromPowerUp += this.fireRateFromPowerUp + increase > 13 ? 0 : increase;
                 break;
             case IncreaseHealthPowerUp:
-                this.healthFromPowerUp -= this.life > 0 ? 1 : 0;
+                this.life += this.life < this.totalLife ? 1 : 0;
+                this.game.camera.life = this.life;
                 break;
             case IncreasePowerPowerUp:
                 this.powerFromPowerUp += 1;
@@ -252,7 +255,7 @@ class AltPlayer {
         // 1 - 2 hits left,
         // 2 - 1 hit left,
         // 3 - dead
-        this.life = 0
+        this.life = 0;
 
         // currently has a powerup
         // 0 - powerup, 1 - no powerup
