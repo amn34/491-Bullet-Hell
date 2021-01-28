@@ -74,8 +74,9 @@ class CaveLevel extends Level {
             new Brain(this.game, 200, 10),
         ];
         this.level[20] = [
-            new MouthMinion(this.game, 200, 0),
-            new MouthMinion(this.game, 500, 0),
+            new MouthMinion(this.game, 100, 0),
+            new MouthMinion(this.game, 350, 0),
+            new MouthMinion(this.game, 600, 0),
         ];
         this.level[21] = [
             new NoseMinion(this.game, 300, 0),

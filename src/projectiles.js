@@ -192,3 +192,39 @@ class CthulhuMinionBullet extends Bullet {
         super.update();
     }
 }
+
+class MouthBullet extends Bullet {
+    constructor(game, x, y, scale, isRight) {
+        const width = 20;
+        const height = 20;
+        const bulletSpeed = 4;
+        const bulletType = 1; //enemy bullet
+        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
+        this.isRight = isRight;
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = "Red";
+        ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
+        
+        if(PARAMS.DEBUG) {
+            this.drawBB(ctx);
+        }
+    }
+
+    update() {
+        if (this.x <= 0 || this.x >= PARAMS.WIDTH) {
+            this.isRight = !this.isRight;
+        }
+
+        if (this.isRight && this.x <= PARAMS.WIDTH) {
+            this.x += this.bulletSpeed;
+        } else if (this.x >= 0) {
+            this.x -= this.bulletSpeed;
+        }
+
+        this.y += this.bulletSpeed / 1.5;
+
+        super.update();
+    }
+}
