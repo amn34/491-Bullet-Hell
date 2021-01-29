@@ -361,8 +361,13 @@ class Cthulhu extends Enemy {
         // Randomize x-coordinate for minion.
         this.xMinionPosition = Math.floor((Math.random() * PARAMS.CANVAS_WIDTH - 96) + 96);
 
+        // TODO - Something wrong here. Probbaly has to do with spawnMax and minion_count. Will need to figure out
+        // how to deal with minion count dynamically.
         this.spawnTrainCreature(250, 1);
         this.spawnMinion(this.xMinionPosition, - 100, this.spawnFrequency, this.spawnMax, "CthulhuMinion");
+        this.spawnMinion(this.xMinionPosition, 80, this.spawnFrequency, 200, "CthulhuSquid");
+        this.spawnMinion(this.xMinionPosition, 40, this.spawnFrequency, this.spawnMax, "CthulhuArrow");
+        this.spawnMinion(this.xMinionPosition, 150, this.spawnFrequency, this.spawnMax, "CthulhuCrab");
 
         this.updateBB();
         super.checkCollision(this.game.entities);
@@ -947,7 +952,6 @@ class CthulhuCrab extends Enemy {
         this.animations[this.animationType].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
     }
 }
-
 
 class FingerGunDude extends Enemy {
     constructor(game, x, y) {
