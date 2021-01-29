@@ -23,6 +23,9 @@ ASSET_MANAGER.queueDownload("./res/bullet.png");
 ASSET_MANAGER.queueDownload("./res/explosion.png");
 ASSET_MANAGER.queueDownload("./res/enemies/mouth.png");
 ASSET_MANAGER.queueDownload("./res/enemies/nose.png");
+ASSET_MANAGER.queueDownload("./res/enemies/cthulhuSquid.png");
+ASSET_MANAGER.queueDownload("./res/enemies/cthulhuTriangle.png");
+ASSET_MANAGER.queueDownload("./res/enemies/cthulhuCrab.png");
 
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
