@@ -40,6 +40,7 @@ class Level {
 class CaveLevel extends Level {
     constructor(game) {
         super(game);
+
         this.createLevel();
     }
 

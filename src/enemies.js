@@ -18,6 +18,8 @@ class Enemy {
         }
     }
 
+
+
     updateBB() {
         this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
     }
@@ -70,7 +72,6 @@ class Enemy {
     }
 
 }
-
 
 class Brain extends Enemy {
     constructor(game, x, y) {
@@ -282,9 +283,8 @@ class EyeMinion extends Enemy {
 
 }
 
-
 /**
- * Chululu sprite is a boss level sprite. Default animation is hovering while tentacles move.
+ * Cthulhu boss. Controls the spawning of CthulhuMinion, CthulhuSquid, CthulhuCrab, and CthulhuArrow.
  */
 class Cthulhu extends Enemy {
     constructor(game, x, y) {
@@ -298,15 +298,18 @@ class Cthulhu extends Enemy {
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 10, 0.3,
             false, false, true));
 
-        // Functionality to control the spawning of minions.
-        this.minion_count = 0;
-        this.spawnFrequency = 1;
-        this.spawnMax = 50;
+        // Control for spawning of minions.
+        this.minionCount = 0;
+        this.typeCounter = 0;
+        this.creatureCount = 0;
+        this.squidCount = 0;
+        this.crabCount = 0;
+        this.arrowCount = 0;
 
-        // Controls spawning of millipede.
+        // Controls for spawning of train.
         this.xMinionPosition = this.x;
-        this.spawnMillipede = false;
-        this.millipedeCounter = 0;
+        this.spawnTrain = false;
+        this.trainCounter = 0;
         this.resetCount = false;
         this.restoreCount = 0;
 
@@ -319,8 +322,8 @@ class Cthulhu extends Enemy {
     };
 
     /**
-     * Cthulhu update method. Controls it's own movement. Functionality also provided to allow control of the
-     * the Cthulhu minion.
+     * Controls movement of Cthulhu sprite and spawning behavior of arrow, squid, crab, and creature minions. Controls
+     * train for creature minion.
      */
     update() {
         // Timer that determines spawning intervals.
@@ -341,93 +344,120 @@ class Cthulhu extends Enemy {
             this.goRight = !this.goRight;
         }
 
-
-        // Controls regular minion spawn behavior. Dependent on Cthulhu life remaining.
-        if (this.life >= this.totalLife * 3 / 4) { // Life greater than a quarter of original life.
-            this.spawnFrequency = 5; // 1 minion every 50 centiseconds
-            this.spawnMax = 100;
-        } else if (this.life >= this.totalLife * 1 / 2) { // Life less then Quarter but greater than 1/2 of original life.
-            this.spawnFrequency = 2; // 1 minion every 25 milliseconds
-            this.spawnMax = 200;
-        } else if (this.life >= this.totalLife * 1 / 4) {
-            this.spawnFrequency = 1; // 1 minion every 10 milliseconds
-            this.spawnMax = 500;
-        } else if (this.life >= this.totalLife * 1 / 8) { // Life very low - go crazy.
-            this.spawnFrequency = 1; // Ultimate -  1 minion every millisecond
-            this.spawnMax = 1000; // Ultimate
-        }
-
         // Randomize x-coordinate for minion.
         this.xMinionPosition = Math.floor((Math.random() * PARAMS.CANVAS_WIDTH - 96) + 96);
 
-        this.spawnMillipedeCreature(250, 1);
-        this.spawnMinion(this.xMinionPosition, - 100, this.spawnFrequency, this.spawnMax);
+        this.spawnTrainCreature(100, 2);
+
+        /* If you want to modify spawn behavior, mess with parameters for spawnBehavior() */
+        if (this.typeCounter < 5 || this.spawnTrain) { // Spawn regular minion
+            this.spawnBehavior(5, 100, 2, 200, 1, 500, 1, 1000);
+            this.spawnMinion(this.xMinionPosition, - 100, "CthulhuMinion");
+        } else if (this.typeCounter < 10) { // Spawn Squid
+            this.spawnBehavior(15, 100, 3, 200, 2, 500, 1, 1000);
+            this.spawnMinion(this.xMinionPosition, -80,"CthulhuSquid");
+        } else if (this.typeCounter < 15) { // Spawn Arrow
+            this.spawnBehavior(3, 100, 2, 200, 1, 500, 1, 1000);
+            this.spawnMinion(this.xMinionPosition, -40, "CthulhuArrow");
+        } else if (this.typeCounter < 20) { // Spawn Crab
+            this.spawnBehavior(10, 100, 2, 200, 1, 500, 1, 1000);
+            this.spawnMinion(this.xMinionPosition, -50, "CthulhuCrab");
+        } else { // Reset counter.
+            this.typeCounter = 0;
+        }
 
         this.updateBB();
         super.checkCollision(this.game.entities);
     };
 
-    updateBB() {
-        this.BB = new BoundingBox(this.x + 60, this.y, this.width - 130, this.height - 40);
+    /**
+     * Controls the spawning behavior of minions. Each stage is dependent on the bosses remaining life. Stage 1
+     * is the spawning behavior when boss has more than 3/4 of remaining life. Stage 2 when bosses health
+     * drops below 3/4 but above 1/2. Stage 3 occurs when bosses health is less than 1/2 but greater than 1/4. Stage
+     * 4 is last spawning behavior when life drops to below 1/4th of total life.
+     *
+     * @param freqStage1 the frequency of spawning for stage 1.
+     * @param maxStage1 the maximum number of minions that can be spawned at stage 1.
+     * @param freqStage2
+     * @param maxStage2
+     * @param freqStage3
+     * @param maxStage3
+     * @param freqStage4
+     * @param maxStage4
+     */
+    spawnBehavior(freqStage1, maxStage1, freqStage2, maxStage2, freqStage3, maxStage3, freqStage4, maxStage4) {
+        if (this.life >= this.totalLife * 3 / 4) {
+            if (!this.spawnTrain) {
+                this.spawnFrequency = freqStage1;
+                this.spawnMax = maxStage1;
+            }
+        } else if (this.life >= this.totalLife / 2) {
+            this.spawnFrequency = freqStage2;
+            this.spawnMax = maxStage2;
+        } else if (this.life >= this.totalLife / 4) {
+            this.spawnFrequency = freqStage3;
+            this.spawnMax =maxStage3;
+        } else if (this.life >= this.totalLife / 8) {
+            this.spawnFrequency = freqStage4;
+            this.spawnMax = maxStage4;
+        }
     }
 
     /**
-     * Determines when to spawn the minion millipede formation. When it is time to spawn the millipede the regular
-     * minion spawning halts until the full length of the millipede is spawned. Once millipede is spawned regular minion
-     * spawning resumes at original rate pre-spawn.
+     * Determines when to spawn the minion train formation. When it is time to spawn the train the regular
+     * minion spawning halts until the full length of the train is spawned. Once the trains spawning has completed
+     * regular minion spawning resumes at original rate pre-spawn.
      *
-     * @param millipedeLength int value that determines how many minions make up a millipede.
+     * @param trainLength int value that determines how many minions make up a train.
      * @param distanceBetween int centisecond value that determines how closely each minion is spawned to the following one.
      */
-    spawnMillipedeCreature(millipedeLength, distanceBetween) {
-        // The frequency of the millipede is dependent on the length of millipede.
-        let millipedeFrequency = 2 * millipedeLength + (millipedeLength / 2)
-        if (this.elapsedTime % millipedeFrequency === 0 && this.oldTime > 0) {
-            this.spawnMillipede = true;
+    spawnTrainCreature(trainLength, distanceBetween) {
+        // The frequency of the train is dependent on the length of millipede.
+
+        let trainFrequency = 2 * trainLength + (trainLength / 2)
+        if (trainFrequency < 600) {
+            trainFrequency = 600;
+        }
+        if (this.elapsedTime % trainFrequency === 0 && this.oldTime > 0) {
+            this.spawnTrain = true;
             this.resetCount = true;
         }
-
-        // Control length of millipede & how close minions spawn together.
-        if (this.spawnMillipede) {
-            this.xMinionPosition = this.x; // Millipede dependent on Cthulhu position.
+        // Control length of train & how close minions spawn together.
+        if (this.spawnTrain) {
+            this.xMinionPosition = this.x; // train dependent on Cthulhu position.
             this.spawnFrequency = distanceBetween; // How close each minion spawns to the next one.
-            this.spawnMax = millipedeLength;  // Length of the millipede.
-
-            //  Reset and save minion count prior to millipede spawn.
+            this.spawnMax = trainLength;  // Length of the train.
+            //  Reset and save minion count prior to train spawn.
             if (this.resetCount) {
                 this.resetCount = false;
-                this.restoreCount = this.minion_count;
-                this.minion_count = 0;
+                this.restoreCount = this.minionCount;
+                this.minionCount = 0;
             }
         }
 
-        // Stop spawning millipede at the max millipede length.
-        if (this.millipedeCounter >= millipedeLength) {
-            this.spawnMillipede = false;
-            this.millipedeCounter = 0;
-            this.minion_count = this.restoreCount; // restore original minion count prior to millipede.
+        // Stop spawning train at the max train length.
+        if (this.trainCounter >= trainLength) {
+            this.spawnTrain = false;
+            this.trainCounter = 0;
+            this.minionCount = this.restoreCount; // restore original minion count prior to train.
         }
-
     }
 
-
     /**
-     * Controls the spawning of spawning of minions. spawnFrequency controls how quickly minions are spawned. It is
-     * based on timer in seconds (e.g. spawnTime = 1000 ms, 1 minion spawned every second. spawnTime = 10, 1 minion spawned
-     * every 10 milliseconds).
+     * Check whether a minion can be spawned or not. If enough time has elapsed since previous spawn, a minion
+     * will be spawned otherwise do not spawn. Time is counted in centiseconds (1/100 second).
      *
      * @param xStart starting spawn x coordinate
      * @param yStart starting spawn y coordinate
-     * @param spawnFrequency spawn interval.
-     * @param spawnMax max number of minions to spawn.
+     * @param minionType type of minion to spawn.
      */
-    spawnMinion(xStart, yStart, spawnFrequency, spawnMax) {
-        if (this.minion_count < spawnMax) {
-            if (this.elapsedTime % spawnFrequency === 0 && this.elapsedTime !== this.oldTime) {
-                this.spawn(xStart, yStart)
+    spawnMinion(xStart, yStart, minionType) {
+        if (this.minionCount < this.spawnMax) {
+            if (this.elapsedTime % this.spawnFrequency === 0 && this.elapsedTime !== this.oldTime) {
+                this.spawn(xStart, yStart, minionType)
                 this.oldTime = this.elapsedTime; // Keep track of old time (to ensure correct count of centiseconds)
-                if (this.spawnMillipede) {
-                    this.millipedeCounter++;
+                if (this.spawnTrain) {
+                    this.trainCounter++;
                 }
             }
         }
@@ -437,11 +467,41 @@ class Cthulhu extends Enemy {
      * Spawns a Cthulhu minion and increments the number of spawns.
      * @param x coordinate for minion spawn location.
      * @param y coordinate for minion spawn location.
+     * @param minionType the type of minion to spawn.
      */
-    spawn(x, y) {
-        this.game.addEntity(new CthulhuMinion(this.game, x, y));
-        this.minion_count++;
+    spawn(x, y, minionType) {
+        let minion;
+        switch (minionType) {
+            case "CthulhuCrab":
+                minion = new CthulhuCrab(this.game, x, y);
+                this.crabCount++;
+                this.minionCount = this.crabCount;
+                break;
+            case "CthulhuMinion":
+                minion = new CthulhuMinion(this.game, x, y);
+                this.creatureCount++;
+                this.minionCount = this.creatureCount;
+                break;
+            case "CthulhuSquid":
+                minion = new CthulhuSquid(this.game, x, y);
+                this.squidCount++;
+                this.minionCount = this.squidCount;
+                break;
+            case "CthulhuArrow":
+                minion = new CthulhuArrow(this.game, x, y);
+                this.arrowCount++;
+                this.minionCount = this.arrowCount;
+                break;
+            default:
+                console.log("Wrong minion type specified.");
+        }
+        this.game.addEntity(minion);
+        this.typeCounter++;
     };
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x + 60, this.y, this.width - 130, this.height - 40);
+    }
 
     /**
      * Cthulhu draw method. Single default animation.
@@ -453,13 +513,6 @@ class Cthulhu extends Enemy {
     };
 }
 
-/**
- * Cthulhu Minion that has two different default animations: Float & Attack. Movement is automatic based on a time
- * interval. Spawning of this character is controlled by the Cthulhu class.
- *
- * The number of minions spawned and the interval at which they are spawned are controlled by the Cthulhu class
- * update method.
- */
 class CthulhuMinion extends Enemy {
     constructor(game, x, y) {
         super(game, x, y);
@@ -574,6 +627,10 @@ class CthulhuMinion extends Enemy {
 
         // Collision
         super.checkCollision(this.game.entities);
+
+        if (this.y >= PARAMS.CANVAS_HEIGHT) {
+            this.removeFromWorld = true;
+        }
     }
 
     updateBB() {
@@ -618,7 +675,327 @@ class CthulhuMinion extends Enemy {
         super.draw(ctx);
         this.animations[this.animationType].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
     }
+}
 
+class CthulhuSquid extends Enemy {
+    constructor(game, x, y) {
+        const scale = 1;
+        const width = 79;
+        const height = 137;
+        super(game, x, y, width, height, scale);
+        this.sprite = ASSET_MANAGER.getAsset("./res/enemies/cthulhuSquid.png");
+
+        this.animationType = 1; // Starting animation.
+        this.velocity = { x: 0, y: 0 };
+        this.direction = 3; // Starting direction of minion movement.
+        this.moveTimer = 0; // Time for Sin/Cos functions.
+        this.life = 3;
+
+        this.startTimer = Date.now()
+        this.loadAnimations();
+        this.updateBB();
+    }
+
+    loadAnimations() {
+        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 1, 0.2,
+            0, false, true));
+        this.animations.push(new Animator(this.sprite, this.width, 0, this.width, this.height, 1, 0.2,
+            0, false, true));
+    }
+
+
+    update() {
+        const TICK = this.game.clockTick;
+        const Direction = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 }; // Keep track of direction
+        const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4 }; // Tied to moveFunction.
+        const VELOCITY = { SUPERFAST: 150, FAST: 100, REGULAR: 75, SLOW: 50, SUPERSLOW: 25 }
+
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+
+        if (this.velocity.x <= 0 && this.direction === Direction.LEFT) {
+            if (this.BB.left < 0) {
+                this.direction = Direction.RIGHT;
+            } else {
+                this.velocity.x += this.moveFunction(VELOCITY.REGULAR, Movement.UP);
+                let amplitude = 150;
+                let angularFrequency = 1 / 120;
+                this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.COS);
+            }
+        } else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) { // SPRITE MOVING RIGHT
+            if (this.BB.right > PARAMS.CANVAS_WIDTH) {
+                this.direction = Direction.LEFT;
+            } else {
+                this.velocity.x += this.moveFunction(VELOCITY.REGULAR, Movement.RIGHT);
+                let amplitude = 100;
+                let angularFrequency = 1 / 60;
+                this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.SIN);
+            }
+        }
+
+        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - 200) {
+            this.velocity.y -= 1;
+            this.y -= 1;
+        }
+
+        if (this.BB.top < -200) this.velocity.y = -this.velocity.y;
+
+        if (this.moveTimer > 10000) this.moveTimer = 1;  // Reset move timer so not to overflow.
+
+        // Update sprite position.
+        this.x += this.velocity.x * TICK * this.scale;
+        this.y += this.velocity.y * TICK * this.scale;
+        this.updateBB();
+        this.bulletPattern(300, 250, 20);
+        super.checkCollision(this.game.entities);
+
+        if (this.y >= PARAMS.CANVAS_HEIGHT) {
+            this.removeFromWorld = true;
+        }
+    }
+
+    /**
+     * Controls the velocity of the sprite.
+     * @param velocity
+     * @param direction
+     * @returns {number|*|number}
+     */
+    moveFunction(velocity, direction) {
+        let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
+        return movementFunctions[direction];
+    }
+
+    /**
+     * Controls the firing mechanism for minions. There are two different firing modes based on the location
+     * of the minion along the y-coordinate. There is a regular firing pattern in which the minion will fire
+     * at the regular fireInterval rate that is specified in milliseconds. If comes within a certain distance
+     * of the bottom of the canvas then the firing interval is dependent on  fireIntervalSpecial.
+     * @param distance from the bottom of the canvas.
+     * @param fireInterval regular fire interval.d
+     * @param fireIntervalSpecial fire interval when minion comes within a certain distance of the bottom of canvas.
+     */
+    bulletPattern(distance, fireInterval, fireIntervalSpecial) {
+        this.endTimer = Date.now();
+        this.elapsedTime = this.startTimer - this.endTimer;
+
+        if (this.elapsedTime % 50 === 0) this.animationType = 1; // Change animation every 50 milliseconds
+
+        // Special fire interval.
+        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - distance && this.elapsedTime % fireIntervalSpecial === 0) {
+            this.game.addEntity(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 15, 1));
+            this.animationType = 0;
+        }
+        // Regular fire interval.
+        else if (this.elapsedTime % fireInterval === 0) {
+            this.game.addEntity(new CthulhuMinionBullet(this.game, this.x + this.width / 2 + 20, this.y + this.height - 5, 1/2));
+            this.game.addEntity(new CthulhuMinionBullet(this.game, this.x + this.width / 2 - 20, this.y + this.height - 5, 1/2));
+            this.game.addEntity(new CthulhuMinionBullet(this.game, this.x + this.width / 2 + 12, this.y + this.height - 15, 1/2));
+            this.game.addEntity(new CthulhuMinionBullet(this.game, this.x + this.width / 2 - 12, this.y + this.height - 15, 1/2));
+            this.game.addEntity(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height, 1/2));
+            this.game.addEntity(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 30, 1/2));
+            this.animationType = 0;
+        }
+    }
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x + 25, this.y, this.width - 50, this.height - 50);
+    }
+
+    draw(ctx) {
+        super.draw(ctx);
+        this.animations[this.animationType].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+    }
+}
+
+class CthulhuArrow extends Enemy {
+    constructor(game, x, y) {
+        const scale = 1;
+        const width = 54;
+        const height = 62;
+        super(game, x, y, width, height, scale);
+        this.sprite = ASSET_MANAGER.getAsset("./res/enemies/cthulhuTriangle.png");
+
+        this.velocity = { x: 0, y: 0 };
+        this.animationType = 0;
+        this.life = 1;
+
+        this.startTimer = Date.now()
+        this.loadAnimations();
+        this.updateBB();
+    }
+
+    loadAnimations() {
+        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 1, 0.2,
+            0, false, true));
+        this.animations.push(new Animator(this.sprite, this.width, 0, this.width, this.height, 1, 0.2,
+            0, false, true));
+    }
+
+    update() {
+        const TICK = this.game.clockTick;
+        const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4 }; // Tied to moveFunction.
+        const VELOCITY = { SUPERFAST: 150, FAST: 100, REGULAR: 75, SLOW: 50, SUPERSLOW: 25 }
+        let startLaser = 350;
+
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+
+        this.velocity.y += this.moveFunction(VELOCITY.REGULAR, Movement.DOWN);
+
+        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - startLaser) {
+            this.velocity.y += this.moveFunction(VELOCITY.SUPERFAST, Movement.DOWN);
+            this.animationType = 1;
+        }
+
+        // Update sprite position.
+        this.x += this.velocity.x * TICK * this.scale;
+        this.y += this.velocity.y * TICK * this.scale;
+        this.updateBB();
+
+        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - startLaser) this.bulletPattern();
+
+        super.checkCollision(this.game.entities);
+
+        if (this.y >= PARAMS.CANVAS_HEIGHT) {
+            this.removeFromWorld = true;
+        }
+    }
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x, this.y, this.width, this.height);
+    }
+
+    bulletPattern() {
+        this.game.addEntity(new CthulhuMinionBullet(this.game, this.x + this.width / 2 - 1, this.y + this.height, 1/4));
+    }
+
+    /**
+     * Controls the velocity of the sprite.
+     * @param velocity
+     * @param direction
+     * @returns {number|*|number}
+     */
+    moveFunction(velocity, direction) {
+        let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
+        return movementFunctions[direction];
+    }
+
+    draw(ctx) {
+        super.draw(ctx);
+        this.animations[this.animationType].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+    }
+}
+
+class CthulhuCrab extends Enemy {
+    constructor(game, x, y) {
+        const scale = 1;
+        const width = 71;
+        const height = 42;
+        super(game, x, y, width, height, scale);
+        this.sprite = ASSET_MANAGER.getAsset("./res/enemies/cthulhuCrab.png")
+
+        this.velocity = { x: 0, y: 0 };
+        this.animationType = 0; // Starting animation.
+        this.direction = 3; // Starting direction of minion movement.
+        this.moveTimer = 0; // Time for sin/cos functions.
+
+        this.life = 2;
+        this.startTimer = Date.now()
+        this.loadAnimations();
+        this.updateBB();
+    }
+
+    loadAnimations() {
+        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 4, 0.4,
+            0, false, true));
+    }
+
+    update() {
+        const TICK = this.game.clockTick;
+        const Direction = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 }; // Keep track of direction.
+        const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4 }; // Tied to moveFunction.
+        const VELOCITY = { SUPERFAST: 150, FAST: 100, REGULAR: 75, SLOW: 50, SUPERSLOW: 25 }
+
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+
+        if (this.velocity.x <= 0 && this.direction === Direction.LEFT) { // SPRITE MOVING LEFT
+            if (this.BB.left < 0) {
+                this.direction = Direction.RIGHT;
+            } else {
+                this.velocity.x += this.moveFunction(VELOCITY.SUPERSLOW, Movement.LEFT);
+                let amplitude = 50;
+                let angularFrequency = 1 / 60;
+                this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.COS);
+            }
+        } else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) { // SPRITE MOVING RIGHT
+            if (this.BB.right > PARAMS.CANVAS_WIDTH) {
+                this.direction = Direction.LEFT;
+            } else {
+                this.velocity.x += this.moveFunction(VELOCITY.SUPERSLOW, Movement.RIGHT);
+                let amplitude = 50;
+                let angularFrequency = 1 / 60;
+                this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.SIN);
+            }
+        }
+
+        if (this.BB.top < 300) {
+            this.velocity.y += 1;
+            this.y += 1;
+        }
+
+        if (this.moveTimer > 10000) this.moveTimer = 1; // Reset move timer so not to overflow.
+
+        this.x += this.velocity.x * TICK * this.scale;
+        this.y += this.velocity.y * TICK * this.scale;
+
+        this.updateBB();
+        this.bulletPattern(200, 250, 50);
+        super.checkCollision(this.game.entities);
+
+        if (this.y >= PARAMS.CANVAS_HEIGHT) {
+            this.removeFromWorld = true;
+        }
+    }
+
+    /**
+     * Controls the firing mechanism for minions. There are two different firing modes based on the location
+     * of the minion along the y-coordinate. There is a regular firing pattern in which the minion will fire
+     * at the regular fireInterval rate that is specified in milliseconds. If comes within a certain distance
+     * of the bottom of the canvas then the firing interval is dependent on  fireIntervalSpecial.
+     * @param distance from the bottom of the canvas.
+     * @param fireInterval regular fire interval.
+     * @param fireIntervalSpecial fire interval when minion comes within a certain distance of the bottom of canvas.
+     */
+    bulletPattern(distance, fireInterval, fireIntervalSpecial) {
+        this.endTimer = Date.now();
+        this.elapsedTime = this.startTimer - this.endTimer;
+
+        // Regular fire interval.
+        if (this.elapsedTime % fireInterval === 0) {
+            this.game.addEntity(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 15, 1));
+        }
+    }
+
+    /**
+     * Controls the velocity of the sprite.
+     * @param velocity
+     * @param direction
+     * @returns {number|*|number}
+     */
+    moveFunction(velocity, direction) {
+        let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
+        return movementFunctions[direction];
+    }
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x, this.y, this.width, this.height);
+    }
+
+    draw(ctx) {
+        super.draw(ctx);
+        this.animations[this.animationType].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+    }
 }
 
 class FingerGunDude extends Enemy {
