@@ -73,7 +73,6 @@ class Enemy {
 
 }
 
-
 class Brain extends Enemy {
     constructor(game, x, y) {
         const scale = 3;
@@ -285,7 +284,7 @@ class EyeMinion extends Enemy {
 }
 
 /**
- * Chululu sprite is a boss level sprite. Default animation is hovering while tentacles move.
+ * Cthulhu boss. Controls the spawning of CthulhuMinion, CthulhuSquid, CthulhuCrab, and CthulhuArrow.
  */
 class Cthulhu extends Enemy {
     constructor(game, x, y) {
@@ -299,12 +298,15 @@ class Cthulhu extends Enemy {
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 10, 0.3,
             false, false, true));
 
-        // Functionality to control the spawning of minions.
-        this.minion_count = 0;
-        this.spawnFrequency = 1;
-        this.spawnMax = 50;
+        // Control for spawning of minions.
+        this.minionCount = 0;
+        this.typeCounter = 0;
+        this.creatureCount = 0;
+        this.squidCount = 0;
+        this.crabCount = 0;
+        this.arrowCount = 0;
 
-        // Controls spawning of train.
+        // Controls for spawning of train.
         this.xMinionPosition = this.x;
         this.spawnTrain = false;
         this.trainCounter = 0;
@@ -320,8 +322,8 @@ class Cthulhu extends Enemy {
     };
 
     /**
-     * Cthulhu update method. Controls it's own movement. Functionality also provided to allow control of the
-     * the Cthulhu minion.
+     * Controls movement of Cthulhu sprite and spawning behavior of arrow, squid, crab, and creature minions. Controls
+     * train for creature minion.
      */
     update() {
         // Timer that determines spawning intervals.
@@ -342,68 +344,94 @@ class Cthulhu extends Enemy {
             this.goRight = !this.goRight;
         }
 
-
-        // Controls regular minion spawn behavior. Dependent on Cthulhu life remaining.
-        if (this.life >= this.totalLife * 3 / 4) { // Life greater than a quarter of original life.
-            this.spawnFrequency = 5; // 1 minion every 50 centiseconds
-            this.spawnMax = 100;
-        } else if (this.life >= this.totalLife * 1 / 2) { // Life less then Quarter but greater than 1/2 of original life.
-            this.spawnFrequency = 2; // 1 minion every 25 milliseconds
-            this.spawnMax = 200;
-        } else if (this.life >= this.totalLife * 1 / 4) {
-            this.spawnFrequency = 1; // 1 minion every 10 milliseconds
-            this.spawnMax = 500;
-        } else if (this.life >= this.totalLife * 1 / 8) { // Life very low - go crazy.
-            this.spawnFrequency = 1; // Ultimate -  1 minion every millisecond
-            this.spawnMax = 1000; // Ultimate
-        }
-
         // Randomize x-coordinate for minion.
         this.xMinionPosition = Math.floor((Math.random() * PARAMS.CANVAS_WIDTH - 96) + 96);
 
-        // TODO - Something wrong here. Probbaly has to do with spawnMax and minion_count. Will need to figure out
-        // how to deal with minion count dynamically.
-        this.spawnTrainCreature(250, 1);
-        this.spawnMinion(this.xMinionPosition, - 100, this.spawnFrequency, this.spawnMax, "CthulhuMinion");
-        this.spawnMinion(this.xMinionPosition, 80, this.spawnFrequency, 200, "CthulhuSquid");
-        this.spawnMinion(this.xMinionPosition, 40, this.spawnFrequency, this.spawnMax, "CthulhuArrow");
-        this.spawnMinion(this.xMinionPosition, 150, this.spawnFrequency, this.spawnMax, "CthulhuCrab");
+        this.spawnTrainCreature(100, 2);
+
+        /* If you want to modify spawn behavior, mess with parameters for spawnBehavior() */
+        if (this.typeCounter < 5 || this.spawnTrain) { // Spawn regular minion
+            this.spawnBehavior(5, 100, 2, 200, 1, 500, 1, 1000);
+            this.spawnMinion(this.xMinionPosition, - 100, "CthulhuMinion");
+        } else if (this.typeCounter < 10) { // Spawn Squid
+            this.spawnBehavior(15, 100, 3, 200, 2, 500, 1, 1000);
+            this.spawnMinion(this.xMinionPosition, -80,"CthulhuSquid");
+        } else if (this.typeCounter < 15) { // Spawn Arrow
+            this.spawnBehavior(3, 100, 2, 200, 1, 500, 1, 1000);
+            this.spawnMinion(this.xMinionPosition, -40, "CthulhuArrow");
+        } else if (this.typeCounter < 20) { // Spawn Crab
+            this.spawnBehavior(10, 100, 2, 200, 1, 500, 1, 1000);
+            this.spawnMinion(this.xMinionPosition, -50, "CthulhuCrab");
+        } else { // Reset counter.
+            this.typeCounter = 0;
+        }
 
         this.updateBB();
         super.checkCollision(this.game.entities);
     };
 
-    updateBB() {
-        this.BB = new BoundingBox(this.x + 60, this.y, this.width - 130, this.height - 40);
+    /**
+     * Controls the spawning behavior of minions. Each stage is dependent on the bosses remaining life. Stage 1
+     * is the spawning behavior when boss has more than 3/4 of remaining life. Stage 2 when bosses health
+     * drops below 3/4 but above 1/2. Stage 3 occurs when bosses health is less than 1/2 but greater than 1/4. Stage
+     * 4 is last spawning behavior when life drops to below 1/4th of total life.
+     *
+     * @param freqStage1 the frequency of spawning for stage 1.
+     * @param maxStage1 the maximum number of minions that can be spawned at stage 1.
+     * @param freqStage2
+     * @param maxStage2
+     * @param freqStage3
+     * @param maxStage3
+     * @param freqStage4
+     * @param maxStage4
+     */
+    spawnBehavior(freqStage1, maxStage1, freqStage2, maxStage2, freqStage3, maxStage3, freqStage4, maxStage4) {
+        if (this.life >= this.totalLife * 3 / 4) {
+            if (!this.spawnTrain) {
+                this.spawnFrequency = freqStage1;
+                this.spawnMax = maxStage1;
+            }
+        } else if (this.life >= this.totalLife / 2) {
+            this.spawnFrequency = freqStage2;
+            this.spawnMax = maxStage2;
+        } else if (this.life >= this.totalLife / 4) {
+            this.spawnFrequency = freqStage3;
+            this.spawnMax =maxStage3;
+        } else if (this.life >= this.totalLife / 8) {
+            this.spawnFrequency = freqStage4;
+            this.spawnMax = maxStage4;
+        }
     }
 
     /**
      * Determines when to spawn the minion train formation. When it is time to spawn the train the regular
-     * minion spawning halts until the full length of the millipede is spawned. Once train is spawned regular minion
-     * spawning resumes at original rate pre-spawn.
+     * minion spawning halts until the full length of the train is spawned. Once the trains spawning has completed
+     * regular minion spawning resumes at original rate pre-spawn.
      *
      * @param trainLength int value that determines how many minions make up a train.
      * @param distanceBetween int centisecond value that determines how closely each minion is spawned to the following one.
      */
     spawnTrainCreature(trainLength, distanceBetween) {
         // The frequency of the train is dependent on the length of millipede.
+
         let trainFrequency = 2 * trainLength + (trainLength / 2)
+        if (trainFrequency < 600) {
+            trainFrequency = 600;
+        }
         if (this.elapsedTime % trainFrequency === 0 && this.oldTime > 0) {
             this.spawnTrain = true;
             this.resetCount = true;
         }
-
         // Control length of train & how close minions spawn together.
         if (this.spawnTrain) {
             this.xMinionPosition = this.x; // train dependent on Cthulhu position.
             this.spawnFrequency = distanceBetween; // How close each minion spawns to the next one.
             this.spawnMax = trainLength;  // Length of the train.
-
             //  Reset and save minion count prior to train spawn.
             if (this.resetCount) {
                 this.resetCount = false;
-                this.restoreCount = this.minion_count;
-                this.minion_count = 0;
+                this.restoreCount = this.minionCount;
+                this.minionCount = 0;
             }
         }
 
@@ -411,25 +439,21 @@ class Cthulhu extends Enemy {
         if (this.trainCounter >= trainLength) {
             this.spawnTrain = false;
             this.trainCounter = 0;
-            this.minion_count = this.restoreCount; // restore original minion count prior to train.
+            this.minionCount = this.restoreCount; // restore original minion count prior to train.
         }
     }
 
-
     /**
-     * Controls the spawning of spawning of minions. spawnFrequency controls how quickly minions are spawned. It is
-     * based on timer in seconds (e.g. spawnTime = 1000 ms, 1 minion spawned every second. spawnTime = 10, 1 minion spawned
-     * every 10 milliseconds).
+     * Check whether a minion can be spawned or not. If enough time has elapsed since previous spawn, a minion
+     * will be spawned otherwise do not spawn. Time is counted in centiseconds (1/100 second).
      *
      * @param xStart starting spawn x coordinate
      * @param yStart starting spawn y coordinate
-     * @param spawnFrequency spawn interval.
-     * @param spawnMax max number of minions to spawn.
      * @param minionType type of minion to spawn.
      */
-    spawnMinion(xStart, yStart, spawnFrequency, spawnMax, minionType) {
-        if (this.minion_count < spawnMax) {
-            if (this.elapsedTime % spawnFrequency === 0 && this.elapsedTime !== this.oldTime) {
+    spawnMinion(xStart, yStart, minionType) {
+        if (this.minionCount < this.spawnMax) {
+            if (this.elapsedTime % this.spawnFrequency === 0 && this.elapsedTime !== this.oldTime) {
                 this.spawn(xStart, yStart, minionType)
                 this.oldTime = this.elapsedTime; // Keep track of old time (to ensure correct count of centiseconds)
                 if (this.spawnTrain) {
@@ -443,30 +467,41 @@ class Cthulhu extends Enemy {
      * Spawns a Cthulhu minion and increments the number of spawns.
      * @param x coordinate for minion spawn location.
      * @param y coordinate for minion spawn location.
-     * @param minionType the type of minion.
+     * @param minionType the type of minion to spawn.
      */
     spawn(x, y, minionType) {
         let minion;
         switch (minionType) {
             case "CthulhuCrab":
                 minion = new CthulhuCrab(this.game, x, y);
+                this.crabCount++;
+                this.minionCount = this.crabCount;
                 break;
             case "CthulhuMinion":
                 minion = new CthulhuMinion(this.game, x, y);
+                this.creatureCount++;
+                this.minionCount = this.creatureCount;
                 break;
             case "CthulhuSquid":
                 minion = new CthulhuSquid(this.game, x, y);
+                this.squidCount++;
+                this.minionCount = this.squidCount;
                 break;
             case "CthulhuArrow":
                 minion = new CthulhuArrow(this.game, x, y);
+                this.arrowCount++;
+                this.minionCount = this.arrowCount;
                 break;
             default:
                 console.log("Wrong minion type specified.");
         }
-
         this.game.addEntity(minion);
-        this.minion_count++;
+        this.typeCounter++;
     };
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x + 60, this.y, this.width - 130, this.height - 40);
+    }
 
     /**
      * Cthulhu draw method. Single default animation.
@@ -478,13 +513,6 @@ class Cthulhu extends Enemy {
     };
 }
 
-/**
- * Cthulhu Minion that has two different default animations: Float & Attack. Movement is automatic based on a time
- * interval. Spawning of this character is controlled by the Cthulhu class.
- *
- * The number of minions spawned and the interval at which they are spawned are controlled by the Cthulhu class
- * update method.
- */
 class CthulhuMinion extends Enemy {
     constructor(game, x, y) {
         super(game, x, y);
@@ -599,6 +627,10 @@ class CthulhuMinion extends Enemy {
 
         // Collision
         super.checkCollision(this.game.entities);
+
+        if (this.y >= PARAMS.CANVAS_HEIGHT) {
+            this.removeFromWorld = true;
+        }
     }
 
     updateBB() {
@@ -657,7 +689,7 @@ class CthulhuSquid extends Enemy {
         this.velocity = { x: 0, y: 0 };
         this.direction = 3; // Starting direction of minion movement.
         this.moveTimer = 0; // Time for Sin/Cos functions.
-        this.life = 1;
+        this.life = 3;
 
         this.startTimer = Date.now()
         this.loadAnimations();
@@ -716,6 +748,10 @@ class CthulhuSquid extends Enemy {
         this.updateBB();
         this.bulletPattern(300, 250, 20);
         super.checkCollision(this.game.entities);
+
+        if (this.y >= PARAMS.CANVAS_HEIGHT) {
+            this.removeFromWorld = true;
+        }
     }
 
     /**
@@ -799,13 +835,14 @@ class CthulhuArrow extends Enemy {
         const TICK = this.game.clockTick;
         const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4 }; // Tied to moveFunction.
         const VELOCITY = { SUPERFAST: 150, FAST: 100, REGULAR: 75, SLOW: 50, SUPERSLOW: 25 }
+        let startLaser = 350;
 
         this.velocity.x = 0;
         this.velocity.y = 0;
 
         this.velocity.y += this.moveFunction(VELOCITY.REGULAR, Movement.DOWN);
 
-        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - 300) {
+        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - startLaser) {
             this.velocity.y += this.moveFunction(VELOCITY.SUPERFAST, Movement.DOWN);
             this.animationType = 1;
         }
@@ -815,9 +852,13 @@ class CthulhuArrow extends Enemy {
         this.y += this.velocity.y * TICK * this.scale;
         this.updateBB();
 
-        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - 300) this.bulletPattern();
+        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - startLaser) this.bulletPattern();
 
         super.checkCollision(this.game.entities);
+
+        if (this.y >= PARAMS.CANVAS_HEIGHT) {
+            this.removeFromWorld = true;
+        }
     }
 
     updateBB() {
@@ -847,7 +888,7 @@ class CthulhuArrow extends Enemy {
 
 class CthulhuCrab extends Enemy {
     constructor(game, x, y) {
-        const scale = 2;
+        const scale = 1;
         const width = 71;
         const height = 42;
         super(game, x, y, width, height, scale);
@@ -858,7 +899,7 @@ class CthulhuCrab extends Enemy {
         this.direction = 3; // Starting direction of minion movement.
         this.moveTimer = 0; // Time for sin/cos functions.
 
-        this.life = 1;
+        this.life = 2;
         this.startTimer = Date.now()
         this.loadAnimations();
         this.updateBB();
@@ -898,7 +939,7 @@ class CthulhuCrab extends Enemy {
             }
         }
 
-        if (this.BB.top < 100) {
+        if (this.BB.top < 300) {
             this.velocity.y += 1;
             this.y += 1;
         }
@@ -911,6 +952,10 @@ class CthulhuCrab extends Enemy {
         this.updateBB();
         this.bulletPattern(200, 250, 50);
         super.checkCollision(this.game.entities);
+
+        if (this.y >= PARAMS.CANVAS_HEIGHT) {
+            this.removeFromWorld = true;
+        }
     }
 
     /**
@@ -944,7 +989,7 @@ class CthulhuCrab extends Enemy {
     }
 
     updateBB() {
-        this.BB = new BoundingBox(this.x + this.width/2, this.y, this.width, this.height);
+        this.BB = new BoundingBox(this.x, this.y, this.width, this.height);
     }
 
     draw(ctx) {

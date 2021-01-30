@@ -52,10 +52,6 @@ class CaveLevel extends Level {
         ];
         this.level[1] = [
             new EyeMinion(this.game, 50, 0),
-            // remove
-            new CthulhuSquid(this.game, 50, 50),
-            new CthulhuArrow(this.game, 100, 50),
-            new CthulhuCrab(this.game, 200, 50),
         ];
         this.level[2] = [
             new EyeMinion(this.game, 150, 0),
