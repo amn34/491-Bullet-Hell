@@ -9,7 +9,9 @@ class Level {
         //reset the state of the game and remove all entities 
         game.entities.backgrounds = [];
         game.entities.enemies = [];
+        game.entities.particles = [];
         game.entities.bullets = [];
+        game.entities.powerups = [];
         game.entities.player = new Player(this.game);
     }
 

@@ -83,22 +83,42 @@ class GameEngine {
         }, false);
     };
 
+    /**
+     * Adds a bullet to the game. 
+     * @param {Bullet} bullet 
+     */
     addBullet(bullet) {
         this.entities.bullets.push(bullet);
     }
 
+    /**
+     * Adds an enemy to the game. 
+     * @param {Enemy} enemy 
+     */
     addEnemy(enemy) {
         this.entities.enemies.push(enemy);
     }
 
+    /**
+     * Adds a powerup to the game. 
+     * @param {Powerup} powerup 
+     */
     addPowerup(powerup) {
         this.entities.powerups.push(powerup);
     }
 
+    /**
+     * Adds a new particle effect to the game. 
+     * @param {Particle} particle 
+     */
     addParticle(particle) {
         this.entities.particles.push(particle);
     }
 
+    /**
+     * Sets the background of the game. 
+     * @param {String} background - The filepath of the background 
+     */
     setBackground(background) {
         this.entities.backgrounds = [
             new Background(this, 0, -760, background),
@@ -106,13 +126,13 @@ class GameEngine {
         ];
     }
 
+    /**
+     * Sets the current level of the game. 
+     * @param {Level} level - Level to start playing 
+     */
     setLevel(level) {
         this.entities.level = level;
     }
-
-    // addEntity(entity) {
-    //     this.entities.push(entity);
-    // };
 
     draw() {
         //clear the screen 
@@ -137,9 +157,13 @@ class GameEngine {
         this.updateEntityList(this.entities.enemies);
         this.updateEntityList(this.entities.bullets);
         this.updateEntityList(this.entities.powerups);
-
     };
 
+    /**
+     * Updates all the entities in a list. 
+     * Removes all entities that should be removed. 
+     * @param {List[Object]} list 
+     */
     updateEntityList(list) {
         list.forEach((entity, i) => {
             if (entity.removeFromWorld) {
