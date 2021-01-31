@@ -1,4 +1,4 @@
-# Space Force: The Seven Shooter Shuffle (in Space)
+# What The Shmup
 Ever wanted to play a bullet hell game in space? Well now you can because this game is in space and is a bullet hell donmaku game.
 
 ## Team
