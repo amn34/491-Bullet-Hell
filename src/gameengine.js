@@ -29,6 +29,16 @@ class GameEngine {
         })();
     };
 
+    /**
+     * Resets the current level back to the original state.
+     * HardCoded to reset to the cave level currently.
+     */
+    reset() {
+        this.entities = [];
+        this.addEntity(new CaveLevel(this));
+        this.timer = new Timer();
+    };
+
     startInput() {
         var that = this;
 
@@ -93,7 +103,7 @@ class GameEngine {
         for (var i = 0; i < entitiesCount; i++) {
             var entity = this.entities[i];
 
-            if (!entity.removeFromWorld) {
+            if (typeof entity !== "undefined" && !entity.removeFromWorld) {
                 entity.update();
             }
         }

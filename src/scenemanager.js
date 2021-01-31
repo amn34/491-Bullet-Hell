@@ -2,8 +2,9 @@ class Level {
     constructor(game) {
         this.game = game;
         this.game.camera = this;
-        this.life = 3;
+        this.removeFromWorld = false;
         this.totalLife = 3;
+        this.life = 3;
         this.level = {};
     }
 
@@ -18,8 +19,18 @@ class Level {
             });
             this.level[seconds] = [];
         }
+
+        if (this.life === 0) {
+            // Should resets the current level to the original state starting at time 0
+            // Hard coded to reset the cave level currently.
+            this.game.reset();
+        }
     };
 
+    /**
+     * Draws the health bar onto the canvas
+     * @param {*} ctx 
+     */
     draw(ctx) {
         ctx.fillStyle = "black";
         ctx.fillRect(210, 720, 310, 30);
