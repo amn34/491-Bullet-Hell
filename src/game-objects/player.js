@@ -203,7 +203,7 @@ class Player {
                 break;
             case IncreaseHealthPowerUp:
                 this.life += this.life < this.totalLife ? 1 : 0;
-                this.game.level.life = this.life;
+                this.game.entities.level.life = this.life;
                 break;
             case IncreasePowerPowerUp:
                 this.powerFromPowerUp += 1;
