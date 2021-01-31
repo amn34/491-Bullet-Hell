@@ -37,6 +37,12 @@ class GameEngine {
         })();
     };
 
+    reset() {
+        this.entities = [];
+        this.setLevel(new CaveLevel(this));
+        this.timer = new Timer();
+    };
+
     startInput() {
         var that = this;
 
