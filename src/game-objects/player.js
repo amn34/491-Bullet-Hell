@@ -175,7 +175,7 @@ class Player {
                             this.shield--;
                         } else {
                             this.life = this.life > 0 ? this.life - 1 : 0;
-                            this.game.camera.life = this.life;
+                            this.game.entities.level.life = this.life;
                         }
                     }
 

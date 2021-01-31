@@ -145,7 +145,7 @@ class GameEngine {
         this.entities.powerups.forEach(powerup => powerup.draw(this.ctx));
         this.entities.player.draw(this.ctx);
         //draw the hud
-        this.camera.draw(this.ctx);
+        this.entities.level.draw(this.ctx);
     };
 
     update() {

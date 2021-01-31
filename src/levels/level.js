@@ -1,7 +1,6 @@
 class Level {
     constructor(game) {
         this.game = game;
-        this.game.camera = this;
         this.life = 3;
         this.totalLife = 3;
         this.level = {};
