@@ -7,22 +7,50 @@
 
     <title>What The Shmup</title>
 
-    <script type="text/javascript" src="./src/assetmanager.js"></script>
-    <script type="text/javascript" src="./src/boundingbox.js"></script>
-    <script type="text/javascript" src="./src/player.js"></script>
-    <script type="text/javascript" src="./src/projectiles.js"></script>
-    <script type="text/javascript" src="./src/enemies.js"></script>
-    <script type="text/javascript" src="./src/background.js"></script>
-    <script type="text/javascript" src="./src/animator.js"></script>
-    <script type="text/javascript" src="./src/timer.js"></script>
-    <script type="text/javascript" src="./src/gameengine.js"></script>
-    <script type="text/javascript" src="./src/util.js"></script>
-    <script type="text/javascript" src="./src/main.js"></script>
-    <script type="text/javascript" src="./src/scenemanager.js"></script>
-    <script type="text/javascript" src="./src/powerups.js"></script>
-    <script type="text/javascript" src="./src/particles.js"></script>
     <link rel="stylesheet" href="style.css">
 
+    <!-- Load in scripts for the game engine -->
+    <script src="./src/engine/gameengine.js"></script>
+    <script src="./src/engine/assetmanager.js"></script>
+    <script src="./src/engine/animator.js"></script>
+    <script src="./src/engine/scenemanager.js"></script>
+    <script src="./src/engine/timer.js"></script>
+    <script src="./src/util.js"></script>
+
+    <!-- Load in Game Objects -->
+    <script src="./src/game-objects/boundingbox.js"></script>
+
+    <script src="./src/game-objects/bullet.js"></script>
+    <script src="./src/game-objects/player.js"></script>
+    <script src="./src/game-objects/powerups.js"></script>
+
+    <script src="./src/game-objects/misc/background.js"></script>
+    <script src="./src/game-objects/misc/particles.js"></script>
+
+    <!-- Load in the scripts for the enemies  -->
+    <script src="./src/game-objects/enemies/enemy.js"></script>
+
+    <!-- Brain Enemies -->
+    <script src="./src/game-objects/enemies/brain/brain.js"></script>
+    <script src="./src/game-objects/enemies/brain/eye-minion.js"></script>
+    <script src="./src/game-objects/enemies/brain/mouth-minion.js"></script>
+    <script src="./src/game-objects/enemies/brain/nose-minion.js"></script>
+
+    <!-- Cthulhu Enemies -->
+    <script src="./src/game-objects/enemies/cthulhu/cthulhu.js"></script>
+    <script src="./src/game-objects/enemies/cthulhu/cthulhu-minion.js"></script>
+    <script src="./src/game-objects/enemies/cthulhu/cthulhu-arrow.js"></script>
+    <script src="./src/game-objects/enemies/cthulhu/cthulhu-squid.js"></script>
+    <script src="./src/game-objects/enemies/cthulhu/cthulhu-crab.js"></script>
+
+    <!-- Misc Enemies -->
+    <script src="./src/game-objects/enemies/misc/fingergun.js"></script>
+
+    <!-- Levels  -->
+    <script src="./src/levels/level.js"></script>
+    <script src="./src/levels/cave-level.js"></script>
+
+    <script src="./src/main.js"></script>
 </head>
 
 <body>

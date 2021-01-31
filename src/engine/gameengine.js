@@ -2,7 +2,15 @@
 
 class GameEngine {
     constructor() {
-        this.entities = [];
+        this.entities = {
+            backgrounds: [],
+            enemies: [],
+            particles: [],
+            bullets: [],
+            powerups: [],
+            level: null,
+            player: null,
+        };
         this.ctx = null;
         this.surfaceWidth = null;
         this.surfaceHeight = null;
@@ -75,35 +83,73 @@ class GameEngine {
         }, false);
     };
 
-    addEntity(entity) {
-        this.entities.push(entity);
-    };
+    addBullet(bullet) {
+        this.entities.bullets.push(bullet);
+    }
+
+    addEnemy(enemy) {
+        this.entities.enemies.push(enemy);
+    }
+
+    addPowerup(powerup) {
+        this.entities.powerups.push(powerup);
+    }
+
+    addParticle(particle) {
+        this.entities.particles.push(particle);
+    }
+
+    setBackground(background) {
+        this.entities.backgrounds = [
+            new Background(this, 0, -760, background),
+            new Background(this, 0, 0, background)
+        ];
+    }
+
+    setLevel(level) {
+        this.entities.level = level;
+    }
+
+    // addEntity(entity) {
+    //     this.entities.push(entity);
+    // };
 
     draw() {
+        //clear the screen 
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-        for (var i = 0; i < this.entities.length; i++) {
-            this.entities[i].draw(this.ctx);
-        }
+        //draw all game objects
+        this.entities.backgrounds.forEach(background => background.draw(this.ctx));
+        this.entities.particles.forEach(particle => particle.draw(this.ctx));
+        this.entities.enemies.forEach(enemy => enemy.draw(this.ctx))
+        this.entities.bullets.forEach(bullet => bullet.draw(this.ctx));
+        this.entities.powerups.forEach(powerup => powerup.draw(this.ctx));
+        this.entities.player.draw(this.ctx);
+        //draw the hud
         this.camera.draw(this.ctx);
     };
 
     update() {
-        var entitiesCount = this.entities.length;
+        this.entities.level.update();
+        this.entities.player.update();
 
-        for (var i = 0; i < entitiesCount; i++) {
-            var entity = this.entities[i];
+        this.updateEntityList(this.entities.backgrounds);
+        this.updateEntityList(this.entities.particles);
+        this.updateEntityList(this.entities.enemies);
+        this.updateEntityList(this.entities.bullets);
+        this.updateEntityList(this.entities.powerups);
 
-            if (!entity.removeFromWorld) {
+    };
+
+    updateEntityList(list) {
+        list.forEach((entity, i) => {
+            if (entity.removeFromWorld) {
+                list.splice(i, 1);
+            } else {
                 entity.update();
             }
-        }
+        })
+    }
 
-        for (var i = this.entities.length - 1; i >= 0; --i) {
-            if (this.entities[i].removeFromWorld) {
-                this.entities.splice(i, 1);
-            }
-        }
-    };
 
     loop() {
         this.clockTick = this.timer.tick();
