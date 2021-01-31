@@ -86,15 +86,6 @@ class Player {
 
 
     draw(ctx) {
-        this.canShoot++;
-        if (this.canShoot >= (this.fireRate - this.fireRateFromPowerUp)) {
-            this.bullets.forEach(bulletPos => {
-                this.game.addEntity(new PlayerBullet(this.game, this.x + bulletPos, this.y, 1, this.damage + this.powerFromPowerUp));
-            });
-
-            this.canShoot = 0;
-        }
-
         let animationIndex = this.life == 0 ? 0 : this.totalLife - this.life;
         this.animations[animationIndex][this.powerup].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
 
@@ -138,8 +129,20 @@ class Player {
             }
         }
 
+        this.canShoot++;
+        if (this.canShoot >= (this.fireRate - this.fireRateFromPowerUp)) {
+            this.bullets.forEach(bulletPos => {
+                this.game.addBullet(new PlayerBullet(this.game, this.x + bulletPos, this.y, 1, this.damage + this.powerFromPowerUp));
+            });
+
+            this.canShoot = 0;
+        }
+
+
         this.updateBB();
-        this.checkCollision(this.game.entities);
+        this.checkCollision(this.game.entities.enemies);
+        this.checkCollision(this.game.entities.bullets);
+        this.checkCollision(this.game.entities.powerups);
     }
 
     /**
@@ -172,7 +175,7 @@ class Player {
                             this.shield--;
                         } else {
                             this.life = this.life > 0 ? this.life - 1 : 0;
-                            this.game.camera.life = this.life;
+                            this.game.entities.level.life = this.life;
                         }
                     }
 
@@ -291,5 +294,64 @@ class AltPlayer {
 
         this.speedX *= 0.8;
         this.speedY *= 0.8;
+    }
+}
+
+class PlayerBullet extends Bullet {
+    constructor(game, x, y, scale, damage) {
+        const width = 10;
+        const height = 30;
+        const bulletSpeed = 12;
+        const bulletType = 2; //player bullet
+        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
+        this.damage = damage;
+
+        this.spritesheet = ASSET_MANAGER.getAsset("./res/bullet.png");
+        this.animations = [];
+        this.animations.push(new Animator(this.spritesheet, 0, 0, this.width, this.height, 1, 0.2, 0, false, true));
+    }
+
+    draw(ctx) {
+        // Use yellow rectangles to keep the theme of the sprite
+        // ctx.fillStyle = "#F9DC5C";
+        // ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
+        this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+
+        if(PARAMS.DEBUG) {
+            this.drawBB(ctx);
+        }
+    }
+
+    update() {
+        this.y -= this.bulletSpeed;
+        super.update();
+    }
+}
+
+
+class AltPlayerBullet extends Bullet {
+    constructor(game, x, y, scale, damage) {
+        const width = 10;
+        const height = 30;
+        const bulletSpeed = 12;
+        const bulletType = 2; //player bullet 
+        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
+        this.damage = damage;
+    }
+
+    draw(ctx) {
+        // Use yellow rectangles to keep the theme of the sprite
+        ctx.fillStyle = "black";
+        ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
+
+        if(PARAMS.DEBUG) {
+            this.drawBB(ctx);
+        }
+
+    }
+
+    update() {
+        this.y -= this.bulletSpeed;
+        super.update();
     }
 }
