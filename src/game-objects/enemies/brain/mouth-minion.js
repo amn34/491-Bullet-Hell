@@ -8,7 +8,6 @@ class MouthMinion extends Enemy {
 
         this.sprite = ASSET_MANAGER.getAsset("./res/enemies/mouth.png");
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 1, 1, 0, false, true));
-        super.updateBB();
 
         // For movement
         this.velocity = { x: 0, y: 0 };
@@ -21,19 +20,14 @@ class MouthMinion extends Enemy {
         this.canShoot = 0;
         this.threshHold = 36;
         this.startTimer = Date.now()
-    }
+    };
 
     draw(ctx) {
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
         super.draw(ctx);
-    }
-
-    // updateBB() {
-    //     this.BB = new BoundingBox(this.x + 24, this.y + 32, this.width + 20, this.height + 12);
-    // }
+    };
 
     update() {
-
         this.updateBB();
         super.checkCollision(this.game.entities.bullets);
 
@@ -110,9 +104,9 @@ class MouthMinion extends Enemy {
     };
 
     updateBB() {
-        const radius = 35;
+        const radius = 42;
         super.updateBB(radius);
-    }
+    };
 
     /**
      * Controls the velocity of the sprite.
@@ -123,7 +117,7 @@ class MouthMinion extends Enemy {
     moveFunction(velocity, direction) {
         let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
         return movementFunctions[direction];
-    }
+    };
 }
 
 class MouthBullet extends Bullet {
@@ -133,7 +127,7 @@ class MouthBullet extends Bullet {
         const bulletType = 1; //enemy bullet
         super(game, x, y, scale, radius, bulletSpeed, bulletType);
         this.isRight = isRight;
-    }
+    };
 
     update() {
         if (this.x <= 0 || this.x >= PARAMS.WIDTH) {
@@ -150,5 +144,5 @@ class MouthBullet extends Bullet {
 
         this.checkBounds();
         this.updateBB(10);
-    }
+    };
 }

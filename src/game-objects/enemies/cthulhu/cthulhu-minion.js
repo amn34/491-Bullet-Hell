@@ -1,17 +1,16 @@
 class CthulhuMinion extends Enemy {
     constructor(game, x, y) {
-        super(game, x, y);
+        const scale = 1;
+        const width = 96;
+        const height = 80;
+        super(game, x, y, width, height, scale);
 
         this.spriteFloat = ASSET_MANAGER.getAsset("./res/enemies/cth_minion_float.png");
         this.spriteAttack = ASSET_MANAGER.getAsset("./res/enemies/cth_minion_attack.png");
-
-        this.width = 96;
-        this.height = 80;
-        this.scale = 1;
-
+        this.loadAnimations();
         this.animationType = 1;
-        this.velocity = { x: 0, y: 0 };
 
+        this.velocity = { x: 0, y: 0 };
         // Starting direction of minion movement.
         this.direction = 3;
         // Timer for Sin/Cos functions.
@@ -19,21 +18,22 @@ class CthulhuMinion extends Enemy {
 
         this.life = 1;
 
-        this.startTimer = Date.now()
-
-
-        this.loadAnimations();
-        this.updateBB();
-    }
+        this.startTimer = Date.now();
+    };
 
     loadAnimations() {
-        this.animations.push(new Animator(this.spriteFloat, 0, 0, this.width, this.height, 5, 0.2,
-            0, false, true));
-        this.animations.push(new Animator(this.spriteAttack, 0, 0, this.width, this.height, 6, 0.2,
-            0, false, true));
-    }
+        this.animations.push(new Animator(this.spriteFloat, 0, 0, this.width, this.height, 5, 0.2, 0, false, true));
+        this.animations.push(new Animator(this.spriteAttack, 0, 0, this.width, this.height, 6, 0.2, 0, false, true));
+    };
+
+    draw(ctx) {
+        super.draw(ctx);
+        this.animations[this.animationType].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+    };
 
     update() {
+        this.updateBB();
+        super.checkCollision(this.game.entities.bullets);
 
         // Enums objects for legibility.
         const Mode = { FLOAT: 0, ATTACK: 1 }; // Two animations types (uses attack only so far - will likely remove).
@@ -53,7 +53,7 @@ class CthulhuMinion extends Enemy {
 
         // SPRITE MOVING LEFT ( and/or UP/DOWN)
         if (this.velocity.x <= 0 && this.direction === Direction.LEFT) {
-            if (this.BB.left < 0) { // check if we need to reverse
+            if (this.x + this.BB.radius < 0) { // check if we need to reverse
                 this.direction = Direction.RIGHT; // Switch directions and go right.
             } else { // We know we are going left.
 
@@ -68,7 +68,7 @@ class CthulhuMinion extends Enemy {
 
         // SPRITE MOVING RIGHT ( and/or UP/DOWN)
         else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) {
-            if (this.BB.right > PARAMS.CANVAS_WIDTH) { // check if we have gone off the right side of canvas
+            if (this.x + this.BB.radius > PARAMS.CANVAS_WIDTH) { // check if we have gone off the right side of canvas
                 this.direction = Direction.LEFT; // go left
             } else { // We know we are going right.
 
@@ -105,23 +105,21 @@ class CthulhuMinion extends Enemy {
         // Update sprite position.
         this.x += this.velocity.x * TICK * this.scale;
         this.y += this.velocity.y * TICK * this.scale;
-        this.updateBB();
 
         // Bullet firing mechanism
         this.bulletPattern(200, 250, 50);
 
         // Collision
-        super.checkCollision(this.game.entities.bullets);
 
         if (this.y >= PARAMS.CANVAS_HEIGHT) {
             this.removeFromWorld = true;
         }
-    }
+    };
 
     updateBB() {
-        const radius = 25;
+        const radius = 45;
         super.updateBB(radius);
-    }
+    };
 
     /**
      * Controls the firing mechanism for minions. There are two different firing modes based on the location
@@ -144,7 +142,7 @@ class CthulhuMinion extends Enemy {
         else if (this.elapsedTime % fireInterval === 0) {
             this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 15, 1));
         }
-    }
+    };
 
     /**
      * Controls the velocity of the sprite.
@@ -155,12 +153,7 @@ class CthulhuMinion extends Enemy {
     moveFunction(velocity, direction) {
         let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
         return movementFunctions[direction];
-    }
-
-    draw(ctx) {
-        super.draw(ctx);
-        this.animations[this.animationType].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-    }
+    };
 }
 
 

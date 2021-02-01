@@ -4,18 +4,16 @@ class FingerGunDude extends Enemy {
         const scale = 3;
         const width = 32;
         const height = 28;
-
         super(game, x, y, width, height, scale);
 
         this.sprite = ASSET_MANAGER.getAsset("./res/enemies/finger_gun_dude.png");
-
-        this.canShoot = 0;
-        this.threshHold = 100;
+        this.loadAnimations();
         this.animationIndex = 0;
 
         this.life = 10;
-        this.loadAnimations();
-    }
+        this.canShoot = 0;
+        this.threshHold = 100;
+    };
 
     loadAnimations() {
         // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
@@ -25,10 +23,10 @@ class FingerGunDude extends Enemy {
         this.animations.push(new Animator(this.sprite, 0, 32, this.width, this.height, 0.3, 1, 0, false, false));
         // Finger 2
         this.animations.push(new Animator(this.sprite, 32, 32, this.width, this.height, 0.3, 1, 0, false, false));
-    }
+    };
 
     draw(ctx) {
-
+        super.draw(ctx);
         this.animations[this.animationIndex].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
 
         if (this.animationIndex === 1) {
@@ -46,11 +44,12 @@ class FingerGunDude extends Enemy {
         if (this.animations[this.animationIndex].isDone()) {
             this.animationIndex = (this.animationIndex + 1) % 3;
         }
-
-        super.draw(ctx);
-    }
+    };
 
     update() {
+        this.updateBB();
+        super.checkCollision(this.game.entities.bullets);
+
         if (this.x <= this.startX + 50 && this.goRight) {
             this.x++;
         } else {
@@ -63,24 +62,26 @@ class FingerGunDude extends Enemy {
         } else if (this.x === this.startX - 50 && !this.goRight) {
             this.goRight = !this.goRight;
         }
+    };
 
-        super.updateBB(35);
-        super.checkCollision(this.game.entities.bullets);
-    }
+    updateBB() {
+        const radius = 57;
+        super.updateBB(radius);
+    };
 }
 
 class FingerGunDudeBullet extends Bullet {
     constructor(game, x, y, scale) {
-        const radius =  10;
+        const radius = 10;
         const bulletSpeed = 5;
         const bulletType = 1; //enemy bullet
         super(game, x, y, scale, radius, bulletSpeed, bulletType);
-    }
-    
+    };
+
     update() {
         this.y += this.bulletSpeed;
         this.x += Math.sin(this.y * this.bulletSpeed / 90) * 4;
         this.checkBounds();
         this.updateBB(10);
-    }
+    };
 }

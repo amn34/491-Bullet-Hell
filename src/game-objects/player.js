@@ -196,8 +196,8 @@ class Player {
         //this.BB = new BoundingBox(this.x + 19, this.y + 18, this.width, this.height);
         const xCenter = this.x + (this.width * this.scale / 2);
         const yCenter = this.y + (this.height * this.scale / 2);
-        const radius = 25;
-        this.BB = new BoundingCircle(xCenter, yCenter, radius); 
+        const radius = 12;
+        this.BB = new BoundingCircle(xCenter + 1, yCenter - 2, radius);
     };
 
     handlePowerUp(entity) {
@@ -326,7 +326,7 @@ class PlayerBullet extends Bullet {
         const radius = 10;
         super.updateBB(radius);
     }
-    
+
 }
 
 
@@ -345,7 +345,7 @@ class AltPlayerBullet extends Bullet {
         ctx.fillStyle = "black";
         ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
 
-        if(PARAMS.DEBUG) {
+        if (PARAMS.DEBUG) {
             this.drawBB(ctx);
         }
 

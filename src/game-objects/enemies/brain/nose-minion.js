@@ -8,7 +8,6 @@ class NoseMinion extends Enemy {
 
         this.sprite = ASSET_MANAGER.getAsset("./res/enemies/nose.png");
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 1, 1, 0, false, true));
-        this.updateBB();
 
         // For movement
         this.velocity = { x: 0, y: 0 };
@@ -19,16 +18,14 @@ class NoseMinion extends Enemy {
 
         this.life = 5;
         this.startTimer = Date.now()
-    }
+    };
 
     draw(ctx) {
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
         super.draw(ctx);
-    }
-
+    };
 
     update() {
-
         this.updateBB();
         super.checkCollision(this.game.entities.bullets);
 
@@ -96,6 +93,11 @@ class NoseMinion extends Enemy {
 
     };
 
+    updateBB() {
+        const radius = 27;
+        super.updateBB(radius);
+    };
+
     /**
      * Controls the velocity of the sprite.
      * @param velocity
@@ -105,10 +107,5 @@ class NoseMinion extends Enemy {
     moveFunction(velocity, direction) {
         let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
         return movementFunctions[direction];
-    }
-
-    updateBB() {
-        const radius = 15;
-        super.updateBB(radius);
-    }
+    };
 }

@@ -4,25 +4,33 @@ class CthulhuCrab extends Enemy {
         const width = 71;
         const height = 42;
         super(game, x, y, width, height, scale);
+
         this.sprite = ASSET_MANAGER.getAsset("./res/enemies/cthulhuCrab.png")
+        this.loadAnimations();
+        this.animationType = 0; // Starting animation.
 
         this.velocity = { x: 0, y: 0 };
-        this.animationType = 0; // Starting animation.
         this.direction = 3; // Starting direction of minion movement.
         this.moveTimer = 0; // Time for sin/cos functions.
 
         this.life = 2;
         this.startTimer = Date.now()
-        this.loadAnimations();
-        this.updateBB();
-    }
+    };
 
     loadAnimations() {
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 4, 0.4,
             0, false, true));
-    }
+    };
+
+    draw(ctx) {
+        super.draw(ctx);
+        this.animations[this.animationType].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+    };
 
     update() {
+        this.updateBB();
+        super.checkCollision(this.game.entities.bullets);
+
         const TICK = this.game.clockTick;
         const Direction = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 }; // Keep track of direction.
         const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4 }; // Tied to moveFunction.
@@ -61,14 +69,17 @@ class CthulhuCrab extends Enemy {
         this.x += this.velocity.x * TICK * this.scale;
         this.y += this.velocity.y * TICK * this.scale;
 
-        this.updateBB();
         this.bulletPattern(200, 250, 50);
-        super.checkCollision(this.game.entities.bullets);
 
         if (this.y >= PARAMS.CANVAS_HEIGHT) {
             this.removeFromWorld = true;
         }
-    }
+    };
+
+    updateBB() {
+        const radius = 35;
+        super.updateBB(radius);
+    };
 
     /**
      * Controls the firing mechanism for minions. There are two different firing modes based on the location
@@ -87,7 +98,7 @@ class CthulhuCrab extends Enemy {
         if (this.elapsedTime % fireInterval === 0) {
             this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 15, 1));
         }
-    }
+    };
 
     /**
      * Controls the velocity of the sprite.
@@ -98,15 +109,5 @@ class CthulhuCrab extends Enemy {
     moveFunction(velocity, direction) {
         let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
         return movementFunctions[direction];
-    }
-
-    updateBB() {
-        const radius = 20;
-        super.updateBB(20);
-    }
-
-    draw(ctx) {
-        super.draw(ctx);
-        this.animations[this.animationType].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-    }
+    };
 }

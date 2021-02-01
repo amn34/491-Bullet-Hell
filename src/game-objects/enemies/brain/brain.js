@@ -13,19 +13,21 @@ class Brain extends Enemy {
         this.life = 15;
         this.canShoot = 9;
         this.threshHold = 200;
-        this.updateBB();
 
         this.startTimer = Math.floor(Date.now() / 100);
         this.oldTime = 0;
         this.totalLife = this.life;
-    }
+    };
 
     draw(ctx) {
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
         super.draw(ctx);
-    }
+    };
 
     update() {
+        this.updateBB();
+        super.checkCollision(this.game.entities.bullets);
+
         this.canShoot++;
 
         if (this.canShoot === this.threshHold) {
@@ -75,15 +77,12 @@ class Brain extends Enemy {
         this.xMinionPosition = Math.floor((Math.random() * PARAMS.CANVAS_WIDTH - 96) + 96);
 
         this.spawnMinion(this.xMinionPosition, - 100, this.spawnFrequency, this.spawnMax);
-
-        this.updateBB();
-        super.checkCollision(this.game.entities.bullets);
-    }
+    };
 
     updateBB() {
         const radius = 50;
         super.updateBB(radius);
-    }
+    };
 
     spawnMinion(xStart, yStart, spawnFrequency, spawnMax) {
         if (this.minion_count < spawnMax) {
@@ -92,7 +91,7 @@ class Brain extends Enemy {
                 this.oldTime = this.elapsedTime;
             }
         }
-    }
+    };
 
     spawn(x, y) {
         this.game.addEnemy(new EyeMinion(this.game, x, y));
@@ -106,17 +105,17 @@ class BrainBullet extends Bullet {
         const bulletSpeed = 3;
         const bulletType = 1; //enemy bullet
         super(game, x, y, scale, radius, bulletSpeed, bulletType);
-    }
+    };
 
     update() {
-        this.y += this.bulletSpeed;
-        super.checkBounds();
         this.updateBB();
-    }
+        super.checkBounds();
+        this.y += this.bulletSpeed;
+    };
 
     updateBB() {
         const radius = 10;
         super.updateBB(radius);
-    }
+    };
 
 }
