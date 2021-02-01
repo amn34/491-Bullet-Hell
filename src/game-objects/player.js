@@ -91,12 +91,14 @@ class Player {
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            // ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            ctx.beginPath();
+            ctx.arc(this.BB.xCenter, this.BB.yCenter, this.BB.radius, 0, Math.PI * 2);
+            ctx.stroke();
         }
     }
 
     update() {
-
         this.speedX -= this.game.left ? this.moveSpeed : 0;
         this.speedX += this.game.right ? this.moveSpeed : 0;
 
@@ -191,7 +193,11 @@ class Player {
     }
 
     updateBB() {
-        this.BB = new BoundingBox(this.x + 19, this.y + 18, this.width, this.height);
+        //this.BB = new BoundingBox(this.x + 19, this.y + 18, this.width, this.height);
+        const xCenter = this.x + (this.width * this.scale / 2);
+        const yCenter = this.y + (this.height * this.scale / 2);
+        const radius = 25;
+        this.BB = new BoundingCircle(xCenter, yCenter, radius); 
     };
 
     handlePowerUp(entity) {

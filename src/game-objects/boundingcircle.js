@@ -1,4 +1,4 @@
-class Hitbox {
+class BoundingCircle {
 
     constructor(xCenter, yCenter, radius) {
         Object.assign(this, { xCenter, yCenter, radius });
@@ -23,3 +23,4 @@ class Hitbox {
         return dist <= (radiusTotal * radiusTotal);
     }
 }
+
