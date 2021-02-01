@@ -15,11 +15,11 @@ class Hitbox {
         const xDist = this.xCenter - other.xCenter;
         const yDist = this.yCenter - other.yCenter;
         //dist = c^2
-        const dist = (xDist * xDist) - (yDist * yDist);
+        const dist = (xDist * xDist) + (yDist * yDist);
         //combined radius of the two circles
         const radiusTotal = this.radius + other.radius;  
         //c^2 < r^2 === c < r
         //sqrt is logn so it's faster to square radius distance and compare
-        return dist < (radiusTotal * radiusTotal);
+        return dist <= (radiusTotal * radiusTotal);
     }
 }
