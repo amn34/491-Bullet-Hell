@@ -217,7 +217,8 @@ class Cthulhu extends Enemy {
     };
 
     updateBB() {
-        this.BB = new BoundingBox(this.x + 60, this.y, this.width - 130, this.height - 40);
+        const radius = 90;
+        super.updateBB(radius);
     }
 
     /**

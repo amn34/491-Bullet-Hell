@@ -101,7 +101,8 @@ class CthulhuCrab extends Enemy {
     }
 
     updateBB() {
-        this.BB = new BoundingBox(this.x, this.y, this.width, this.height);
+        const radius = 20;
+        super.updateBB(20);
     }
 
     draw(ctx) {

@@ -120,7 +120,8 @@ class CthulhuSquid extends Enemy {
     }
 
     updateBB() {
-        this.BB = new BoundingBox(this.x + 25, this.y, this.width - 50, this.height - 50);
+        const radius = 20;
+        super.updateBB(radius);
     }
 
     draw(ctx) {

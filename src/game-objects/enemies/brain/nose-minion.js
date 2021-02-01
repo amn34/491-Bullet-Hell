@@ -8,7 +8,7 @@ class NoseMinion extends Enemy {
 
         this.sprite = ASSET_MANAGER.getAsset("./res/enemies/nose.png");
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 1, 1, 0, false, true));
-        super.updateBB();
+        this.updateBB();
 
         // For movement
         this.velocity = { x: 0, y: 0 };
@@ -26,9 +26,6 @@ class NoseMinion extends Enemy {
         super.draw(ctx);
     }
 
-    updateBB() {
-        this.BB = new BoundingBox(this.x + 36, this.y + 24, this.width - 8, this.height + 16);
-    }
 
     update() {
 
@@ -108,5 +105,10 @@ class NoseMinion extends Enemy {
     moveFunction(velocity, direction) {
         let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
         return movementFunctions[direction];
+    }
+
+    updateBB() {
+        const radius = 15;
+        super.updateBB(radius);
     }
 }

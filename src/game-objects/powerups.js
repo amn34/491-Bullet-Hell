@@ -15,9 +15,15 @@ class PowerUp {
         this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, 1);
         
         if (PARAMS.DEBUG) {
-            ctx.strokeStyle = 'Green';
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            this.drawBB(ctx);
         }
+    }
+
+    drawBB(ctx) {
+        ctx.strokeStyle = 'Red';
+        ctx.beginPath();
+        ctx.arc(this.BB.xCenter, this.BB.yCenter, this.BB.radius, 0, Math.PI * 2);
+        ctx.stroke();
     }
 
     update() {
@@ -28,12 +34,13 @@ class PowerUp {
             this.destroy();
         }
 
-        this.updateBB();
+        this.updateBB(20);
     }
 
-    updateBB() {
-        this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
-    }
+    updateBB(radius) {
+        this.BB = new BoundingCircle(this.x + (this.width / 2), this.y + (this.height / 2), radius);
+    };
+
 
     destroy() {
         this.removeFromWorld = true;

@@ -28,9 +28,9 @@ class MouthMinion extends Enemy {
         super.draw(ctx);
     }
 
-    updateBB() {
-        this.BB = new BoundingBox(this.x + 24, this.y + 32, this.width + 20, this.height + 12);
-    }
+    // updateBB() {
+    //     this.BB = new BoundingBox(this.x + 24, this.y + 32, this.width + 20, this.height + 12);
+    // }
 
     update() {
 
@@ -109,6 +109,11 @@ class MouthMinion extends Enemy {
 
     };
 
+    updateBB() {
+        const radius = 35;
+        super.updateBB(radius);
+    }
+
     /**
      * Controls the velocity of the sprite.
      * @param velocity
@@ -123,21 +128,11 @@ class MouthMinion extends Enemy {
 
 class MouthBullet extends Bullet {
     constructor(game, x, y, scale, isRight) {
-        const width = 20;
-        const height = 20;
+        const radius = 10;
         const bulletSpeed = 4;
         const bulletType = 1; //enemy bullet
-        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
+        super(game, x, y, scale, radius, bulletSpeed, bulletType);
         this.isRight = isRight;
-    }
-
-    draw(ctx) {
-        ctx.fillStyle = "Red";
-        ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
-        
-        if(PARAMS.DEBUG) {
-            this.drawBB(ctx);
-        }
     }
 
     update() {
@@ -153,6 +148,7 @@ class MouthBullet extends Bullet {
 
         this.y += this.bulletSpeed / 1.5;
 
-        super.update();
+        this.checkBounds();
+        this.updateBB(10);
     }
 }

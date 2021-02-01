@@ -64,32 +64,23 @@ class FingerGunDude extends Enemy {
             this.goRight = !this.goRight;
         }
 
-        super.updateBB();
+        super.updateBB(35);
         super.checkCollision(this.game.entities.bullets);
     }
 }
 
 class FingerGunDudeBullet extends Bullet {
     constructor(game, x, y, scale) {
-        const width = 10;
-        const height = 30;
+        const radius =  10;
         const bulletSpeed = 5;
         const bulletType = 1; //enemy bullet
-        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
+        super(game, x, y, scale, radius, bulletSpeed, bulletType);
     }
-
-    draw(ctx) {
-        ctx.fillStyle = "Red";
-        ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
-        
-        if(PARAMS.DEBUG) {
-            this.drawBB(ctx);
-        }
-    }
-
+    
     update() {
         this.y += this.bulletSpeed;
         this.x += Math.sin(this.y * this.bulletSpeed / 90) * 4;
-        super.update();
+        this.checkBounds();
+        this.updateBB(10);
     }
 }

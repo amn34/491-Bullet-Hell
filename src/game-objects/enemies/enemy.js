@@ -14,12 +14,14 @@ class Enemy {
     draw(ctx) {
         if (PARAMS.DEBUG && this.BB) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            ctx.beginPath();
+            ctx.arc(this.BB.xCenter, this.BB.yCenter, this.BB.radius, 0, Math.PI * 2);
+            ctx.stroke();
         }
     }
 
-    updateBB() {
-        this.BB = new BoundingBox(this.x, this.y, this.width * this.scale, this.height * this.scale);
+    updateBB(radius) {
+        this.BB = new BoundingCircle(this.x + (this.width * this.scale / 2), this.y + (this.height * this.scale / 2), radius);
     }
 
     destroy() {
@@ -61,7 +63,6 @@ class Enemy {
 
         // if roll === 1 drop a powerup
         let roll = Math.floor(Math.random() * 100);
-
         if (roll <= 15) {
             let ind = Math.floor(Math.random() * powerups.length);
             this.game.addPowerup(new powerups[ind][0](this.game, this.x, this.y, powerups[ind][1]));

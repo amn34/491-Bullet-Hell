@@ -18,7 +18,7 @@ class Player {
         this.width = 18;
         this.height = 21;
         this.scale = 3;
-        this.center = (this.width * this.scale / 2) - 3;
+        this.center = (this.width * this.scale / 2);
 
         // how many hits left before death
         // 3 = full health | 2 = 2 hits left | 1 = 1 hits left | 0 = dead
@@ -91,12 +91,14 @@ class Player {
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            // ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            ctx.beginPath();
+            ctx.arc(this.BB.xCenter, this.BB.yCenter, this.BB.radius, 0, Math.PI * 2);
+            ctx.stroke();
         }
     }
 
     update() {
-
         this.speedX -= this.game.left ? this.moveSpeed : 0;
         this.speedX += this.game.right ? this.moveSpeed : 0;
 
@@ -191,7 +193,11 @@ class Player {
     }
 
     updateBB() {
-        this.BB = new BoundingBox(this.x + 19, this.y + 18, this.width, this.height);
+        //this.BB = new BoundingBox(this.x + 19, this.y + 18, this.width, this.height);
+        const xCenter = this.x + (this.width * this.scale / 2);
+        const yCenter = this.y + (this.height * this.scale / 2);
+        const radius = 25;
+        this.BB = new BoundingCircle(xCenter, yCenter, radius); 
     };
 
     handlePowerUp(entity) {
@@ -299,11 +305,10 @@ class AltPlayer {
 
 class PlayerBullet extends Bullet {
     constructor(game, x, y, scale, damage) {
-        const width = 10;
-        const height = 30;
+        const radius = 10;
         const bulletSpeed = 12;
         const bulletType = 2; //player bullet
-        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
+        super(game, x, y, scale, radius, bulletSpeed, bulletType);
         this.damage = damage;
 
         this.spritesheet = ASSET_MANAGER.getAsset("./res/bullet.png");
@@ -311,21 +316,17 @@ class PlayerBullet extends Bullet {
         this.animations.push(new Animator(this.spritesheet, 0, 0, this.width, this.height, 1, 0.2, 0, false, true));
     }
 
-    draw(ctx) {
-        // Use yellow rectangles to keep the theme of the sprite
-        // ctx.fillStyle = "#F9DC5C";
-        // ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
-        this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-
-        if(PARAMS.DEBUG) {
-            this.drawBB(ctx);
-        }
-    }
-
     update() {
         this.y -= this.bulletSpeed;
-        super.update();
+        this.checkBounds();
+        this.updateBB();
     }
+
+    updateBB() {
+        const radius = 10;
+        super.updateBB(radius);
+    }
+    
 }
 
 
