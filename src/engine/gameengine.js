@@ -174,10 +174,16 @@ class GameEngine {
         })
     }
 
-
     loop() {
         this.clockTick = this.timer.tick();
         this.update();
         this.draw();
     };
+
+    reset() {
+        this.entities = [];
+        this.setLevel(new CaveLevel(this));
+        this.timer = new Timer();
+    };
+
 };

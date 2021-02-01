@@ -119,7 +119,8 @@ class CthulhuMinion extends Enemy {
     }
 
     updateBB() {
-        this.BB = new BoundingBox(this.x + 36, this.y + 24, this.width - 68, this.height - 48);
+        const radius = 25;
+        super.updateBB(radius);
     }
 
     /**
@@ -165,24 +166,19 @@ class CthulhuMinion extends Enemy {
 
 class CthulhuMinionBullet extends Bullet {
     constructor(game, x, y, scale) {
-        const width = 10;
-        const height = 30;
+        const radius = 10;
         const bulletSpeed = 5;
         const bulletType = 1;
-        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
+        super(game, x, y, scale, radius, bulletSpeed, bulletType);
     }
 
     draw(ctx) {
-        ctx.fillStyle = "Red";
-        ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
-
-        if (PARAMS.DEBUG) {
-            this.drawBB(ctx);
-        }
+        super.draw(ctx);
     }
 
     update() {
         this.y += this.bulletSpeed;
-        super.update();
+        super.checkBounds();
+        super.updateBB(10);
     }
 }

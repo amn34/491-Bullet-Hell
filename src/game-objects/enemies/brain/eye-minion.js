@@ -7,8 +7,6 @@ class EyeMinion extends Enemy {
 
         this.sprite = ASSET_MANAGER.getAsset("./res/enemies/eye.png");
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 8, 0.2, 0, false, true));
-        super.updateBB();
-
         // For movement
         this.velocity = { x: 0, y: 0 };
         // Starting direction of minion movement.
@@ -26,7 +24,8 @@ class EyeMinion extends Enemy {
     };
 
     updateBB() {
-        this.BB = new BoundingBox(this.x + 40, this.y + 24, this.width - 16, this.height - 16);
+        const radius = 15;
+        super.updateBB(radius);
     }
 
     update() {

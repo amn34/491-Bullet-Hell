@@ -76,8 +76,13 @@ class Brain extends Enemy {
 
         this.spawnMinion(this.xMinionPosition, - 100, this.spawnFrequency, this.spawnMax);
 
-        super.updateBB();
+        this.updateBB();
         super.checkCollision(this.game.entities.bullets);
+    }
+
+    updateBB() {
+        const radius = 50;
+        super.updateBB(radius);
     }
 
     spawnMinion(xStart, yStart, spawnFrequency, spawnMax) {
@@ -97,24 +102,21 @@ class Brain extends Enemy {
 
 class BrainBullet extends Bullet {
     constructor(game, x, y, scale) {
-        const width = 10;
-        const height = 30;
+        const radius = 15;
         const bulletSpeed = 3;
         const bulletType = 1; //enemy bullet
-        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
-    }
-
-    draw(ctx) {
-        ctx.fillStyle = "Red";
-        ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
-
-        if (PARAMS.DEBUG) {
-            this.drawBB(ctx);
-        }
+        super(game, x, y, scale, radius, bulletSpeed, bulletType);
     }
 
     update() {
         this.y += this.bulletSpeed;
-        super.update();
+        super.checkBounds();
+        this.updateBB();
     }
+
+    updateBB() {
+        const radius = 10;
+        super.updateBB(radius);
+    }
+
 }

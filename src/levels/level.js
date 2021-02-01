@@ -25,6 +25,10 @@ class Level {
             });
             this.level[seconds] = [];
         }
+
+        if (this.life === 0) {
+            this.game.reset();
+        }
     };
 
     draw(ctx) {

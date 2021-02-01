@@ -18,7 +18,7 @@ class Player {
         this.width = 18;
         this.height = 21;
         this.scale = 3;
-        this.center = (this.width * this.scale / 2) - 3;
+        this.center = (this.width * this.scale / 2);
 
         // how many hits left before death
         // 3 = full health | 2 = 2 hits left | 1 = 1 hits left | 0 = dead
@@ -209,7 +209,7 @@ class Player {
                 break;
             case IncreaseHealthPowerUp:
                 this.life += this.life < this.totalLife ? 1 : 0;
-                this.game.camera.life = this.life;
+                this.game.entities.level.life = this.life;
                 break;
             case IncreasePowerPowerUp:
                 this.powerFromPowerUp += 1;
@@ -305,11 +305,10 @@ class AltPlayer {
 
 class PlayerBullet extends Bullet {
     constructor(game, x, y, scale, damage) {
-        const width = 10;
-        const height = 30;
+        const radius = 10;
         const bulletSpeed = 12;
         const bulletType = 2; //player bullet
-        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
+        super(game, x, y, scale, radius, bulletSpeed, bulletType);
         this.damage = damage;
 
         this.spritesheet = ASSET_MANAGER.getAsset("./res/bullet.png");
@@ -317,21 +316,17 @@ class PlayerBullet extends Bullet {
         this.animations.push(new Animator(this.spritesheet, 0, 0, this.width, this.height, 1, 0.2, 0, false, true));
     }
 
-    draw(ctx) {
-        // Use yellow rectangles to keep the theme of the sprite
-        // ctx.fillStyle = "#F9DC5C";
-        // ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
-        this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-
-        if(PARAMS.DEBUG) {
-            this.drawBB(ctx);
-        }
-    }
-
     update() {
         this.y -= this.bulletSpeed;
-        super.update();
+        this.checkBounds();
+        this.updateBB();
     }
+
+    updateBB() {
+        const radius = 10;
+        super.updateBB(radius);
+    }
+    
 }
 
 
