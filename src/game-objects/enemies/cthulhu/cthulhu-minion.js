@@ -19,6 +19,8 @@ class CthulhuMinion extends Enemy {
         this.life = 1;
 
         this.startTimer = Date.now();
+
+        this.score = 25;
     };
 
     loadAnimations() {

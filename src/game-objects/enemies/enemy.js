@@ -9,6 +9,7 @@ class Enemy {
         this.life = 1;
         // Determines the path of the enemy
         this.goRight = true;
+        this.score = 100;
     }
 
     draw(ctx) {
@@ -50,6 +51,8 @@ class Enemy {
                     if (this.life <= 0 || this.life === NaN) {
                         this.chanceForDrop();
                         this.destroy();
+                        this.game.score += this.score;
+                        this.game.displayScore.innerHTML = this.game.score;
                     }
                 }
             }

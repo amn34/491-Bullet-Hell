@@ -219,9 +219,9 @@ class Player {
                 break;
             case AdditionalProjectilePowerUp:
                 if (len === 1) {
-                    this.bullets.push(this.bullets[0] - 15, this.bullets[0] + 15);
+                    this.bullets.push(this.bullets[0] - 20, this.bullets[0] + 20);
                 } else if (len + 2 < 10) {
-                    this.bullets.push(this.bullets[len - 2] - 15, this.bullets[len - 1] + 15);
+                    this.bullets.push(this.bullets[len - 2] - 20, this.bullets[len - 1] + 20);
                 }
                 break;
             /*

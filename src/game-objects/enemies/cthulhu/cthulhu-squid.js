@@ -15,7 +15,9 @@ class CthulhuSquid extends Enemy {
 
         this.life = 3;
 
-        this.startTimer = Date.now()
+        this.startTimer = Date.now();
+
+        this.score = 150;
     };
 
     loadAnimations() {

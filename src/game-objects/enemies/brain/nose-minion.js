@@ -23,6 +23,8 @@ class NoseMinion extends Enemy {
     draw(ctx) {
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
         super.draw(ctx);
+
+        this.score = 50;
     };
 
     update() {

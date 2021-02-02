@@ -17,6 +17,8 @@ class Brain extends Enemy {
         this.startTimer = Math.floor(Date.now() / 100);
         this.oldTime = 0;
         this.totalLife = this.life;
+        
+        this.score = 250;
     };
 
     draw(ctx) {

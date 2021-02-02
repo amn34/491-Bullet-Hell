@@ -27,6 +27,8 @@ class GameEngine {
         this.surfaceHeight = this.ctx.canvas.height;
         this.startInput();
         this.timer = new Timer();
+        this.score = 0;
+        this.displayScore = document.getElementById('score');
     };
 
     start() {
@@ -39,6 +41,8 @@ class GameEngine {
 
     reset() {
         this.entities = [];
+        this.score = 0;
+        this.displayScore.innerHTML = 0;
         this.setLevel(new CaveLevel(this));
         this.timer = new Timer();
     };
@@ -185,11 +189,4 @@ class GameEngine {
         this.update();
         this.draw();
     };
-
-    reset() {
-        this.entities = [];
-        this.setLevel(new CaveLevel(this));
-        this.timer = new Timer();
-    };
-
 };

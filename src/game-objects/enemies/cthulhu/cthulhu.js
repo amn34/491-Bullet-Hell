@@ -36,6 +36,8 @@ class Cthulhu extends Enemy {
 
         this.startTimer = Math.floor(Date.now() / 100);
         this.oldTime = 0;
+
+        this.score = 5000;
     };
 
     /**
