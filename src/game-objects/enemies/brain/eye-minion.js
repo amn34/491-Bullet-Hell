@@ -7,6 +7,7 @@ class EyeMinion extends Enemy {
 
         this.sprite = ASSET_MANAGER.getAsset("./res/enemies/eye.png");
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 8, 0.2, 0, false, true));
+
         // For movement
         this.velocity = { x: 0, y: 0 };
         // Starting direction of minion movement.
@@ -22,11 +23,6 @@ class EyeMinion extends Enemy {
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
         super.draw(ctx);
     };
-
-    updateBB() {
-        const radius = 15;
-        super.updateBB(radius);
-    }
 
     update() {
         this.updateBB();
@@ -47,7 +43,7 @@ class EyeMinion extends Enemy {
 
         // SPRITE MOVING LEFT
         if (this.velocity.x <= 0 && this.direction === Direction.LEFT) {
-            if (this.BB.left < 0) {
+            if (this.x + this.radius < 0) {
                 this.direction = Direction.RIGHT;
             } else {
 
@@ -65,7 +61,7 @@ class EyeMinion extends Enemy {
 
         // SPRITE MOVING RIGHT ( and/or UP/DOWN)
         else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) {
-            if (this.BB.right > PARAMS.CANVAS_WIDTH) {
+            if (this.x + this.radius > PARAMS.CANVAS_WIDTH) {
                 this.direction = Direction.LEFT;
             } else {
 
@@ -96,6 +92,11 @@ class EyeMinion extends Enemy {
 
     };
 
+    updateBB() {
+        const radius = 24;
+        super.updateBB(radius);
+    };
+
     /**
      * Controls the velocity of the sprite.
      * @param velocity
@@ -105,6 +106,5 @@ class EyeMinion extends Enemy {
     moveFunction(velocity, direction) {
         let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
         return movementFunctions[direction];
-    }
-
+    };
 }

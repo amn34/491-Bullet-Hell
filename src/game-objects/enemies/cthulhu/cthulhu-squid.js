@@ -6,27 +6,34 @@ class CthulhuSquid extends Enemy {
         const height = 137;
         super(game, x, y, width, height, scale);
         this.sprite = ASSET_MANAGER.getAsset("./res/enemies/cthulhuSquid.png");
-
+        this.loadAnimations();
         this.animationType = 1; // Starting animation.
+
         this.velocity = { x: 0, y: 0 };
         this.direction = 3; // Starting direction of minion movement.
         this.moveTimer = 0; // Time for Sin/Cos functions.
+
         this.life = 3;
 
         this.startTimer = Date.now()
-        this.loadAnimations();
-        this.updateBB();
-    }
+    };
 
     loadAnimations() {
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 1, 0.2,
             0, false, true));
         this.animations.push(new Animator(this.sprite, this.width, 0, this.width, this.height, 1, 0.2,
             0, false, true));
-    }
+    };
 
+    draw(ctx) {
+        super.draw(ctx);
+        this.animations[this.animationType].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+    };
 
     update() {
+        this.updateBB();
+        super.checkCollision(this.game.entities.bullets);
+
         const TICK = this.game.clockTick;
         const Direction = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 }; // Keep track of direction
         const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4 }; // Tied to moveFunction.
@@ -36,7 +43,7 @@ class CthulhuSquid extends Enemy {
         this.velocity.y = 0;
 
         if (this.velocity.x <= 0 && this.direction === Direction.LEFT) {
-            if (this.BB.left < 0) {
+            if (this.x + this.BB.radius < 0) {
                 this.direction = Direction.RIGHT;
             } else {
                 this.velocity.x += this.moveFunction(VELOCITY.REGULAR, Movement.UP);
@@ -45,7 +52,7 @@ class CthulhuSquid extends Enemy {
                 this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.COS);
             }
         } else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) { // SPRITE MOVING RIGHT
-            if (this.BB.right > PARAMS.CANVAS_WIDTH) {
+            if (this.x + this.BB.radius > PARAMS.CANVAS_WIDTH) {
                 this.direction = Direction.LEFT;
             } else {
                 this.velocity.x += this.moveFunction(VELOCITY.REGULAR, Movement.RIGHT);
@@ -67,14 +74,17 @@ class CthulhuSquid extends Enemy {
         // Update sprite position.
         this.x += this.velocity.x * TICK * this.scale;
         this.y += this.velocity.y * TICK * this.scale;
-        this.updateBB();
         this.bulletPattern(300, 250, 20);
-        super.checkCollision(this.game.entities.bullets);
 
         if (this.y >= PARAMS.CANVAS_HEIGHT) {
             this.removeFromWorld = true;
         }
-    }
+    };
+
+    updateBB() {
+        const radius = 70;
+        super.updateBB(radius);
+    };
 
     /**
      * Controls the velocity of the sprite.
@@ -85,7 +95,7 @@ class CthulhuSquid extends Enemy {
     moveFunction(velocity, direction) {
         let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
         return movementFunctions[direction];
-    }
+    };
 
     /**
      * Controls the firing mechanism for minions. There are two different firing modes based on the location
@@ -109,23 +119,13 @@ class CthulhuSquid extends Enemy {
         }
         // Regular fire interval.
         else if (this.elapsedTime % fireInterval === 0) {
-            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 + 20, this.y + this.height - 5, 1/2));
-            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 - 20, this.y + this.height - 5, 1/2));
-            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 + 12, this.y + this.height - 15, 1/2));
-            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 - 12, this.y + this.height - 15, 1/2));
-            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height, 1/2));
-            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 30, 1/2));
+            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 + 20, this.y + this.height - 5, 1 / 2));
+            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 - 20, this.y + this.height - 5, 1 / 2));
+            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 + 12, this.y + this.height - 15, 1 / 2));
+            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 - 12, this.y + this.height - 15, 1 / 2));
+            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height, 1 / 2));
+            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 30, 1 / 2));
             this.animationType = 0;
         }
-    }
-
-    updateBB() {
-        const radius = 20;
-        super.updateBB(radius);
-    }
-
-    draw(ctx) {
-        super.draw(ctx);
-        this.animations[this.animationType].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-    }
+    };
 }
