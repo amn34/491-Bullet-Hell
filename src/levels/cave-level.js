@@ -92,7 +92,7 @@ class CaveLevel extends Level {
             new MouthMinion(this.game, 400, 0),
         ];
         this.level[80] = [
-            new Cthulhu(this.game, 300, 0),
+            new Cthulhu(this.game, 300, 100),
         ];
     }
 }

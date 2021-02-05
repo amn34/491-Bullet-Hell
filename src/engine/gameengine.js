@@ -19,6 +19,7 @@ class GameEngine {
         this.right = false;
         this.up = false;
         this.down = false;
+        this.slow = false;
     };
 
     init(ctx) {
@@ -47,6 +48,7 @@ class GameEngine {
         var that = this;
 
         this.ctx.canvas.addEventListener("keydown", function (e) {
+            console.log(e.code);
             switch (e.code) {
                 case "ArrowLeft":
                 case "KeyA":
@@ -64,6 +66,9 @@ class GameEngine {
                 case "KeyS":
                     that.down = true;
                     break;
+                case "ShiftLeft":
+                case "ShiftRight":
+                    that.slow = true;
             }
         }, false);
 
@@ -85,6 +90,9 @@ class GameEngine {
                 case "KeyS":
                     that.down = false;
                     break;
+                case "ShiftLeft":
+                case "ShiftRight":
+                    that.slow = false;
             }
         }, false);
     };

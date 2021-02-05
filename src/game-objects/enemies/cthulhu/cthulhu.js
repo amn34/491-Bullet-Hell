@@ -228,5 +228,15 @@ class Cthulhu extends Enemy {
     draw(ctx) {
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
         super.draw(ctx);
+
+
+        let health = 150;
+
+        ctx.fillStyle = "black";
+        ctx.fillRect(this.x + health/2 - 50, this.y, health, 10);
+        ctx.fillStyle = "red";
+        ctx.fillRect(this.x + health/2 - 50, this.y, - health * (this.totalLife/5000 - this.life/5000) + health, 5);
+        ctx.stroke();
+
     };
 }
