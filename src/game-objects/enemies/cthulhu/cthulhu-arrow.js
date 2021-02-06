@@ -13,7 +13,9 @@ class CthulhuArrow extends Enemy {
 
         this.life = 1;
 
-        this.startTimer = Date.now()
+        this.startTimer = Date.now();
+
+        this.score = 100;
     };
 
     loadAnimations() {

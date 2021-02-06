@@ -22,7 +22,7 @@ canvas:focus {
     margin: 0;
 }
 
-.stopwatch {
+.stats {
     padding: 4px;
     color: #e4e6eb;
     border-radius: 2px;
@@ -45,7 +45,7 @@ canvas:focus {
         text-align: center;
     }
 
-    .stopwatch {
+    .stats {
         float: left;
         margin-right: 10px;
         margin-top: 5px;

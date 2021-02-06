@@ -20,6 +20,8 @@ class MouthMinion extends Enemy {
         this.canShoot = 0;
         this.threshHold = 36;
         this.startTimer = Date.now()
+
+        this.score = 50;
     };
 
     draw(ctx) {

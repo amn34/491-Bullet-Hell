@@ -16,7 +16,9 @@ class EyeMinion extends Enemy {
         this.moveTimer = 0;
 
         this.life = 1;
-        this.startTimer = Date.now()
+        this.startTimer = Date.now();
+
+        this.score = 50;
     };
 
     draw(ctx) {

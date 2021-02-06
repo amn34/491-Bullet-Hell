@@ -14,7 +14,9 @@ class CthulhuCrab extends Enemy {
         this.moveTimer = 0; // Time for sin/cos functions.
 
         this.life = 2;
-        this.startTimer = Date.now()
+        this.startTimer = Date.now();
+
+        this.score = 100;
     };
 
     loadAnimations() {
