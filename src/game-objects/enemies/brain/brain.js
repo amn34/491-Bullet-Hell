@@ -22,6 +22,16 @@ class Brain extends Enemy {
     draw(ctx) {
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
         super.draw(ctx);
+
+        let health = 100;
+
+        let distanceFromHead = 10;
+
+        ctx.fillStyle = "black";
+        ctx.fillRect(this.x -1 , this.y - 1 - distanceFromHead, health + 1, 7);
+        ctx.fillStyle = "red";
+        ctx.fillRect(this.x , this.y - distanceFromHead, - health * (this.totalLife/15 - this.life/15) + health, 5);
+        ctx.stroke();
     };
 
     update() {

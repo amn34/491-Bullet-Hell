@@ -32,7 +32,7 @@ class CaveLevel extends Level {
             new MouthMinion(this.game, 650, 0),
         ];
         this.level[9] = [
-            new Brain(this.game, 200, 10),
+            new Brain(this.game, 200, 20),
         ];
         this.level[20] = [
             new MouthMinion(this.game, 100, 0),
@@ -43,7 +43,7 @@ class CaveLevel extends Level {
             new NoseMinion(this.game, 300, 0),
         ];
         this.level[25] = [
-            new Brain(this.game, 400, 10),
+            new Brain(this.game, 400, 20),
             new NoseMinion(this.game, 100, 0),
         ];
         this.level[30] = [
@@ -68,10 +68,10 @@ class CaveLevel extends Level {
             new FingerGunDude(this.game, 350, 100),
         ];
         this.level[51] = [
-            new Brain(this.game, 100, 10),
+            new Brain(this.game, 100, 20),
         ];
         this.level[55] = [
-            new Brain(this.game, 500, 10),
+            new Brain(this.game, 500, 20),
         ];
         this.level[60] = [
             new MouthMinion(this.game, 100, 0),
@@ -92,7 +92,7 @@ class CaveLevel extends Level {
             new MouthMinion(this.game, 400, 0),
         ];
         this.level[80] = [
-            new Cthulhu(this.game, 300, 100),
+            new Cthulhu(this.game, 300, 100), // TODO - reset to 0, placed at 100 to see health bar.
         ];
     }
 }
