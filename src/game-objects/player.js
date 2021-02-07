@@ -6,6 +6,7 @@ class Player {
 
         // The movespeed for the player unnormalized (you move faster diagonally)
         this.moveSpeed = 3;
+        this.moveSpeedSlow = .75;
         this.speedX = 0;
         this.speedY = 0;
         this.game = game;
@@ -99,11 +100,8 @@ class Player {
     }
 
     update() {
-        this.speedX -= this.game.left ? this.moveSpeed : 0;
-        this.speedX += this.game.right ? this.moveSpeed : 0;
 
-        this.speedY -= this.game.up ? this.moveSpeed : 0;
-        this.speedY += this.game.down ? this.moveSpeed : 0;
+        this.game.slow ? this.calculateSpeed(this.moveSpeedSlow) : this.calculateSpeed(this.moveSpeed);
 
         this.x += this.speedX;
         if (this.speedX < 0) {
@@ -145,6 +143,14 @@ class Player {
         this.checkCollision(this.game.entities.enemies);
         this.checkCollision(this.game.entities.bullets);
         this.checkCollision(this.game.entities.powerups);
+    }
+
+    calculateSpeed(speed) {
+        this.speedX -= this.game.left ? speed : 0;
+        this.speedX += this.game.right ? speed : 0;
+
+        this.speedY -= this.game.up ? speed : 0;
+        this.speedY += this.game.down ? speed : 0;
     }
 
     /**
