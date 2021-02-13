@@ -4,28 +4,24 @@ var ASSET_MANAGER = new AssetManager();
 
 // Load assets here
 // Might need a separate load manager here
-ASSET_MANAGER.queueDownload("./res/player.png");
-ASSET_MANAGER.queueDownload("./res/altPlayer.png");
-ASSET_MANAGER.queueDownload("./res/enemies/brain.png");
-ASSET_MANAGER.queueDownload("./res/enemies/cthulhuSprite.png");
-ASSET_MANAGER.queueDownload("./res/enemies/eye.png");
-ASSET_MANAGER.queueDownload("./res/cavebg.png");
-ASSET_MANAGER.queueDownload("./res/powerups/ap1_pu.png");
-ASSET_MANAGER.queueDownload("./res/powerups/ap2_pu.png");
-ASSET_MANAGER.queueDownload("./res/powerups/fire_rate_pu.png");
-ASSET_MANAGER.queueDownload("./res/powerups/health_pu.png");
-ASSET_MANAGER.queueDownload("./res/powerups/power_pu.png");
-ASSET_MANAGER.queueDownload("./res/powerups/shield_pu.png");
-ASSET_MANAGER.queueDownload("./res/enemies/finger_gun_dude.png");
-ASSET_MANAGER.queueDownload("./res/enemies/cth_minion_float.png");
-ASSET_MANAGER.queueDownload("./res/enemies/cth_minion_attack.png");
-ASSET_MANAGER.queueDownload("./res/bullet.png");
-ASSET_MANAGER.queueDownload("./res/explosion.png");
-ASSET_MANAGER.queueDownload("./res/enemies/mouth.png");
-ASSET_MANAGER.queueDownload("./res/enemies/nose.png");
-ASSET_MANAGER.queueDownload("./res/enemies/cthulhuSquid.png");
-ASSET_MANAGER.queueDownload("./res/enemies/cthulhuTriangle.png");
-ASSET_MANAGER.queueDownload("./res/enemies/cthulhuCrab.png");
+function loadSprites() {
+	let base = "./res/";
+	let extension = ".png";
+	let sprites = {
+		"" : ["player", "altPlayer", "cavebg", "explosion"],
+		"powerups/" : ["ap1_pu", "ap2_pu", "fire_rate_pu", "health_pu", "power_pu", "shield_pu"],
+		"enemies/" : ["finger_gun_dude", "cth_minion_float", "cth_minion_attack", "brain", "cthulhuSprite", 
+					  "eye", "mouth", "nose", "cthulhuSquid", "cthulhuTriangle", "cthulhuCrab"],
+	}
+
+	for (path in sprites) {
+		for (index in sprites[path]) {
+			ASSET_MANAGER.queueDownload(base + path + sprites[path][index] + extension);
+		}
+	}
+}
+
+loadSprites();
 
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');

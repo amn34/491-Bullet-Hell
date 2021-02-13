@@ -87,18 +87,8 @@ class Player {
 
 
     draw(ctx) {
-        this.canShoot++;
-        if (this.canShoot >= (this.fireRate - this.fireRateFromPowerUp)) {
-            this.bullets.forEach(bulletPos => {
-                this.game.addEntity(new PlayerBullet(this.game, this.x + bulletPos, this.y, 0.75, this.power + this.powerFromPowerUp));
-            });
-            // Go back to shooting 1 bullet
-            //let center = this.x + this.center;
-            // this.game.addEntity(new PlayerBullet(this.game, center, this.y, 1, this.power + this.powerFromPowerUp));
-            this.canShoot = 0;
-        }
-
-        this.animations[this.life][this.powerup].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        let animationIndex = this.life == 0 ? 0 : this.totalLife - this.life;
+        this.animations[animationIndex][this.powerup].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
@@ -218,7 +208,7 @@ class Player {
 
     handlePowerUp(entity) {
         const len = this.bullets.length;
-        switch(entity.constructor) {
+        switch (entity.constructor) {
             case IncreaseFireRatePowerUp:
                 const increase = (this.fireRate - this.fireRateFromPowerUp) * 0.15;
                 this.fireRateFromPowerUp += this.fireRateFromPowerUp + increase > 13 ? 0 : increase;
