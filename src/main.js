@@ -23,6 +23,36 @@ function loadSprites() {
 
 loadSprites();
 
+window.addEventListener('keydown', function (e) {
+	switch (e.code) {
+		case 'KeyP':
+			if (PARAMS.isPaused) {
+				PARAMS.isPaused = false;
+				document.querySelector('.main-menu').style.display = 'none';
+				document.querySelector('.control-menu').style.display = 'none';
+				document.querySelector('#gameWorld').focus();
+
+			} else {
+				PARAMS.isPaused = true;
+				document.querySelector('.main-menu').style.display = 'flex';
+
+			}
+			break;
+	}
+})
+
+document.querySelector('#control-btn').addEventListener('click', () => {
+	document.querySelector('.main-menu').style.display = 'none';
+	document.querySelector('.control-menu').style.display = 'flex';
+})
+
+document.querySelector('#nav-back').addEventListener('click', () => {
+	document.querySelector('.control-menu').style.display = 'none';
+	document.querySelector('.main-menu').style.display = 'flex';
+})
+
+
+
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');

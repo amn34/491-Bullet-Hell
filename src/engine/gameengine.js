@@ -35,7 +35,9 @@ class GameEngine {
     start() {
         var that = this;
         (function gameLoop() {
-            that.loop();
+            if (!PARAMS.isPaused) {
+                that.loop();
+            }
             requestAnimFrame(gameLoop, that.ctx.canvas);
         })();
     };
@@ -74,6 +76,7 @@ class GameEngine {
                 case "ShiftLeft":
                 case "ShiftRight":
                     that.slow = true;
+                    break;
             }
         }, false);
 
