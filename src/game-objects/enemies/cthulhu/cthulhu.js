@@ -38,6 +38,10 @@ class Cthulhu extends Enemy {
         this.oldTime = 0;
 
         this.score = 5000;
+
+        this.canShoot = 0;
+        this.threshHold = 30;
+        this.bulletPattern = [];
     };
 
     /**
@@ -61,6 +65,16 @@ class Cthulhu extends Enemy {
 
         } else if (this.x === this.startX - 125 && !this.goRight) {
             this.goRight = !this.goRight;
+        }
+
+        this.canShoot++;
+
+        if (this.canShoot === this.threshHold) {
+            this.canShoot = 0;
+            let center = this.x + (this.width / 2) * this.scale;
+            this.bulletPattern.forEach(bPattern => {
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, bPattern));
+            });
         }
 
         // Randomize x-coordinate for minion.
@@ -110,15 +124,31 @@ class Cthulhu extends Enemy {
                 this.spawnFrequency = freqStage1;
                 this.spawnMax = maxStage1;
             }
+
+            if (this.bulletPattern.length === 0) {
+                this.bulletPattern.push(archimedesReverse);
+            }
         } else if (this.life >= this.totalLife / 2) {
             this.spawnFrequency = freqStage2;
             this.spawnMax = maxStage2;
+
+            if (this.bulletPattern.length === 1) {
+                this.bulletPattern.push(archimedes);
+            }
         } else if (this.life >= this.totalLife / 4) {
             this.spawnFrequency = freqStage3;
             this.spawnMax =maxStage3;
+
+            if (this.bulletPattern.length === 2) {
+                this.bulletPattern.push(downSpiral);
+            }
         } else if (this.life >= this.totalLife / 8) {
             this.spawnFrequency = freqStage4;
             this.spawnMax = maxStage4;
+
+            if (this.bulletPattern.length === 3) {
+                this.bulletPattern.push(downSpiralReverse);
+            }
         }
     }
 
@@ -241,5 +271,29 @@ class Cthulhu extends Enemy {
         ctx.fillRect(this.x + modifier, this.y - distanceFromHead, - health * (this.totalLife/5000 - this.life/5000) + health, 5);
         ctx.stroke();
 
+    };
+}
+
+class CthulhuBullet extends Bullet {
+    constructor(game, x, y, scale, callback) {
+        const radius = 8;
+        const bulletSpeed = 3;
+        const bulletType = 1; //enemy bullet
+        super(game, x, y, scale, radius, bulletSpeed, bulletType);
+        this.callback = callback;
+        this.angle = 0;
+    }
+
+    update() {
+        this.updateBB();
+        super.checkBounds();
+
+        this.angle += 0.04;
+        this.callback(this);     
+    };
+
+    updateBB() {
+        const radius = 8;
+        super.updateBB(radius);
     };
 }
