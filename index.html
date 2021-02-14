@@ -6,9 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>What The Shmup</title>
-
+    <link rel="stylesheet" href="game-menu.css">
     <link rel="stylesheet" href="style.css">
     <script defer src="src/loadFiles.js"></script>
+<!--<script src="src/loadFiles.js"></script>-->
+
 </head>
 
 <body>
@@ -41,7 +43,91 @@
             <p id='pu-desc'>Increases player health</p>
         </div>
         <input type="checkbox" id="debug" checked> Debug
+        <input type="checkbox" id="invincible"> Invincible
     </div>
+
+    <div class="main-menu">
+
+        <div class="menu-bar">
+            <p>Paused</p>
+        </div>
+
+        <h1>What the Schmup?</h1>
+        <button id="control-btn">Controls</button>
+        <p id="pause-info">Press P to unpause</p>
+        <p id="credits">Credits</p>
+    </div>
+
+    <div class="main-menu control-menu">
+        <div class="menu-bar">
+            <p id="nav-back">Back</p>
+            <p>Paused</p>
+        </div>
+
+        <h1>Controls</h1>
+        <p>WASD and Arrow keys control players movement</p>
+
+        <div class="directional">
+            <div class="directions">
+                <p>Forward</p>
+                <p>Left</p>
+                <p>Backward</p>
+                <p>Right</p>
+            </div>
+
+            <div class="directions">
+                <p>W</p>
+                <p>A</p>
+                <p>S</p>
+                <p>D</p>
+            </div>
+
+            <div class="directions">
+                <p>&#8593;</p>
+                <p>&#8592;</p>
+                <p>&#8595;</p>
+                <p>&#8594;</p>
+            </div>
+        </div>
+
+        <div class="diagonals">
+            <p>Diagonal</p>
+
+            <div class="arrows">
+                <p>&#8593;</p>
+                <p>&#8594;</p>
+            </div>
+
+            <div class="arrows">
+                <p>&#8592;</p>
+                <p>&#8593;</p>
+            </div>
+
+            <div class="arrows">
+                <p>&#8592;</p>
+                <p>&#8595;</p>
+            </div>
+
+            <div class="arrows">
+                <p>&#8595;</p>
+                <p>&#8594;</p>
+            </div>
+
+        </div>
+
+        <div class="align">
+            <p id="shift">Shift</p>
+            <p>Fine movement control</p>
+        </div>
+
+        <div class="align">
+            <p id="pause">Pause</p>
+            <p>P to pause and unpause game</p>
+        </div>
+
+    </div>
+
+    <script src="src/loadFiles.js"></script>
 </body>
 
 </html>

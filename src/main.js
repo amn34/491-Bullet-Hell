@@ -23,6 +23,36 @@ function loadSprites() {
 
 loadSprites();
 
+window.addEventListener('keydown', function (e) {
+	switch (e.code) {
+		case 'KeyP':
+			if (PARAMS.isPaused) {
+				PARAMS.isPaused = false;
+				document.querySelector('.main-menu').style.display = 'none';
+				document.querySelector('.control-menu').style.display = 'none';
+				document.querySelector('#gameWorld').focus();
+
+			} else {
+				PARAMS.isPaused = true;
+				document.querySelector('.main-menu').style.display = 'flex';
+
+			}
+			break;
+	}
+})
+
+document.querySelector('#control-btn').addEventListener('click', () => {
+	document.querySelector('.main-menu').style.display = 'none';
+	document.querySelector('.control-menu').style.display = 'flex';
+})
+
+document.querySelector('#nav-back').addEventListener('click', () => {
+	document.querySelector('.control-menu').style.display = 'none';
+	document.querySelector('.main-menu').style.display = 'flex';
+})
+
+
+
 ASSET_MANAGER.downloadAll(function () {
 	const canvas = document.getElementById('gameWorld');
 	const ctx = canvas.getContext('2d');
@@ -38,8 +68,8 @@ ASSET_MANAGER.downloadAll(function () {
 
 	// This is where we will add the scene manager to handle
 	// the adding and removing of entities
-
 	gameEngine.setLevel(new CaveLevel(gameEngine));
+	//gameEngine.setLevel(new TestLevel(gameEngine));
 	gameEngine.start();
 });
 
