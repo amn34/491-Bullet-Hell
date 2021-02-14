@@ -29,7 +29,9 @@ window.requestAnimFrame = (function () {
 
 const PARAMS = {
     DEBUG: true,
+    INVINCIBLE: false,
     WIDTH: 768,
     HEIGHT: 760,
     isPaused: false
 };
+

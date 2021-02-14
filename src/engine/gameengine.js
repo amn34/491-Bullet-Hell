@@ -47,6 +47,7 @@ class GameEngine {
         this.score = 0;
         this.displayScore.innerHTML = 0;
         this.setLevel(new CaveLevel(this));
+        //this.setLevel(new TestLevel(this));
         this.timer = new Timer();
     };
 
@@ -172,7 +173,7 @@ class GameEngine {
     update() {
         this.entities.level.update();
         this.entities.player.update();
-
+    
         this.updateEntityList(this.entities.backgrounds);
         this.updateEntityList(this.entities.particles);
         this.updateEntityList(this.entities.enemies);
