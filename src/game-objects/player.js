@@ -181,6 +181,7 @@ class Player {
                         // Remove 1 shield regardless of the damage of the enemy bullet
                         if (this.shield) {
                             this.shield--;
+                            this.game.entities.level.shield = this.shield;
                         } else {
                             this.life = this.life > 0 ? this.life - 1 : 0;
                             this.game.entities.level.life = this.life;
@@ -225,6 +226,7 @@ class Player {
                 break;
             case IncreaseShieldPowerUp:
                 this.shield += 1;
+                this.game.entities.level.shield = this.shield;
                 this.handleGameMenu('res/powerups/shield_pu.png', 'Shield', 'Increases player shield')
                 break;
             case AdditionalProjectilePowerUp:
