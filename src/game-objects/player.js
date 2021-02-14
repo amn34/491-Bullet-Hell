@@ -6,7 +6,7 @@ class Player {
 
         // The movespeed for the player unnormalized (you move faster diagonally)
         this.moveSpeed = 3;
-        this.moveSpeedSlow = .75;
+        this.moveSpeedSlow = 1.5;
         this.speedX = 0;
         this.speedY = 0;
         this.game = game;
@@ -177,6 +177,7 @@ class Player {
                 if (collideWithEnemyBullet(entity) || collideWithEnemy(entity)) {
                     if (this.canTakeDamage) {
                         this.canTakeDamage = false;
+                      
                         if (!PARAMS.INVINCIBLE) {
                             // Remove 1 shield regardless of the damage of the enemy bullet
                             if (this.shield) {
@@ -226,6 +227,7 @@ class Player {
                 break;
             case IncreaseShieldPowerUp:
                 this.shield += 1;
+                this.game.entities.level.shield = this.shield;
                 this.handleGameMenu('res/powerups/shield_pu.png', 'Shield', 'Increases player shield')
                 break;
             case AdditionalProjectilePowerUp:

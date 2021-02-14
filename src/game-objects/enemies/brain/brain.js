@@ -19,6 +19,9 @@ class Brain extends Enemy {
         this.totalLife = this.life;
         
         this.score = 250;
+
+        this.canShoot = 0;
+        this.threshHold = 36;
     };
 
     draw(ctx) {
@@ -43,16 +46,16 @@ class Brain extends Enemy {
         this.canShoot++;
 
         if (this.canShoot === this.threshHold) {
-            let center = this.x + (this.width / 2);
-            this.game.addBullet(new BrainBullet(this.game, center, this.y + this.height, 1));
-            this.canShoot = 0;
+            let center = this.x + (this.width / 2) * this.scale;
+            this.game.addBullet(new BrainBullet(this.game, center, this.y + this.height, 1, downSpiral));
+            this.game.addBullet(new BrainBullet(this.game, center, this.y + this.height, 1, downSpiralReverse));            this.canShoot = 0;
         }
 
-        if (this.x <= this.startX + 50 && this.goRight) {
-            this.x++;
-        } else {
-            this.x--;
-        }
+        // if (this.x <= this.startX + 50 && this.goRight) {
+        //     this.x++;
+        // } else {
+        //     this.x--;
+        // }
 
         if (this.x === this.startX + 50 && this.goRight) {
             this.goRight = !this.goRight;
@@ -112,17 +115,20 @@ class Brain extends Enemy {
 }
 
 class BrainBullet extends Bullet {
-    constructor(game, x, y, scale) {
+    constructor(game, x, y, scale, callback) {
         const radius = 15;
         const bulletSpeed = 3;
         const bulletType = 1; //enemy bullet
         super(game, x, y, scale, radius, bulletSpeed, bulletType);
+        this.callback = callback;
+        this.angle = 0;
     };
 
     update() {
         this.updateBB();
         super.checkBounds();
-        this.y += this.bulletSpeed;
+        this.angle += 0.04;
+        this.callback(this);
     };
 
     updateBB() {

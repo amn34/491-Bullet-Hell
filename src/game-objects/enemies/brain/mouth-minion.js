@@ -35,7 +35,7 @@ class MouthMinion extends Enemy {
 
         this.canShoot++;
         if (this.canShoot === this.threshHold) {
-            let center = this.x + (this.width / 2);
+            let center = this.x + (this.width / 2) * this.scale;
             this.game.addBullet(new MouthBullet(this.game, center, this.y + this.height, 1, true));
             this.game.addBullet(new MouthBullet(this.game, center, this.y + this.height, 1, false));
             this.canShoot = 0;
