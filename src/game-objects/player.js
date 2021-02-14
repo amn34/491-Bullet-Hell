@@ -177,13 +177,14 @@ class Player {
                 if (collideWithEnemyBullet(entity) || collideWithEnemy(entity)) {
                     if (this.canTakeDamage) {
                         this.canTakeDamage = false;
-
-                        // Remove 1 shield regardless of the damage of the enemy bullet
-                        if (this.shield) {
-                            this.shield--;
-                        } else {
-                            this.life = this.life > 0 ? this.life - 1 : 0;
-                            this.game.entities.level.life = this.life;
+                        if (!PARAMS.INVINCIBLE) {
+                            // Remove 1 shield regardless of the damage of the enemy bullet
+                            if (this.shield) {
+                                this.shield--;
+                            } else {
+                                this.life = this.life > 0 ? this.life - 1 : 0;
+                                this.game.entities.level.life = this.life;
+                            }
                         }
                     }
 

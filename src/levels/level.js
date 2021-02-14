@@ -16,6 +16,7 @@ class Level {
 
     update() {
         PARAMS.DEBUG = document.getElementById("debug").checked;
+        PARAMS.INVINCIBLE = document.getElementById("invincible").checked;
         const seconds = this.game.timer.getGameTime();
         //checks the level entity-creation map to see if there are units to spawn
         if (this.level[seconds]) {
