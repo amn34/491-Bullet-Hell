@@ -213,17 +213,21 @@ class Player {
             case IncreaseFireRatePowerUp:
                 const increase = (this.fireRate - this.fireRateFromPowerUp) * 0.15;
                 this.fireRateFromPowerUp += this.fireRateFromPowerUp + increase > 13 ? 0 : increase;
+                this.handleGameMenu('res/powerups/fire_rate_pu.png', 'Fire Rate', 'Increases player fire rate')
                 break;
             case IncreaseHealthPowerUp:
                 this.life += this.life < this.totalLife ? 1 : 0;
                 this.game.entities.level.life = this.life;
+                this.handleGameMenu('res/powerups/health_pu.png', 'Player Health', 'Increases player health')
                 break;
             case IncreasePowerPowerUp:
                 this.powerFromPowerUp += 1;
+                this.handleGameMenu('res/powerups/power_pu.png', 'Power Up', 'Increases player fire power')
                 break;
             case IncreaseShieldPowerUp:
                 this.shield += 1;
                 this.game.entities.level.shield = this.shield;
+                this.handleGameMenu('res/powerups/shield_pu.png', 'Shield', 'Increases player shield')
                 break;
             case AdditionalProjectilePowerUp:
                 if (len === 1) {
@@ -231,6 +235,7 @@ class Player {
                 } else if (len + 2 < 10) {
                     this.bullets.push(this.bullets[len - 2] - 20, this.bullets[len - 1] + 20);
                 }
+                this.handleGameMenu('res/powerups/ap1_pu.png', 'Bullet', 'Increases number of player bullets')
                 break;
             /*
             case MultipleProjectilePowerUp:
@@ -244,6 +249,12 @@ class Player {
             default:
                 break;
         }
+    }
+
+    handleGameMenu(src, title, desc) {
+        document.querySelector('#pu-img').src = src;
+        document.querySelector('#pu-title').innerText = title;
+        document.querySelector('#pu-desc').innerText = desc;
     }
 }
 
