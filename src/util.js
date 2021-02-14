@@ -30,5 +30,6 @@ window.requestAnimFrame = (function () {
 const PARAMS = {
     DEBUG: true,
     WIDTH: 768,
-    HEIGHT: 760,  
+    HEIGHT: 760,
+    isPaused: false
 };
