@@ -7,7 +7,7 @@ let fileSystem = {
     "game-objects/enemies/brain/" : ["brain.js", "eye-minion.js", "mouth-minion.js", "nose-minion.js"],
     "game-objects/enemies/cthulhu/" : ["cthulhu.js", "cthulhu-minion.js", "cthulhu-arrow.js", "cthulhu-squid.js", "cthulhu-crab.js"],
     "game-objects/enemies/misc/" : ["fingergun.js"],
-    "game-objects/enemies/robot/" : ["homing-robot.js"],
+    "game-objects/enemies/robot/" : ["homing-robot.js", "spread-robot.js"],
     "levels/" : ["level.js", "cave-level.js", "test-level.js"],
     "" : ["util.js", "main.js"],
 }

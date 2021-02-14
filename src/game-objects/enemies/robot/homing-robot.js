@@ -48,27 +48,12 @@ class HomingRobot extends Enemy {
         this.updateBB();
         super.checkCollision(this.game.entities.bullets);
 
-        if (this.x <= this.startX + 50 && this.goRight) {
-            this.x++;
-        } else {
-            this.x--;
-        }
-
-        if (this.x === this.startX + 50 && this.goRight) {
-            this.goRight = !this.goRight;
-
-        } else if (this.x === this.startX - 50 && !this.goRight) {
-            this.goRight = !this.goRight;
-        }
-
 
         this.canShoot++;
-        // if(this.canShoot <= 60) {
-        //     this.canShoot++;
-        // }
 
 
-        if (this.canShoot == 45) {
+
+        if (this.canShoot == 100) {
             let center = this.x + (this.width / 1.5);
             this.game.addBullet(new HomingBullet(this.game, center, this.y + this.height * 3, -5, -5, 1));
             this.game.addBullet(new HomingBullet(this.game, center, this.y + this.height * 3, -4, -5, 1));
@@ -95,7 +80,7 @@ class HomingRobot extends Enemy {
 class HomingBullet extends Bullet {
     constructor(game, x, y, dx, dy, scale) {
         const radius = 10;
-        const bulletSpeed = 20;
+        const bulletSpeed = 15;
         const bulletType = 1; //enemy bullet
         super(game, x, y, scale, radius, bulletSpeed, bulletType);
         this.dx = dx;
