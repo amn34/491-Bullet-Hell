@@ -3,6 +3,7 @@ class Level {
         this.game = game;
         this.life = 3;
         this.totalLife = 3;
+        this.shield = 0;
         this.level = {};
 
         //reset the state of the game and remove all entities 
@@ -34,7 +35,8 @@ class Level {
     draw(ctx) {
         ctx.fillStyle = "black";
         ctx.fillRect(210, 720, 310, 30);
-        ctx.fillStyle = "red";
+        this.shield == 0 ? ctx.fillStyle = "red" : ctx.fillStyle = "blue";
+        //ctx.fillStyle = "red";
         ctx.fillRect(215, 725, 300 - 100 * (this.totalLife - this.life), 20);
         ctx.strokeStyle = "black";
         ctx.beginPath();
