@@ -64,7 +64,7 @@ class NoseMinion extends Enemy {
 
         // SPRITE MOVING RIGHT ( and/or UP/DOWN)
         else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) {
-            if (this.BB.right > PARAMS.CANVAS_WIDTH) {
+            if (this.BB.right > PARAMS.WIDTH) {
                 this.direction = Direction.LEFT;
             } else {
 

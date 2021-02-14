@@ -44,7 +44,7 @@ class CthulhuArrow extends Enemy {
 
         this.velocity.y += this.moveFunction(VELOCITY.REGULAR, Movement.DOWN);
 
-        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - startLaser) {
+        if (this.BB.bottom > PARAMS.HEIGHT - startLaser) {
             this.velocity.y += this.moveFunction(VELOCITY.SUPERFAST, Movement.DOWN);
             this.animationType = 1;
         }
@@ -53,11 +53,11 @@ class CthulhuArrow extends Enemy {
         this.x += this.velocity.x * TICK * this.scale;
         this.y += this.velocity.y * TICK * this.scale;
 
-        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - startLaser) {
+        if (this.BB.bottom > PARAMS.HEIGHT - startLaser) {
             this.bulletPattern();
         }
 
-        if (this.y >= PARAMS.CANVAS_HEIGHT) {
+        if (this.y >= PARAMS.HEIGHT) {
             this.removeFromWorld = true;
         }
     };

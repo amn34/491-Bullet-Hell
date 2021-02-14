@@ -54,7 +54,7 @@ class CthulhuSquid extends Enemy {
                 this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.COS);
             }
         } else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) { // SPRITE MOVING RIGHT
-            if (this.x + this.BB.radius > PARAMS.CANVAS_WIDTH) {
+            if (this.x + this.BB.radius > PARAMS.WIDTH) {
                 this.direction = Direction.LEFT;
             } else {
                 this.velocity.x += this.moveFunction(VELOCITY.REGULAR, Movement.RIGHT);

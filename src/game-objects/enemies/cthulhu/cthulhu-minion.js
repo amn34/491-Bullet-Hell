@@ -70,7 +70,7 @@ class CthulhuMinion extends Enemy {
 
         // SPRITE MOVING RIGHT ( and/or UP/DOWN)
         else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) {
-            if (this.x + this.BB.radius > PARAMS.CANVAS_WIDTH) { // check if we have gone off the right side of canvas
+            if (this.x + this.BB.radius > PARAMS.WIDTH) { // check if we have gone off the right side of canvas
                 this.direction = Direction.LEFT; // go left
             } else { // We know we are going right.
 
