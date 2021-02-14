@@ -36,7 +36,6 @@ class Level {
         ctx.fillStyle = "black";
         ctx.fillRect(210, 720, 310, 30);
         this.shield == 0 ? ctx.fillStyle = "red" : ctx.fillStyle = "blue";
-        //ctx.fillStyle = "red";
         ctx.fillRect(215, 725, 300 - 100 * (this.totalLife - this.life), 20);
         ctx.strokeStyle = "black";
         ctx.beginPath();
