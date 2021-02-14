@@ -51,7 +51,7 @@ class CthulhuCrab extends Enemy {
                 this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.COS);
             }
         } else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) { // SPRITE MOVING RIGHT
-            if (this.BB.right > PARAMS.CANVAS_WIDTH) {
+            if (this.BB.right > PARAMS.WIDTH) {
                 this.direction = Direction.LEFT;
             } else {
                 this.velocity.x += this.moveFunction(VELOCITY.SUPERSLOW, Movement.RIGHT);

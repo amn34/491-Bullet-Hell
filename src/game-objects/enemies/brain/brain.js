@@ -89,7 +89,7 @@ class Brain extends Enemy {
         }
 
         // Randomize x-coordinate for minion.
-        this.xMinionPosition = Math.floor((Math.random() * PARAMS.CANVAS_WIDTH - 96) + 96);
+        this.xMinionPosition = Math.floor((Math.random() * PARAMS.WIDTH - 96) + 96);
 
         this.spawnMinion(this.xMinionPosition, - 100, this.spawnFrequency, this.spawnMax);
     };

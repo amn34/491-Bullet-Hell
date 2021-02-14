@@ -63,7 +63,7 @@ class EyeMinion extends Enemy {
 
         // SPRITE MOVING RIGHT ( and/or UP/DOWN)
         else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) {
-            if (this.x + this.radius > PARAMS.CANVAS_WIDTH) {
+            if (this.x + this.radius > PARAMS.WIDTH) {
                 this.direction = Direction.LEFT;
             } else {
 
