@@ -1,7 +1,7 @@
 
 let fileSystem = {
     "engine/" : ["gameengine.js", "assetmanager.js", "animator.js", "timer.js"],
-    "game-objects/" : ["boundingbox.js", "boundingcircle.js", "bullet.js", "player.js", "powerups.js"],
+    "game-objects/" : ["boundingbox.js", "boundingcircle.js", "bullet.js", "player.js", "powerups.js", "bulletPatterns.js"],
     "game-objects/misc/" : ["background.js", "particles.js"],
     "game-objects/enemies/" : ["enemy.js"],
     "game-objects/enemies/brain/" : ["brain.js", "eye-minion.js", "mouth-minion.js", "nose-minion.js"],
