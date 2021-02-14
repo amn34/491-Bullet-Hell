@@ -1,13 +1,15 @@
 .main-menu {
-    width: 768px;
+    width: 760px;
     height: 760px;
     background-color: rgba(40, 40, 40, 0.9);
-    border: 1px solid blue;
     margin-left: 10px;
+    margin-top: 2px;
     position: absolute;
-
+    left: 10px;
+    border: 1px solid rgba(40, 40, 40, 0.9);
     display: none;
     flex-direction: column;
+
 }
 
 .menu-bar {
