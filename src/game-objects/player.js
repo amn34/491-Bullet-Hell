@@ -39,9 +39,9 @@ class Player {
         this.canShoot = 0;
         this.fireRate = 20;
 
-        // The array bullets the player will shoot
-        // Store the positions relative to the center
-        this.bullets = [this.center];
+        // Stores the angles (in degrees) the bullets will travel in
+        // 0 - right, 90 - up, 180 - left, 270 - down
+        this.bulletAngles = [90];
 
         // The damage the player does to an enemy
         this.damage = 1;
@@ -131,8 +131,10 @@ class Player {
 
         this.canShoot++;
         if (this.canShoot >= (this.fireRate - this.fireRateFromPowerUp)) {
-            this.bullets.forEach(bulletPos => {
-                this.game.addBullet(new PlayerBullet(this.game, this.x + bulletPos, this.y, 1, this.damage + this.powerFromPowerUp));
+            let xCenter = this.x + (this.width * this.scale / 2);
+            let yCenter = this.y + (this.height * this.scale / 2);
+            this.bulletAngles.forEach(angle => {
+                this.game.addBullet(new PlayerBullet(this.game, xCenter, yCenter, 1, this.damage + this.powerFromPowerUp, angle, line));
             });
 
             this.canShoot = 0;
@@ -210,7 +212,7 @@ class Player {
     };
 
     handlePowerUp(entity) {
-        const len = this.bullets.length;
+        const len = this.bulletAngles.length;
         switch (entity.constructor) {
             case IncreaseFireRatePowerUp:
                 const increase = (this.fireRate - this.fireRateFromPowerUp) * 0.15;
@@ -233,9 +235,11 @@ class Player {
                 break;
             case AdditionalProjectilePowerUp:
                 if (len === 1) {
-                    this.bullets.push(this.bullets[0] - 20, this.bullets[0] + 20);
-                } else if (len + 2 < 10) {
-                    this.bullets.push(this.bullets[len - 2] - 20, this.bullets[len - 1] + 20);
+                    this.bulletAngles.push(this.bulletAngles[0] + 20, this.bulletAngles[0] - 20);
+                } else if (len != 17) {
+                    this.bulletAngles.push(this.bulletAngles[len - 2] + 20, this.bulletAngles[len - 1] - 20);
+                } else {
+                    this.bulletAngles.push(this.bulletAngles[len - 1] - 20);
                 }
                 this.handleGameMenu('res/powerups/ap1_pu.png', 'Bullet', 'Increases number of player bullets')
                 break;
@@ -325,7 +329,7 @@ class AltPlayer {
 }
 
 class PlayerBullet extends Bullet {
-    constructor(game, x, y, scale, damage) {
+    constructor(game, x, y, scale, damage, angle, callback) {
         const radius = 10;
         const bulletSpeed = 12;
         const bulletType = 2; //player bullet
@@ -335,10 +339,13 @@ class PlayerBullet extends Bullet {
         this.spritesheet = ASSET_MANAGER.getAsset("./res/bullet.png");
         this.animations = [];
         this.animations.push(new Animator(this.spritesheet, 0, 0, this.width, this.height, 1, 0.2, 0, false, true));
+
+        this.angle = angle;
+        this.callback = callback;
     }
 
     update() {
-        this.y -= this.bulletSpeed;
+        this.callback(this);
         this.checkBounds();
         this.updateBB();
     }
