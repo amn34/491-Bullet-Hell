@@ -51,6 +51,11 @@ class Enemy {
                     if (this.life <= 0 || this.life === NaN) {
                         this.chanceForDrop();
                         this.destroy();
+
+                        if (this instanceof NoseMinion) {
+                            this.shootOnDeath();
+                        }
+                        
                         this.game.score += this.score;
                         this.game.displayScore.innerHTML = this.game.score;
                     }

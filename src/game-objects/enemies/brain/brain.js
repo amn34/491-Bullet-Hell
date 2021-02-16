@@ -48,7 +48,8 @@ class Brain extends Enemy {
         if (this.canShoot === this.threshHold) {
             let center = this.x + (this.width / 2) * this.scale;
             this.game.addBullet(new BrainBullet(this.game, center, this.y + this.height, 1, downSpiral));
-            this.game.addBullet(new BrainBullet(this.game, center, this.y + this.height, 1, downSpiralReverse));            this.canShoot = 0;
+            this.game.addBullet(new BrainBullet(this.game, center, this.y + this.height, 1, downSpiralReverse));            
+            this.canShoot = 0;
         }
 
         // if (this.x <= this.startX + 50 && this.goRight) {
