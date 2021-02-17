@@ -49,7 +49,7 @@ class Player {
         // Additional States from the power up picked
         // Use these so we can always reset the stats of the player easily when needed
         this.fireRateFromPowerUp = 0;
-        this.powerFromPowerUp = 0;
+        //this.powerFromPowerUp = 0;
         this.bulletSpeedFromPowerUp = 0;
         // this.healthFromPowerUp = 0;
         this.shieldFromPowerUp = 0;
@@ -134,7 +134,7 @@ class Player {
             let xCenter = this.x + (this.width * this.scale / 2);
             let yCenter = this.y + (this.height * this.scale / 2);
             this.bulletAngles.forEach(angle => {
-                this.game.addBullet(new PlayerBullet(this.game, xCenter, yCenter, 1, this.damage + this.powerFromPowerUp, angle, line));
+                this.game.addBullet(new PlayerBullet(this.game, xCenter, yCenter, 1, this.damage, angle, line));
             });
 
             this.canShoot = 0;
@@ -225,7 +225,8 @@ class Player {
                 this.handleGameMenu('res/powerups/health_pu.png', 'Player Health', 'Increases player health')
                 break;
             case IncreasePowerPowerUp:
-                this.powerFromPowerUp += 1;
+                this.damage++;
+                this.game.entities.level.damage = this.damage;
                 this.handleGameMenu('res/powerups/power_pu.png', 'Power Up', 'Increases player fire power')
                 break;
             case IncreaseShieldPowerUp:

@@ -10,9 +10,9 @@ class FingerGunDude extends Enemy {
         this.loadAnimations();
         this.animationIndex = 0;
 
-        this.life = 10;
+        this.life = 20;
         this.canShoot = 0;
-        this.threshHold = 100;
+        this.threshHold = 50;
 
         this.score = 200;
     };
