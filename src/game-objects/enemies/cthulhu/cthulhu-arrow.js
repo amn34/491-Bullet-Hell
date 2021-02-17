@@ -57,9 +57,7 @@ class CthulhuArrow extends Enemy {
             this.bulletPattern();
         }
 
-        if (this.y >= PARAMS.HEIGHT) {
-            this.removeFromWorld = true;
-        }
+        super.remove();
     };
 
     updateBB() {

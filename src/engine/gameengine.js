@@ -20,6 +20,7 @@ class GameEngine {
         this.up = false;
         this.down = false;
         this.slow = false;
+
     };
 
     init(ctx) {
@@ -35,13 +36,14 @@ class GameEngine {
     start() {
         var that = this;
         (function gameLoop() {
-            if (!PARAMS.isPaused) {
+            if (!PARAMS.PAUSED) {
                 that.loop();
             }
             requestAnimFrame(gameLoop, that.ctx.canvas);
         })();
     };
 
+    // TODO - make reset dynamic based upon current level. switch statement ? Or ?
     reset() {
         this.entities = [];
         this.score = 0;
@@ -55,7 +57,6 @@ class GameEngine {
         var that = this;
 
         this.ctx.canvas.addEventListener("keydown", function (e) {
-            console.log(e.code);
             switch (e.code) {
                 case "ArrowLeft":
                 case "KeyA":
@@ -156,6 +157,7 @@ class GameEngine {
         this.entities.level = level;
     }
 
+
     draw() {
         //clear the screen 
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -189,6 +191,9 @@ class GameEngine {
     updateEntityList(list) {
         list.forEach((entity, i) => {
             if (entity.removeFromWorld) {
+                if (entity instanceof Enemy) {
+                    this.entities.level.enemiesDefeated++;
+                }
                 list.splice(i, 1);
             } else {
                 entity.update();

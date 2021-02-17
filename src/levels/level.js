@@ -5,6 +5,8 @@ class Level {
         this.totalLife = 3;
         this.shield = 0;
         this.damage = 1;
+        this.enemiesDefeated = 0;
+        this.totalEnemies = 0;
         this.level = {};
 
         //reset the state of the game and remove all entities 
@@ -35,7 +37,22 @@ class Level {
         if (this.life === 0) {
             this.game.reset();
         }
+
+        this.levelOver();
+
     };
+
+    levelOver() {
+        if (this.enemiesDefeated === this.totalEnemies) {
+            this.game.reset();
+        }
+    }
+
+    enemyTotal(obj) {
+        for (const v of Object.values(obj)) {
+            this.totalEnemies += v.length;
+        }
+    }
 
     draw(ctx) {
         ctx.fillStyle = "black";

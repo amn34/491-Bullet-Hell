@@ -73,9 +73,7 @@ class CthulhuCrab extends Enemy {
 
         this.bulletPattern(200, 250, 50);
 
-        if (this.y >= PARAMS.CANVAS_HEIGHT) {
-            this.removeFromWorld = true;
-        }
+        super.remove();
     };
 
     updateBB() {
