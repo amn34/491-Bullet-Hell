@@ -16,9 +16,9 @@ class MouthMinion extends Enemy {
         // Timer for Sin/Cos functions.
         this.moveTimer = 0;
 
-        this.life = 3;
+        this.life = 2;
         this.canShoot = 0;
-        this.threshHold = 36;
+        this.threshHold = 25;
         this.startTimer = Date.now()
 
         this.score = 50;

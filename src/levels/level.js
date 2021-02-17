@@ -4,6 +4,7 @@ class Level {
         this.life = 3;
         this.totalLife = 3;
         this.shield = 0;
+        this.damage = 1;
         this.level = {};
 
         //reset the state of the game and remove all entities 
@@ -23,6 +24,9 @@ class Level {
         if (this.level[seconds]) {
             //spawns all the entities that should be created at this time-stamp
             this.level[seconds].forEach(enemy => {
+                if (!enemy.boss) {
+                    enemy.life *= this.damage;
+                }
                 this.game.addEnemy(enemy);
             });
             this.level[seconds] = [];

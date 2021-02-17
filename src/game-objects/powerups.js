@@ -1,7 +1,7 @@
 class PowerUp {
     constructor(game, x, y, image) {
-        Object.assign(this, {game, x, y});
-        this.scale = 1;
+        Object.assign(this, { game, x, y });
+        this.scale = 1.5;
         this.width = 32;
         this.height = 32;
         this.timeBeforeDeletion = 250;
@@ -10,10 +10,10 @@ class PowerUp {
         this.animation = new Animator(this.sprite, 0, 0, this.width, this.height, 1, 1, 0, false, true);
         this.updateBB();
     }
-    
+
     draw(ctx) {
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, 1);
-        
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+
         if (PARAMS.DEBUG) {
             this.drawBB(ctx);
         }
@@ -28,7 +28,7 @@ class PowerUp {
 
     update() {
         this.y += 3;
-        
+
         this.timeBeforeDeletion--;
         if (this.y >= PARAMS.HEIGHT || this.timeBeforeDeletion <= 0) {
             this.destroy();
@@ -38,7 +38,7 @@ class PowerUp {
     }
 
     updateBB(radius) {
-        this.BB = new BoundingCircle(this.x + (this.width / 2), this.y + (this.height / 2), radius);
+        this.BB = new BoundingCircle(this.x + (this.width / 2) * this.scale, this.y + (this.height / 2) * this.scale, radius);
     };
 
 

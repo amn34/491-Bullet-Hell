@@ -7,6 +7,7 @@ class Enemy {
 
         this.damage = 1;
         this.life = 1;
+        this.boss = false;
         // Determines the path of the enemy
         this.goRight = true;
         this.score = 100;
@@ -55,7 +56,7 @@ class Enemy {
                         if (this instanceof NoseMinion) {
                             this.shootOnDeath();
                         }
-                        
+
                         this.game.score += this.score;
                         this.game.displayScore.innerHTML = this.game.score;
                     }
@@ -71,7 +72,7 @@ class Enemy {
 
         // if roll === 1 drop a powerup
         let roll = Math.floor(Math.random() * 100);
-        if (roll <= 15) {
+        if (roll <= 10) {
             let ind = Math.floor(Math.random() * powerups.length);
             this.game.addPowerup(new powerups[ind][0](this.game, this.x, this.y, powerups[ind][1]));
         }

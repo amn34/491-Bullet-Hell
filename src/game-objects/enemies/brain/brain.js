@@ -10,14 +10,16 @@ class Brain extends Enemy {
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 12, 0.2, 0, false, true));
 
         // Can shoot once this reaches 100
-        this.life = 15;
+        this.life = 250;
         this.canShoot = 9;
         this.threshHold = 200;
+
+        this.boss = true;
 
         this.startTimer = Math.floor(Date.now() / 100);
         this.oldTime = 0;
         this.totalLife = this.life;
-        
+
         this.score = 250;
 
         this.canShoot = 0;
@@ -33,9 +35,9 @@ class Brain extends Enemy {
         let distanceFromHead = 10;
 
         ctx.fillStyle = "black";
-        ctx.fillRect(this.x -1 , this.y - 1 - distanceFromHead, health + 1, 7);
+        ctx.fillRect(this.x - 1, this.y - 1 - distanceFromHead, health + 1, 7);
         ctx.fillStyle = "red";
-        ctx.fillRect(this.x , this.y - distanceFromHead, - health * (this.totalLife/15 - this.life/15) + health, 5);
+        ctx.fillRect(this.x, this.y - distanceFromHead, - health * (this.totalLife / this.totalLife - this.life / this.totalLife) + health, 5);
         ctx.stroke();
     };
 
@@ -48,7 +50,7 @@ class Brain extends Enemy {
         if (this.canShoot === this.threshHold) {
             let center = this.x + (this.width / 2) * this.scale;
             this.game.addBullet(new BrainBullet(this.game, center, this.y + this.height, 1, downSpiral));
-            this.game.addBullet(new BrainBullet(this.game, center, this.y + this.height, 1, downSpiralReverse));            
+            this.game.addBullet(new BrainBullet(this.game, center, this.y + this.height, 1, downSpiralReverse));
             this.canShoot = 0;
         }
 
