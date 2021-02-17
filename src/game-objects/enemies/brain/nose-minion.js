@@ -89,10 +89,7 @@ class NoseMinion extends Enemy {
         this.y += this.velocity.y * TICK * this.scale;
 
 
-        if (this.y >= PARAMS.CANVAS_HEIGHT) {
-            this.removeFromWorld = true;
-        }
-
+        super.remove();
     };
 
     updateBB() {

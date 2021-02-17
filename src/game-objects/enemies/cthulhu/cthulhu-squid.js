@@ -64,7 +64,7 @@ class CthulhuSquid extends Enemy {
             }
         }
 
-        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - 200) {
+        if (this.BB.bottom > PARAMS.HEIGHT - 200) {
             this.velocity.y -= 1;
             this.y -= 1;
         }
@@ -78,9 +78,7 @@ class CthulhuSquid extends Enemy {
         this.y += this.velocity.y * TICK * this.scale;
         this.bulletPattern(300, 250, 20);
 
-        if (this.y >= PARAMS.CANVAS_HEIGHT) {
-            this.removeFromWorld = true;
-        }
+        super.remove();
     };
 
     updateBB() {
@@ -115,7 +113,7 @@ class CthulhuSquid extends Enemy {
         if (this.elapsedTime % 50 === 0) this.animationType = 1; // Change animation every 50 milliseconds
 
         // Special fire interval.
-        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - distance && this.elapsedTime % fireIntervalSpecial === 0) {
+        if (this.BB.bottom > PARAMS.HEIGHT - distance && this.elapsedTime % fireIntervalSpecial === 0) {
             this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 15, 1));
             this.animationType = 0;
         }

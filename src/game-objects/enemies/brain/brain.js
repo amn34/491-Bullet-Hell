@@ -54,12 +54,6 @@ class Brain extends Enemy {
             this.canShoot = 0;
         }
 
-        // if (this.x <= this.startX + 50 && this.goRight) {
-        //     this.x++;
-        // } else {
-        //     this.x--;
-        // }
-
         if (this.x === this.startX + 50 && this.goRight) {
             this.goRight = !this.goRight;
 
@@ -95,6 +89,7 @@ class Brain extends Enemy {
         this.xMinionPosition = Math.floor((Math.random() * PARAMS.WIDTH - 96) + 96);
 
         this.spawnMinion(this.xMinionPosition, - 100, this.spawnFrequency, this.spawnMax);
+        super.remove();
     };
 
     updateBB() {
@@ -113,6 +108,7 @@ class Brain extends Enemy {
 
     spawn(x, y) {
         this.game.addEnemy(new EyeMinion(this.game, x, y));
+        this.game.entities.level.totalEnemies++;
         this.minion_count++;
     };
 }

@@ -30,6 +30,12 @@ class Enemy {
         this.removeFromWorld = true;
     }
 
+    remove() {
+        if (this.y > PARAMS.HEIGHT) {
+            this.removeFromWorld = true;
+        }
+    }
+
     /**
      * Checks if the player has collided with any of the enemies 
      * or enemy bullets in the game. 

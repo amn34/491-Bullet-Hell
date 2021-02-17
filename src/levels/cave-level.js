@@ -3,6 +3,8 @@ class CaveLevel extends Level {
         super(game);
 
         this.createLevel()
+        super.enemyTotal(this.level);
+
     }
 
     createLevel() {
@@ -158,5 +160,7 @@ class CaveLevel extends Level {
         this.level[135] = [
             new MouthMinion(this.game, 300, -50)
         ];
+
     }
+
 }

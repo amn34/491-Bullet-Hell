@@ -26,14 +26,14 @@ loadSprites();
 window.addEventListener('keydown', function (e) {
 	switch (e.code) {
 		case 'KeyP':
-			if (PARAMS.isPaused) {
-				PARAMS.isPaused = false;
+			if (PARAMS.PAUSED) {
+				PARAMS.PAUSED = false;
 				document.querySelector('.main-menu').style.display = 'none';
 				document.querySelector('.control-menu').style.display = 'none';
 				document.querySelector('#gameWorld').focus();
 
 			} else {
-				PARAMS.isPaused = true;
+				PARAMS.PAUSED = true;
 				document.querySelector('.main-menu').style.display = 'flex';
 
 			}
@@ -68,7 +68,7 @@ ASSET_MANAGER.downloadAll(function () {
 
 	// This is where we will add the scene manager to handle
 	// the adding and removing of entities
-	//gameEngine.setLevel(new CaveLevel(gameEngine));
+	// gameEngine.setLevel(new CaveLevel(gameEngine));
 	gameEngine.setLevel(new FactoryLevel(gameEngine));
 	gameEngine.start();
 });

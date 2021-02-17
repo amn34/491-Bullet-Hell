@@ -87,7 +87,7 @@ class CthulhuMinion extends Enemy {
         Controls the behavior of the minion [300] pixels before the bottom of the canvas.
         Minions will begin to slow down until they reverse.
          */
-        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - 300) {
+        if (this.BB.bottom > PARAMS.HEIGHT - 300) {
             this.velocity.y -= 1;
             this.y -= 1;
         }
@@ -113,9 +113,7 @@ class CthulhuMinion extends Enemy {
 
         // Collision
 
-        if (this.y >= PARAMS.CANVAS_HEIGHT) {
-            this.removeFromWorld = true;
-        }
+        super.remove();
     };
 
     updateBB() {
@@ -137,7 +135,7 @@ class CthulhuMinion extends Enemy {
         this.endTimer = Date.now();
         this.elapsedTime = this.startTimer - this.endTimer;
         // Special fire interval.
-        if (this.BB.bottom > PARAMS.CANVAS_HEIGHT - distance && this.elapsedTime % fireIntervalSpecial === 0) {
+        if (this.BB.bottom > PARAMS.HEIGHT - distance && this.elapsedTime % fireIntervalSpecial === 0) {
             this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 15, 1));
         }
         // Regular fire interval.

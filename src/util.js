@@ -32,8 +32,8 @@ const PARAMS = {
     INVINCIBLE: false,
     WIDTH: 768,
     HEIGHT: 760,
-    isPaused: false,
+    PAUSED: false,
     LEFT: 0,
-    RIGHT: 1
+    RIGHT: 1,
 };
 
