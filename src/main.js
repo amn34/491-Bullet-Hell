@@ -8,7 +8,7 @@ function loadSprites() {
 	let base = "./res/";
 	let extension = ".png";
 	let sprites = {
-		"" : ["player", "altPlayer", "cavebg", "explosion", "factorybg"],
+		"" : ["player", "altPlayer", "cavebg", "explosion", "factorybg", "spacebg"],
 		"powerups/" : ["ap1_pu", "ap2_pu", "fire_rate_pu", "health_pu", "power_pu", "shield_pu"],
 		"enemies/" : ["finger_gun_dude", "cth_minion_float", "cth_minion_attack", "brain", "cthulhuSprite",
 			"eye", "mouth", "nose", "cthulhuSquid", "cthulhuTriangle", "cthulhuCrab"],

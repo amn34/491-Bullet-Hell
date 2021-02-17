@@ -8,7 +8,7 @@ class FactoryLevel extends Level {
 
     createLevel() {
 
-        this.game.setBackground("./res/factorybg.png");
+        this.game.setBackground("./res/spacebg.png");
 
 
         this.level[0] = [
