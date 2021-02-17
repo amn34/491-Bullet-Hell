@@ -52,46 +52,30 @@ class SpreadRobot extends Enemy {
 
         this.canShoot++;
 
-
-
         if (this.canShoot == 45) {
-            console.log(this.angle);
-            //let center = this.x + (this.width / 2);
-            let center = this.x + 57;
 
-            //let change = -0.2;
-            // let dx = Math.cos(this.angle / 2);
-            // let dy = Math.sin(this.angle / 2);
-            let dx = Math.cos(Math.PI * (this.angle));
-            let dy = Math.sin(Math.PI * (this.angle));
-            // let dx = Math.cos(Math.PI * (0.2));
-            // let dy = Math.sin(Math.PI * (0.2));
-
-            this.game.addBullet(new RobotBullet(this.game, center, this.y + this.height * 3, dx * 3, dy * 3, 1));
-            this.game.addBullet(new RobotBullet(this.game, center, this.y + this.height * 3, dx * 4, dy * 4, 1));
-            this.game.addBullet(new RobotBullet(this.game, center, this.y + this.height * 3, dx * 6, dy * 6, 1));
+            const center = this.x + 57;
+            const xVector = Math.cos(Math.PI * (this.angle));
+            const yVector = Math.sin(Math.PI * (this.angle));
+            
+            this.game.addBullet(new RobotBullet(this.game, center, this.y + this.height * 3, xVector * 3, yVector * 3, 1));
+            this.game.addBullet(new RobotBullet(this.game, center, this.y + this.height * 3, xVector * 4, yVector * 4, 1));
+            this.game.addBullet(new RobotBullet(this.game, center, this.y + this.height * 3, xVector * 6, yVector * 6, 1));
             this.canShoot = 0;
 
-
             //change the direction for the next shot
-            const LEFT = 0;
-            const RIGHT = 1;
-
-            if (this.direction == LEFT) {
+            if (this.direction == PARAMS.LEFT) {
                 this.angle += 0.1;
                 if (this.angle >= 0.8) {
-                    this.direction = RIGHT;
+                    this.direction = PARAMS.RIGHT;
                 }
             } else {
                 this.angle -= 0.1;
                 if (this.angle <= 0.2) {
-                    this.direction = LEFT;
+                    this.direction = PARAMS.LEFT;
                 }
             }
-
-
         }
-
     };
 
     updateBB() {

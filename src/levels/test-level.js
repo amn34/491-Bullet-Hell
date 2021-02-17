@@ -7,8 +7,8 @@ class TestLevel extends Level {
     }
 
     createLevel() {
-        console.log(this.game.entities.player.health);
-        this.game.setBackground("./res/cavebg.png");
+
+        this.game.setBackground("./res/factorybg.png");
         const LEFT = 0;
         const RIGHT = 1;
 
