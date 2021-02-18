@@ -10,7 +10,7 @@ class SpreadRobot extends Enemy {
         this.loadAnimations();
         this.animationIndex = 0;
 
-        this.life = 15;
+        this.life = 7;
         this.canShoot = 0;
         this.angle = 0.5;
         this.direction = direction;
@@ -57,10 +57,10 @@ class SpreadRobot extends Enemy {
             const center = this.x + 57;
             const xVector = Math.cos(Math.PI * (this.angle));
             const yVector = Math.sin(Math.PI * (this.angle));
-            
-            this.game.addBullet(new RobotBullet(this.game, center, this.y + this.height * 3, xVector * 3, yVector * 3, 1));
-            this.game.addBullet(new RobotBullet(this.game, center, this.y + this.height * 3, xVector * 4, yVector * 4, 1));
-            this.game.addBullet(new RobotBullet(this.game, center, this.y + this.height * 3, xVector * 6, yVector * 6, 1));
+
+            this.game.addBullet(new SpreadBullet(this.game, center, this.y + this.height * 3, xVector * 3, yVector * 3, 1));
+            this.game.addBullet(new SpreadBullet(this.game, center, this.y + this.height * 3, xVector * 4, yVector * 4, 1));
+            this.game.addBullet(new SpreadBullet(this.game, center, this.y + this.height * 3, xVector * 6, yVector * 6, 1));
             this.canShoot = 0;
 
             //change the direction for the next shot
@@ -84,7 +84,7 @@ class SpreadRobot extends Enemy {
     };
 }
 
-class RobotBullet extends Bullet {
+class SpreadBullet extends Bullet {
     constructor(game, x, y, dx, dy, scale) {
         const radius = 10;
         const bulletSpeed = 20;
