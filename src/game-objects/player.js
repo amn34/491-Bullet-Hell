@@ -222,17 +222,17 @@ class Player {
             case IncreaseHealthPowerUp:
                 this.life += this.life < this.totalLife ? 1 : 0;
                 this.game.entities.level.life = this.life;
-                this.handleGameMenu('res/powerups/health_pu.png', 'Player Health', 'Increases player health')
+                this.handleGameMenu('res/powerups/health_pu.png', 'Player Health', 'Restores one bar of player health')
                 break;
             case IncreasePowerPowerUp:
                 this.damage++;
                 this.game.entities.level.damage = this.damage;
-                this.handleGameMenu('res/powerups/power_pu.png', 'Power Up', 'Increases player fire power')
+                this.handleGameMenu('res/powerups/power_pu.png', 'Damage', 'Increases damage against bosses')
                 break;
             case IncreaseShieldPowerUp:
                 this.shield += 1;
                 this.game.entities.level.shield = this.shield;
-                this.handleGameMenu('res/powerups/shield_pu.png', 'Shield', 'Increases player shield')
+                this.handleGameMenu('res/powerups/shield_pu.png', 'Shield', 'Grants player a stackable shield')
                 break;
             case AdditionalProjectilePowerUp:
                 if (len === 1) {
@@ -242,7 +242,7 @@ class Player {
                 } else {
                     this.bulletAngles.push(this.bulletAngles[len - 1] - 20);
                 }
-                this.handleGameMenu('res/powerups/ap1_pu.png', 'Bullet', 'Increases number of player bullets')
+                this.handleGameMenu('res/powerups/ap1_pu.png', 'Bullet', 'Increases number of player projectiles')
                 break;
             /*
             case MultipleProjectilePowerUp:
@@ -375,8 +375,8 @@ class PlayerBullet extends Bullet {
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
-    
-        if(PARAMS.DEBUG) {
+
+        if (PARAMS.DEBUG) {
             this.drawBB(ctx);
         }
     }
