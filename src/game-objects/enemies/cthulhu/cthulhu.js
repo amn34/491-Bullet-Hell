@@ -8,7 +8,6 @@ class Cthulhu extends Enemy {
         const height = 245;
         super(game, x, y, width, height, scale);
 
-        // Default floating animation.
         this.sprite = ASSET_MANAGER.getAsset("./res/enemies/cthulhuSprite.png");
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 10, 0.3,
             false, false, true));
@@ -32,7 +31,6 @@ class Cthulhu extends Enemy {
         this.life = 5000;
         this.totalLife = this.life;
 
-
         this.velocity = { x: 0, y: 0 };
         this.direction = 0; // Starting direction of minion movement.
         this.moveTimer = 0; // Timer for sin/cos functions.
@@ -40,14 +38,12 @@ class Cthulhu extends Enemy {
         this.moveDownRight = false;
         this.moveDownLeft = false;
 
-
         this.startTimer = Math.floor(Date.now() / 100);
         this.oldTime = 0;
 
         this.score = 5000;
-
         this.canShoot = 0;
-        this.threshHold = 30;
+        this.threshHold = 60;
         this.bulletPattern = [];
         this.updateBB();
     }
@@ -61,7 +57,6 @@ class Cthulhu extends Enemy {
         this.endTimer = Math.floor(Date.now() / 100);
         this.elapsedTime = this.endTimer - this.startTimer; // elapsed time in centi-seconds.
 
-
         const TICK = this.game.clockTick;
         const Direction = { RIGHT: 0, LEFT: 1};
         const Movement = { LEFT: 0, RIGHT: 1, SIN: 2, COS: 3 }; // Tied to moveFunction.
@@ -71,9 +66,7 @@ class Cthulhu extends Enemy {
         this.velocity.y = 0;
 
         if (this.direction === Direction.LEFT) {
-
             if (this.BB.yCenter < 0) this.moveDownLeft = true;
-
             if (this.moveDownLeft) {
                 this.velocity.x -= Velocity.SLOW;
                 this.velocity.y += Velocity.REGULAR;
@@ -83,13 +76,9 @@ class Cthulhu extends Enemy {
                 let angularFrequency = 1 / 60;
                 this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer), Movement.COS);
             }
-
             if (this.BB.xCenter < 0) this.direction = Direction.RIGHT;
-
         } else if (this.direction === Direction.RIGHT) {
-
             if (this.BB.yCenter < 0) this.moveDownRight = true;
-
             if (this.moveDownRight) {
                 this.velocity.x += Velocity.SLOW;
                 this.velocity.y += Velocity.REGULAR;
@@ -99,7 +88,6 @@ class Cthulhu extends Enemy {
                 let angularFrequency = 1 / 60;
                 this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer), Movement.SIN);
             }
-
             if (this.BB.xCenter > PARAMS.WIDTH) this.direction = Direction.LEFT;
         }
 
@@ -113,9 +101,7 @@ class Cthulhu extends Enemy {
         this.x += this.velocity.x * TICK * this.scale;
         this.y += this.velocity.y * TICK * this.scale;
 
-
         this.canShoot++;
-
         if (this.canShoot === this.threshHold) {
             this.canShoot = 0;
             let center = this.x + (this.width / 2) * this.scale;
@@ -324,9 +310,9 @@ class Cthulhu extends Enemy {
         ctx.fillStyle = "red";
         ctx.fillRect(this.x + modifier, this.y - distanceFromHead, - health * (this.totalLife/5000 - this.life/5000) + health, 5);
         ctx.stroke();
-
     }
 }
+
 
 class CthulhuBullet extends Bullet {
     constructor(game, x, y, scale, callback) {
@@ -344,10 +330,10 @@ class CthulhuBullet extends Bullet {
 
         this.angle += 0.04;
         this.callback(this);     
-    };
+    }
 
     updateBB() {
         const radius = 15;
         super.updateBB(radius);
-    };
+    }
 }

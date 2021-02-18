@@ -43,9 +43,7 @@ class CthulhuCrab extends Enemy {
         this.velocity.y = 0;
 
         if (this.direction === Direction.LEFT) {
-
             if (this.BB.yCenter < 0) this.moveDownLeft = true;
-
             if (this.moveDownLeft) {
                 this.velocity.x -= Velocity.REGULAR;
                 this.velocity.y += Velocity.FAST;
@@ -55,13 +53,9 @@ class CthulhuCrab extends Enemy {
                 let angularFrequency = 1 / 60;
                 this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer), Movement.COS);
             }
-
             if (this.BB.xCenter < 0) this.direction = Direction.RIGHT;
-
         } else if (this.direction === Direction.RIGHT) {
-
             if (this.BB.yCenter < 0) this.moveDownRight = true;
-
             if (this.moveDownRight) {
                     this.velocity.x += Velocity.REGULAR;
                     this.velocity.y += Velocity.FAST;
@@ -71,7 +65,6 @@ class CthulhuCrab extends Enemy {
                 let angularFrequency = 1 / 60;
                 this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer), Movement.SIN);
             }
-
             if (this.BB.xCenter > PARAMS.WIDTH) this.direction = Direction.LEFT;
         }
 
@@ -94,7 +87,6 @@ class CthulhuCrab extends Enemy {
         super.remove();
     }
 
-
     fireBulletPattern() {
         if (this.canShoot === this.threshHold) {
             this.canShoot = 0;
@@ -104,7 +96,6 @@ class CthulhuCrab extends Enemy {
             })
         }
     }
-
 
     updateBB() {
         const radius = 35;
@@ -129,7 +120,6 @@ class CthulhuCrab extends Enemy {
 }
 
 
-
 class CthulhuCrabBullet extends Bullet {
     constructor(game, x, y, scale, callback) {
         const radius = 10;
@@ -138,8 +128,6 @@ class CthulhuCrabBullet extends Bullet {
         super(game, x, y, scale, radius, bulletSpeed, bulletType)
         this.callback = callback;
         this.angle = 0;
-
-        this.x = x;
         this.y = y;
     }
 
@@ -156,7 +144,6 @@ class CthulhuCrabBullet extends Bullet {
         const radius = 10;
         super.updateBB(radius);
     }
-
 }
 
 

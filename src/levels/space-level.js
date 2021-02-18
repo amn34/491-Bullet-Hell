@@ -10,6 +10,7 @@ class SpaceLevel extends Level {
 		this.game.setBackground("./res/spacebg.png");
 
 		this.level[0] = [
+			new CthulhuSquid(this.game, 300, -50),
 			new CthulhuArrow(this.game, 225, -50),
 			new CthulhuArrow(this.game, 100, -50),
 			new CthulhuArrow(this.game, 500, -50),

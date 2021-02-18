@@ -41,10 +41,7 @@ class CthulhuMinion extends Enemy {
         this.velocity.y = 0;
 
         if (this.direction === Direction.LEFT) {
-            console.log("LEFT");
-
             if (this.BB.yCenter < 0) this.moveDownLeft = true;
-
             if (this.moveDownLeft) {
                 this.velocity.x -= Velocity.REGULAR;
                 this.velocity.y += Velocity.FAST;
@@ -54,15 +51,10 @@ class CthulhuMinion extends Enemy {
                 let angularFrequency = 1 / 60;
                 this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer), Movement.COS);
             }
-
             if (this.BB.xCenter < 0) this.direction = Direction.RIGHT;
 
         } else if (this.direction === Direction.RIGHT) {
-
-            console.log("RIGHT");
-
             if (this.BB.yCenter < 0) this.moveDownRight = true;
-
             if (this.moveDownRight) {
                 this.velocity.x += Velocity.REGULAR;
                 this.velocity.y += Velocity.FAST;
@@ -72,7 +64,6 @@ class CthulhuMinion extends Enemy {
                 let angularFrequency = 1 / 60;
                 this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer), Movement.SIN);
             }
-
             if (this.BB.xCenter > PARAMS.WIDTH) this.direction = Direction.LEFT;
         }
 
@@ -82,7 +73,6 @@ class CthulhuMinion extends Enemy {
         }
 
         this.moveTimer = this.moveTimer > 10000 ? 0 : this.moveTimer + 1;
-
 
         this.x += this.velocity.x * TICK * this.scale;
         this.y += this.velocity.y * TICK * this.scale;

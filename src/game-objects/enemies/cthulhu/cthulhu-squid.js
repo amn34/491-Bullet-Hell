@@ -19,18 +19,17 @@ class CthulhuSquid extends Enemy {
         this.threshHold = 75;
         this.bulletPattern = [downSpiralAlternative, downSpiralReverseAlternative];
 
-
         this.startTimer = Date.now();
         this.loadAnimations();
         this.updateBB();
-    };
+    }
 
     loadAnimations() {
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 1, 0.2,
             0, false, true));
         this.animations.push(new Animator(this.sprite, this.width, 0, this.width, this.height, 1, 0.2,
             0, false, true));
-    };
+    }
 
     update() {
         const TICK = this.game.clockTick;
@@ -41,11 +40,8 @@ class CthulhuSquid extends Enemy {
         this.velocity.x = 0;
         this.velocity.y = 0;
 
-
         if (this.direction === Direction.LEFT) {
-
             if (this.BB.yCenter < 0) this.moveDownLeft = true;
-
             if (this.moveDownLeft) {
                 this.velocity.x -= Velocity.REGULAR;
                 this.velocity.y += Velocity.FAST;
@@ -55,13 +51,10 @@ class CthulhuSquid extends Enemy {
                 let angularFrequency = 1 / 120;
                 this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer), Movement.COS);
             }
-
             if (this.BB.xCenter < 0) this.direction = Direction.RIGHT;
 
         } else if (this.direction === Direction.RIGHT) {
-
             if (this.BB.yCenter < 0) this.moveDownRight = true;
-
             if (this.moveDownRight) {
                 this.velocity.x += Velocity.REGULAR;
                 this.velocity.y += Velocity.FAST;
@@ -71,7 +64,6 @@ class CthulhuSquid extends Enemy {
                 let angularFrequency = 1 / 60;
                 this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer), Movement.SIN);
             }
-
             if (this.BB.xCenter > PARAMS.WIDTH) this.direction = Direction.LEFT;
         }
 
@@ -80,39 +72,33 @@ class CthulhuSquid extends Enemy {
             this.moveDownLeft = false;
         }
 
-
-
         this.moveTimer = this.moveTimer > 10000 ? 0 : this.moveTimer + 1;
 
         // Update sprite position.
         this.x += this.velocity.x * TICK * this.scale;
         this.y += this.velocity.y * TICK * this.scale;
 
+        this.canShoot++;
         this.fireBulletPattern();
         this.updateBB();
         super.checkCollision(this.game.entities.bullets);
         super.remove();
-
-        this.canShoot++;
-
-    };
+    }
 
     fireBulletPattern() {
         if (this.canShoot === this.threshHold) {
             this.canShoot = 0;
             let center = this.x + (this.width / 2) * this.scale;
-            // this.game.addBullet(new CthulhuSquidBullet(this.game, center, this.y + this.height / 2, 1, fortress));
-
             this.bulletPattern.forEach(bPattern => {
                 this.game.addBullet(new CthulhuSquidBullet(this.game, center, this.y + this.height / 2, 1, bPattern));
-            })
+            });
         }
     }
 
     updateBB() {
         const radius = 70;
         super.updateBB(radius);
-    };
+    }
 
     /**
      * Controls the velocity of the sprite.
@@ -123,13 +109,14 @@ class CthulhuSquid extends Enemy {
     moveFunction(velocity, direction) {
         let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
         return movementFunctions[direction];
-    };
+    }
 
     draw(ctx) {
         super.draw(ctx);
         this.animations[this.animation].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-    };
+    }
 }
+
 
 class CthulhuSquidBullet extends Bullet {
     constructor(game, x, y, scale, callback) {
@@ -140,7 +127,6 @@ class CthulhuSquidBullet extends Bullet {
         this.callback = callback;
         this.angle = 0;
 
-        this.x = x;
         this.y = y;
     }
 
@@ -157,7 +143,5 @@ class CthulhuSquidBullet extends Bullet {
         const radius = 11;
         super.updateBB(radius);
     }
-
-
 }
 

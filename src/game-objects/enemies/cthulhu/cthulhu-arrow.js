@@ -33,7 +33,6 @@ class CthulhuArrow extends Enemy {
         const TICK = this.game.clockTick;
         const VELOCITY = { SUPER_FAST: 250, FAST: 100, REGULAR: 75, SLOW: 50, SUPER_SLOW: 25 }
 
-
         this.velocity.y = 0;
         this.velocity.y += VELOCITY.REGULAR;
 
@@ -57,8 +56,8 @@ class CthulhuArrow extends Enemy {
             let center = this.x + (this.width / 2) * this.scale;
 
             this.bulletPattern.forEach(bPattern => {
-                this.game.addBullet(new CthulhuArrowBullet(this.game, center, this.y + this.height / 2, 1, bPattern));
-            })
+                this.game.addBullet(new CthulhuArrowBullet(this.game, center, this.y + this.height, 1, bPattern));
+            });
         }
     }
 
@@ -82,8 +81,6 @@ class CthulhuArrowBullet extends Bullet {
         super(game, x, y, scale, radius, bulletSpeed, bulletType)
         this.callback = callback;
         this.angle = 0;
-
-        this.x = x;
         this.y = y;
     }
 
