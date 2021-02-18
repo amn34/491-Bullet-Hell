@@ -57,6 +57,22 @@ class Bullet {
         ctx.arc(this.BB.xCenter, this.BB.yCenter, this.BB.radius, 0, Math.PI * 2);
         ctx.fillStyle = 'Red';
         ctx.fill();
+
+        // var radial = context.createRadialGradient(startX, startY, startRadius, endX, endY, endRadius);
+        // create radial gradient
+        var radial = ctx.createRadialGradient(this.BB.xCenter, this.BB.yCenter, this.BB.radius - 10, this.BB.xCenter, this.BB.yCenter, this.BB.radius - 1);
+
+        // light red
+        radial.addColorStop(0, '#f4e8e9');
+
+        // dark red
+        radial.addColorStop(1, 'red');
+
+        ctx.fillStyle = radial;
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+    
         if(PARAMS.DEBUG) {
             this.drawBB(ctx);
         }
