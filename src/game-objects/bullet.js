@@ -15,7 +15,7 @@ class Bullet {
      */
     constructor(game, x, y, scale, radius, bulletSpeed, bulletType) {
         Object.assign(this, {game, x, y, scale, radius, bulletSpeed, bulletType});
-        this.updateBB();
+        this.updateBB(radius);
     }
 
     /**
