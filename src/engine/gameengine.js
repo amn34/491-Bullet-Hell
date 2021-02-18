@@ -22,7 +22,7 @@ class GameEngine {
         this.slow = false;
 
         // defines the all the levels in the game in the order they should be played in
-        this.levels = [CaveLevel, FactoryLevel, TestLevel];
+        this.levels = [CaveLevel, FactoryLevel, SpaceLevel, TestLevel];
 
         // The index of the current level
         this.currentLevel = 0;
