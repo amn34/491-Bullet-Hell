@@ -12,6 +12,9 @@ class CthulhuArrow extends Enemy {
         this.life = 1;
         this.score = 100;
 
+        this.canShoot = 0;
+        this.threshHold = 200;
+
         this.loadAnimations();
         this.updateBB();
     }
@@ -24,6 +27,18 @@ class CthulhuArrow extends Enemy {
     }
 
     update() {
+
+        this.canShoot++;
+        if (this.canShoot === this.threshHold) {
+            this.canShoot = 0;
+            let center = this.x + (this.width / 2) * this.scale;
+            this.game.addBullet(new CthulhuArrowBullet(this.game, center, this.y + this.height, 1 ))
+            // this.game.addBullet(new )
+        }
+
+
+
+
         const TICK = this.game.clockTick;
         const VELOCITY = { SUPER_FAST: 150, FAST: 100, REGULAR: 75, SLOW: 50, SUPER_SLOW: 25 }
         let startLaser = 350;
@@ -34,7 +49,7 @@ class CthulhuArrow extends Enemy {
         if (this.BB.yCenter > PARAMS.HEIGHT - startLaser) {
             this.velocity.y += VELOCITY.SUPER_FAST;
             this.animation = 1;
-            this.bulletPattern();
+            // this.bulletPattern();
         }
 
         this.y += this.velocity.y * TICK * this.scale;
@@ -49,12 +64,40 @@ class CthulhuArrow extends Enemy {
         super.updateBB(radius);
     }
 
-    bulletPattern() {
-        this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 - 1, this.y + this.height, 10));
-    }
+    // bulletPattern() {
+    //     this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 - 1, this.y + this.height, 10));
+    // }
 
     draw(ctx) {
         super.draw(ctx);
         this.animations[this.animation].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+    }
+}
+
+
+class CthulhuArrowBullet extends Bullet {
+    constructor(game, x, y, scale, callback) {
+        const radius = 15;
+        const bulletSpeed = 2;
+        const bulletType = 1;
+        super(game, x, y, scale, radius, bulletSpeed, bulletType);
+        this.callback = callback;
+        this.angle = -1;
+    }
+
+    update() {
+        this.updateBB();
+        super.checkBounds();
+        this.angle += 0.06;
+        this.callback(this);
+    }
+
+    updateBB() {
+        const radius = 10;
+        super.updateBB(radius);
+    }
+
+    draw(ctx) {
+        ctx.beginPath();
     }
 }
