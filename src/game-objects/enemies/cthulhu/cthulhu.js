@@ -244,8 +244,9 @@ class Cthulhu extends Enemy {
             default:
                 console.log("Wrong minion type specified.");
         }
+
         this.game.addEnemy(minion);
-        this.game.level.enemiesDefeated++;
+        this.game.entities.level.totalEnemies++;
         this.typeCounter++;
     };
 
