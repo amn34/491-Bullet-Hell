@@ -10,10 +10,10 @@ class SpaceLevel extends Level {
 		this.game.setBackground("./res/spacebg.png");
 
 		this.level[0] = [
-			new CthulhuCrab(this.game, 225, -200),
-			// new  CthulhuArrow(this.game, 120, -50),
-			new CthulhuMinion(this.game, 100, -50),
-			new CthulhuMinion(this.game, 600, -50)
+			new CthulhuArrow(this.game, 225, -50),
+			new CthulhuArrow(this.game, 100, -50),
+			new CthulhuArrow(this.game, 500, -50),
+			new CthulhuArrow(this.game, 600, -50)
 
 		];
 		this.level[3] = [

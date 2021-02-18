@@ -1,5 +1,3 @@
-
-
 /**
  * Cthulhu boss. Controls the spawning of CthulhuMinion, CthulhuSquid, CthulhuCrab, and CthulhuArrow.
  */
@@ -42,7 +40,7 @@ class Cthulhu extends Enemy {
         this.canShoot = 0;
         this.threshHold = 30;
         this.bulletPattern = [];
-    };
+    }
 
     /**
      * Controls movement of Cthulhu sprite and spawning behavior of arrow, squid, crab, and creature minions. Controls
@@ -51,7 +49,7 @@ class Cthulhu extends Enemy {
     update() {
         // Timer that determines spawning intervals.
         this.endTimer = Math.floor(Date.now() / 100);
-        this.elapsedTime = this.endTimer - this.startTimer; // elapsed time in centiseconds.
+        this.elapsedTime = this.endTimer - this.startTimer; // elapsed time in centi-seconds.
 
         // Default movement.
         if (this.x <= this.startX + 125 && this.goRight) {
@@ -101,7 +99,7 @@ class Cthulhu extends Enemy {
 
         this.updateBB();
         super.checkCollision(this.game.entities.bullets);
-    };
+    }
 
     /**
      * Controls the spawning behavior of minions. Each stage is dependent on the bosses remaining life. Stage 1
@@ -158,7 +156,7 @@ class Cthulhu extends Enemy {
      * regular minion spawning resumes at original rate pre-spawn.
      *
      * @param trainLength int value that determines how many minions make up a train.
-     * @param distanceBetween int centisecond value that determines how closely each minion is spawned to the following one.
+     * @param distanceBetween int centi-second value that determines how closely each minion is spawned to the following one.
      */
     spawnTrainCreature(trainLength, distanceBetween) {
         // The frequency of the train is dependent on the length of millipede.
@@ -194,7 +192,7 @@ class Cthulhu extends Enemy {
 
     /**
      * Check whether a minion can be spawned or not. If enough time has elapsed since previous spawn, a minion
-     * will be spawned otherwise do not spawn. Time is counted in centiseconds (1/100 second).
+     * will be spawned otherwise do not spawn. Time is counted in centi-seconds (1/100 second).
      *
      * @param xStart starting spawn x coordinate
      * @param yStart starting spawn y coordinate
@@ -204,13 +202,13 @@ class Cthulhu extends Enemy {
         if (this.minionCount < this.spawnMax) {
             if (this.elapsedTime % this.spawnFrequency === 0 && this.elapsedTime !== this.oldTime) {
                 this.spawn(xStart, yStart, minionType)
-                this.oldTime = this.elapsedTime; // Keep track of old time (to ensure correct count of centiseconds)
+                this.oldTime = this.elapsedTime; // Keep track of old time (to ensure correct count of centi-seconds)
                 if (this.spawnTrain) {
                     this.trainCounter++;
                 }
             }
         }
-    };
+    }
 
     /**
      * Spawns a Cthulhu minion and increments the number of spawns.
@@ -273,7 +271,7 @@ class Cthulhu extends Enemy {
         ctx.fillRect(this.x + modifier, this.y - distanceFromHead, - health * (this.totalLife/5000 - this.life/5000) + health, 5);
         ctx.stroke();
 
-    };
+    }
 }
 
 class CthulhuBullet extends Bullet {
