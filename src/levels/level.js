@@ -8,6 +8,7 @@ class Level {
         this.enemiesDefeated = 0;
         this.totalEnemies = 0;
         this.level = {};
+        this.startTime = this.game.timer.getGameTime();
 
         //reset the state of the game and remove all entities 
         game.entities.backgrounds = [];
@@ -21,7 +22,9 @@ class Level {
     update() {
         PARAMS.DEBUG = document.getElementById("debug").checked;
         PARAMS.INVINCIBLE = document.getElementById("invincible").checked;
-        const seconds = this.game.timer.getGameTime();
+        const seconds = this.game.timer.getGameTime() - this.startTime;
+        //console.log(seconds);
+        // console.log("start time: " + this.startTime);
         //checks the level entity-creation map to see if there are units to spawn
         if (this.level[seconds]) {
             //spawns all the entities that should be created at this time-stamp
@@ -34,18 +37,24 @@ class Level {
             this.level[seconds] = [];
         }
 
+        // Reset the current level to the beginning if the player dies
         if (this.life === 0) {
             this.game.reset();
         }
 
-        this.levelOver();
-
+        // Go to the next level if the player completes the map by eliminating all enemies
+        if (this.levelOver()) {
+            this.game.nextLevel();
+        }
     };
 
     levelOver() {
-        if (this.enemiesDefeated === this.totalEnemies) {
-            this.game.reset();
-        }
+        // if (this.enemiesDefeated === this.totalEnemies) {
+        //     //this.game.reset();
+        //     return true;
+        // }
+        // return false
+        return this.enemiesDefeated === this.totalEnemies;
     }
 
     enemyTotal(obj) {
