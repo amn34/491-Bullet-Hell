@@ -23,6 +23,23 @@ function loadSprites() {
 
 loadSprites();
 
+function loadSounds() {
+	let base = "./res/";
+	let extension = ".wav";
+	let sounds = {
+		"sfx/": ["Shoot.wav", "Brain.wav"]
+	}
+
+	for (path in sounds) {
+		for (index in sounds[path]) {
+			ASSET_MANAGER.queueDownload(base + path + sounds[path][index] + extension);
+		}
+	}
+}
+
+loadSprites();
+
+
 window.addEventListener('keydown', function (e) {
 	switch (e.code) {
 		case 'KeyP':

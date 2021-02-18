@@ -10,6 +10,9 @@ class CaveLevel extends Level {
 
         this.game.setBackground("./res/cavebg.png");
 
+        this.level[1] = [
+            new Brain(this.game, 300, -50)
+        ];
         this.level[2] = [
             new EyeMinion(this.game, 320, -50),
         ];

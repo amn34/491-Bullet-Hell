@@ -100,7 +100,6 @@ class Player {
     }
 
     update() {
-
         this.game.slow ? this.calculateSpeed(this.moveSpeedSlow) : this.calculateSpeed(this.moveSpeed);
 
         this.x += this.speedX;
@@ -139,7 +138,6 @@ class Player {
 
             this.canShoot = 0;
         }
-
 
         this.updateBB();
         this.checkCollision(this.game.entities.enemies);

@@ -11,6 +11,9 @@ class Enemy {
         // Determines the path of the enemy
         this.goRight = true;
         this.score = 100;
+
+
+        this.audio = await new Audio("./res/sfx/Shoot.wav");
     }
 
     draw(ctx) {

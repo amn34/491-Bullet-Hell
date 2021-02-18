@@ -24,6 +24,10 @@ class Brain extends Enemy {
 
         this.canShoot = 0;
         this.threshHold = 36;
+
+        const audio = new Audio("./res/sfx/Brain.wav");
+        audio.volume = 0.3;
+        audio.play();
     };
 
     draw(ctx) {
