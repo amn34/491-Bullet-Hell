@@ -7,119 +7,86 @@ class CthulhuMinion extends Enemy {
 
         this.spriteFloat = ASSET_MANAGER.getAsset("./res/enemies/cth_minion_float.png");
         this.spriteAttack = ASSET_MANAGER.getAsset("./res/enemies/cth_minion_attack.png");
-        this.loadAnimations();
-        this.animationType = 1;
+        this.animation = 1;
 
         this.velocity = { x: 0, y: 0 };
-        // Starting direction of minion movement.
-        this.direction = 3;
-        // Timer for Sin/Cos functions.
-        this.moveTimer = 0;
+        this.direction = 0; // Starting direction of minion movement.
+        this.moveTimer = 0; // Timer for Sin/Cos functions.
 
         this.life = 1;
+        this.score = 25;
 
         this.startTimer = Date.now();
-
-        this.score = 25;
-    };
+        this.loadAnimations();
+        this.updateBB();
+    }
 
     loadAnimations() {
         this.animations.push(new Animator(this.spriteFloat, 0, 0, this.width, this.height, 5, 0.2, 0, false, true));
         this.animations.push(new Animator(this.spriteAttack, 0, 0, this.width, this.height, 6, 0.2, 0, false, true));
-    };
+    }
 
     draw(ctx) {
         super.draw(ctx);
-        this.animations[this.animationType].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-    };
+        this.animations[this.animation].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+    }
 
     update() {
-        this.updateBB();
-        super.checkCollision(this.game.entities.bullets);
-
-        // Enums objects for legibility.
-        const Mode = { FLOAT: 0, ATTACK: 1 }; // Two animations types (uses attack only so far - will likely remove).
-        // Keep track of direction
-        const Direction = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 };
-        // Movement type (tied to moveFunction).
-        const Movement = { UP: 0, DOWN: 1, LEFT: 0, RIGHT: 1, SQUARED: 2, SIN: 3, COS: 4 };
-
-        // Physics
         const TICK = this.game.clockTick;
-        // Velocity based on movement
-        const VELOCITY = { SUPERFAST: 150, FAST: 100, REGULAR: 75, SLOW: 50, SUPERSLOW: 25 }
+        const Direction = { RIGHT: 0, LEFT: 1};
+        const Movement = { LEFT: 0, RIGHT: 1, SIN: 2, COS: 3 }; // Tied to moveFunction.
+        const Velocity = { SUPER_FAST: 200, FAST: 100, REGULAR: 75, SLOW: 50, SUPER_SLOW: 25 }
 
-        // Sprite velocity
         this.velocity.x = 0;
         this.velocity.y = 0;
 
-        // SPRITE MOVING LEFT ( and/or UP/DOWN)
-        if (this.velocity.x <= 0 && this.direction === Direction.LEFT) {
-            if (this.x + this.BB.radius < 0) { // check if we need to reverse
-                this.direction = Direction.RIGHT; // Switch directions and go right.
-            } else { // We know we are going left.
-
-                // x axis movement.
-                this.velocity.x += this.moveFunction(VELOCITY.REGULAR, Movement.UP);
-                // y axis movement.
-                let amplitude = 100;
-                let angularFrequency = 1 / 120;
-                this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.COS);
-            }
-        }
-
-        // SPRITE MOVING RIGHT ( and/or UP/DOWN)
-        else if (this.velocity.x >= 0 && this.direction === Direction.RIGHT) {
-            if (this.x + this.BB.radius > PARAMS.WIDTH) { // check if we have gone off the right side of canvas
-                this.direction = Direction.LEFT; // go left
-            } else { // We know we are going right.
-
-                // x axis movement.
-                this.velocity.x += this.moveFunction(VELOCITY.REGULAR, Movement.RIGHT);
-                // y axis movement.
-                let amplitude = 100;
+        if (this.direction === Direction.LEFT) {
+            if (this.BB.yCenter < 0) this.moveDownLeft = true;
+            if (this.moveDownLeft) {
+                this.velocity.x -= Velocity.REGULAR;
+                this.velocity.y += Velocity.FAST;
+            } else {
+                this.velocity.x += this.moveFunction(Velocity.SUPER_SLOW, Movement.LEFT);
+                let amplitude = 50;
                 let angularFrequency = 1 / 60;
-                this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer++), Movement.SIN);
+                this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer), Movement.COS);
             }
+            if (this.BB.xCenter < 0) this.direction = Direction.RIGHT;
+
+        } else if (this.direction === Direction.RIGHT) {
+            if (this.BB.yCenter < 0) this.moveDownRight = true;
+            if (this.moveDownRight) {
+                this.velocity.x += Velocity.REGULAR;
+                this.velocity.y += Velocity.FAST;
+            } else {
+                this.velocity.x += this.moveFunction(Velocity.SUPER_SLOW, Movement.RIGHT);
+                let amplitude = 50;
+                let angularFrequency = 1 / 60;
+                this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer), Movement.SIN);
+            }
+            if (this.BB.xCenter > PARAMS.WIDTH) this.direction = Direction.LEFT;
         }
 
-        /*
-        Controls the behavior of the minion [300] pixels before the bottom of the canvas.
-        Minions will begin to slow down until they reverse.
-         */
-        if (this.BB.bottom > PARAMS.HEIGHT - 300) {
-            this.velocity.y -= 1;
-            this.y -= 1;
+        if (this.BB.yCenter > 200) {
+            this.moveDownRight = false;
+            this.moveDownLeft = false;
         }
 
-        /*
-        If the minion flies too far beyond the top of the canvas reverse their velocity.
-         */
-        if (this.BB.top < -200) {
-            this.velocity.y = -this.velocity.y;
-        }
+        this.moveTimer = this.moveTimer > 10000 ? 0 : this.moveTimer + 1;
 
-        // Reset move timer so not to overflow.
-        if (this.moveTimer > 10000) {
-            this.moveTimer = 1;
-        }
-
-        // Update sprite position.
         this.x += this.velocity.x * TICK * this.scale;
         this.y += this.velocity.y * TICK * this.scale;
 
-        // Bullet firing mechanism
+        this.updateBB();
         this.bulletPattern(200, 250, 50);
-
-        // Collision
-
+        super.checkCollision(this.game.entities.bullets);
         super.remove();
-    };
+    }
 
     updateBB() {
         const radius = 45;
         super.updateBB(radius);
-    };
+    }
 
     /**
      * Controls the firing mechanism for minions. There are two different firing modes based on the location
@@ -142,7 +109,7 @@ class CthulhuMinion extends Enemy {
         else if (this.elapsedTime % fireInterval === 0) {
             this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 15, 1));
         }
-    };
+    }
 
     /**
      * Controls the velocity of the sprite.
@@ -151,9 +118,9 @@ class CthulhuMinion extends Enemy {
      * @returns {number|*|number}
      */
     moveFunction(velocity, direction) {
-        let movementFunctions = [-velocity, velocity, velocity * velocity, -Math.sin(velocity), Math.cos(velocity)];
+        let movementFunctions = [-velocity, velocity, -Math.sin(velocity), Math.cos(velocity)];
         return movementFunctions[direction];
-    };
+    }
 }
 
 
