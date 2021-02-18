@@ -5,14 +5,6 @@ class CaveLevel extends Level {
         this.createLevel()
         super.enemyTotal(this.level);
     }
-    
-    update() {
-        super.update();
-        if(this.levelOver()) {
-            this.game.setLevel(new FactoryLevel(this.game));
-        }
-    }
-
 
     createLevel() {
 
