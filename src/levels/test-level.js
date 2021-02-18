@@ -4,6 +4,7 @@ class TestLevel extends Level {
         super(game);
 
         this.createLevel();
+        super.enemyTotal(this.level);
     }
 
     createLevel() {

@@ -85,8 +85,10 @@ ASSET_MANAGER.downloadAll(function () {
 
 	// This is where we will add the scene manager to handle
 	// the adding and removing of entities
+
 	gameEngine.setLevel(new CaveLevel(gameEngine));
-	//gameEngine.setLevel(new FactoryLevel(gameEngine));
+	// gameEngine.setLevel(new FactoryLevel(gameEngine));
+	// gameEngine.setLevel(new SpaceLevel(gameEngine));
 	gameEngine.start();
 });
 

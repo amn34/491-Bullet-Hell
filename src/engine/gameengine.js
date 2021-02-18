@@ -21,6 +21,11 @@ class GameEngine {
         this.down = false;
         this.slow = false;
 
+        // defines the all the levels in the game in the order they should be played in
+        this.levels = [CaveLevel, FactoryLevel, SpaceLevel, TestLevel];
+
+        // The index of the current level
+        this.currentLevel = 0;
     };
 
     init(ctx) {
@@ -48,10 +53,21 @@ class GameEngine {
         this.entities = [];
         this.score = 0;
         this.displayScore.innerHTML = 0;
-        //this.setLevel(new CaveLevel(this));
-        this.setLevel(new FactoryLevel(this));
         this.timer = new Timer();
+        this.setLevel(new this.levels[this.currentLevel](this));
     };
+
+    nextLevel() {
+        this.timer.displayTotalTime();
+        this.entities = [];
+        this.timer = new Timer();
+        this.score = 0;
+        this.displayScore.innerHTML = 0;
+
+        // loop back to start once last level is reached
+        this.currentLevel = (this.currentLevel + 1) % this.levels.length;
+        this.setLevel(new this.levels[this.currentLevel](this));
+    }
 
     startInput() {
         var that = this;
