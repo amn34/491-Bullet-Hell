@@ -4,7 +4,6 @@ class CaveLevel extends Level {
 
         this.createLevel()
         super.enemyTotal(this.level);
-
     }
 
     createLevel() {

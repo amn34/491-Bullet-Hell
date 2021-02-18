@@ -10,7 +10,7 @@ class HomingRobot extends Enemy {
         this.loadAnimations();
         this.animationIndex = 0;
 
-        this.life = 20;
+        this.life = 10;
         this.canShoot = 0;
         this.threshHold = 100;
 
@@ -97,7 +97,7 @@ class HomingBullet extends Bullet {
         if (this.timer <= 45) {
             this.timer++;
         }
-        if(this.timer == 30) {
+        if (this.timer == 30) {
             this.dx = 0;
             this.dy = 0;
             this.homing = true;
@@ -111,7 +111,7 @@ class HomingBullet extends Bullet {
             const angle = Math.atan(distY / distX);
 
             this.dx = Math.cos(angle) * this.bulletSpeed;
-            if(flip) {
+            if (flip) {
                 this.dx = -this.dx;
             }
             this.dy = Math.sin(angle) * this.bulletSpeed;
@@ -127,7 +127,7 @@ class HomingBullet extends Bullet {
     draw(ctx) {
         ctx.beginPath();
         ctx.arc(this.BB.xCenter, this.BB.yCenter, this.BB.radius, 0, Math.PI * 2);
-        if(this.homing) {
+        if (this.homing) {
             ctx.fillStyle = 'Red';
             // var radial = context.createRadialGradient(startX, startY, startRadius, endX, endY, endRadius);
             // create radial gradient
@@ -148,7 +148,7 @@ class HomingBullet extends Bullet {
         }
 
         ctx.fill();
-        if(PARAMS.DEBUG) {
+        if (PARAMS.DEBUG) {
             this.drawBB(ctx);
         }
     }
