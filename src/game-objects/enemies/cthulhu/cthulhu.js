@@ -32,6 +32,15 @@ class Cthulhu extends Enemy {
         this.life = 5000;
         this.totalLife = this.life;
 
+
+        this.velocity = { x: 0, y: 0 };
+        this.direction = 0; // Starting direction of minion movement.
+        this.moveTimer = 0; // Timer for sin/cos functions.
+
+        this.moveDownRight = false;
+        this.moveDownLeft = false;
+
+
         this.startTimer = Math.floor(Date.now() / 100);
         this.oldTime = 0;
 
@@ -40,6 +49,7 @@ class Cthulhu extends Enemy {
         this.canShoot = 0;
         this.threshHold = 30;
         this.bulletPattern = [];
+        this.updateBB();
     }
 
     /**
@@ -51,21 +61,57 @@ class Cthulhu extends Enemy {
         this.endTimer = Math.floor(Date.now() / 100);
         this.elapsedTime = this.endTimer - this.startTimer; // elapsed time in centi-seconds.
 
-        // Default movement.
-        if (this.x <= this.startX + 125 && this.goRight) {
-            this.x++;
-        } else {
-            this.x--;
+
+        const TICK = this.game.clockTick;
+        const Direction = { RIGHT: 0, LEFT: 1};
+        const Movement = { LEFT: 0, RIGHT: 1, SIN: 2, COS: 3 }; // Tied to moveFunction.
+        const Velocity = { SUPER_FAST: 200, FAST: 100, REGULAR: 75, SLOW: 50, SUPER_SLOW: 25 }
+
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+
+        if (this.direction === Direction.LEFT) {
+
+            if (this.BB.yCenter < 0) this.moveDownLeft = true;
+
+            if (this.moveDownLeft) {
+                this.velocity.x -= Velocity.SLOW;
+                this.velocity.y += Velocity.REGULAR;
+            } else {
+                this.velocity.x += this.moveFunction(Velocity.SUPER_SLOW, Movement.LEFT);
+                let amplitude = 50;
+                let angularFrequency = 1 / 60;
+                this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer), Movement.COS);
+            }
+
+            if (this.BB.xCenter < 0) this.direction = Direction.RIGHT;
+
+        } else if (this.direction === Direction.RIGHT) {
+
+            if (this.BB.yCenter < 0) this.moveDownRight = true;
+
+            if (this.moveDownRight) {
+                this.velocity.x += Velocity.SLOW;
+                this.velocity.y += Velocity.REGULAR;
+            } else {
+                this.velocity.x += this.moveFunction(Velocity.SUPER_SLOW, Movement.RIGHT);
+                let amplitude = 50;
+                let angularFrequency = 1 / 60;
+                this.velocity.y += amplitude * this.moveFunction(angularFrequency * (this.moveTimer), Movement.SIN);
+            }
+
+            if (this.BB.xCenter > PARAMS.WIDTH) this.direction = Direction.LEFT;
         }
 
-        if (this.x === this.startX + 125 && this.goRight) {
-            this.goRight = !this.goRight;
-
-        } else if (this.x === this.startX - 125 && !this.goRight) {
-            this.goRight = !this.goRight;
+        if (this.BB.yCenter > 200) {
+            this.moveDownRight = false;
+            this.moveDownLeft = false;
         }
 
+        this.moveTimer = this.moveTimer > 10000 ? 0 : this.moveTimer + 1;
 
+        this.x += this.velocity.x * TICK * this.scale;
+        this.y += this.velocity.y * TICK * this.scale;
 
 
         this.canShoot++;
@@ -102,6 +148,11 @@ class Cthulhu extends Enemy {
 
         this.updateBB();
         super.checkCollision(this.game.entities.bullets);
+    }
+
+    moveFunction(velocity, direction) {
+        let movementFunctions = [-velocity, velocity, -Math.sin(velocity), Math.cos(velocity)];
+        return movementFunctions[direction];
     }
 
     /**
