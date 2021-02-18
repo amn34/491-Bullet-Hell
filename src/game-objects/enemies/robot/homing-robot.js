@@ -129,6 +129,20 @@ class HomingBullet extends Bullet {
         ctx.arc(this.BB.xCenter, this.BB.yCenter, this.BB.radius, 0, Math.PI * 2);
         if(this.homing) {
             ctx.fillStyle = 'Red';
+            // var radial = context.createRadialGradient(startX, startY, startRadius, endX, endY, endRadius);
+            // create radial gradient
+            var radial = ctx.createRadialGradient(this.BB.xCenter, this.BB.yCenter, this.BB.radius - 10, this.BB.xCenter, this.BB.yCenter, this.BB.radius - 1);
+
+            // light red
+            radial.addColorStop(1, '#f4e8e9');
+
+            // dark red
+            radial.addColorStop(0, 'red');
+
+            ctx.fillStyle = radial;
+            ctx.fill();
+            ctx.stroke();
+            ctx.closePath();
         } else {
             ctx.fillStyle = 'Pink';
         }
