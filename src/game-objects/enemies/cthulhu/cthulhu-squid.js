@@ -15,6 +15,11 @@ class CthulhuSquid extends Enemy {
         this.life = 3;
         this.score = 150;
 
+        this.canShoot = 0;
+        this.threshHold = 75;
+        this.bulletPattern = [downSpiralAlternative, downSpiralReverseAlternative];
+
+
         this.startTimer = Date.now();
         this.loadAnimations();
         this.updateBB();
@@ -83,11 +88,26 @@ class CthulhuSquid extends Enemy {
         this.x += this.velocity.x * TICK * this.scale;
         this.y += this.velocity.y * TICK * this.scale;
 
+        this.fireBulletPattern();
         this.updateBB();
-        this.bulletPattern(300, 250, 20);
         super.checkCollision(this.game.entities.bullets);
         super.remove();
+
+        this.canShoot++;
+
     };
+
+    fireBulletPattern() {
+        if (this.canShoot === this.threshHold) {
+            this.canShoot = 0;
+            let center = this.x + (this.width / 2) * this.scale;
+            // this.game.addBullet(new CthulhuSquidBullet(this.game, center, this.y + this.height / 2, 1, fortress));
+
+            this.bulletPattern.forEach(bPattern => {
+                this.game.addBullet(new CthulhuSquidBullet(this.game, center, this.y + this.height / 2, 1, bPattern));
+            })
+        }
+    }
 
     updateBB() {
         const radius = 70;
@@ -105,41 +125,39 @@ class CthulhuSquid extends Enemy {
         return movementFunctions[direction];
     };
 
-    /**
-     * Controls the firing mechanism for minions. There are two different firing modes based on the location
-     * of the minion along the y-coordinate. There is a regular firing pattern in which the minion will fire
-     * at the regular fireInterval rate that is specified in milliseconds. If comes within a certain distance
-     * of the bottom of the canvas then the firing interval is dependent on  fireIntervalSpecial.
-     * @param distance from the bottom of the canvas.
-     * @param fireInterval regular fire interval.d
-     * @param fireIntervalSpecial fire interval when minion comes within a certain distance of the bottom of canvas.
-     */
-    bulletPattern(distance, fireInterval, fireIntervalSpecial) {
-        this.endTimer = Date.now();
-        this.elapsedTime = this.startTimer - this.endTimer;
-
-        if (this.elapsedTime % 50 === 0) this.animation = 1; // Change animation every 50 milliseconds
-
-        // Special fire interval.
-        if (this.BB.bottom > PARAMS.HEIGHT - distance && this.elapsedTime % fireIntervalSpecial === 0) {
-            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 15, 1));
-            this.animation = 0;
-        }
-        // Regular fire interval.
-        else if (this.elapsedTime % fireInterval === 0) {
-            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 + 20, this.y + this.height - 5, 1 / 2));
-            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 - 20, this.y + this.height - 5, 1 / 2));
-            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 + 12, this.y + this.height - 15, 1 / 2));
-            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 - 12, this.y + this.height - 15, 1 / 2));
-            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height, 1 / 2));
-            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 30, 1 / 2));
-            this.animation = 0;
-        }
-    };
-
-
     draw(ctx) {
         super.draw(ctx);
         this.animations[this.animation].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
     };
 }
+
+class CthulhuSquidBullet extends Bullet {
+    constructor(game, x, y, scale, callback) {
+        const radius = 11;
+        const bulletSpeed = 3;
+        const bulletType = 1;
+        super(game, x, y, scale, radius, bulletSpeed, bulletType)
+        this.callback = callback;
+        this.angle = 0;
+
+        this.x = x;
+        this.y = y;
+    }
+
+    update() {
+        this.updateBB();
+        super.checkBounds();
+        this.y += this.bulletSpeed;
+
+        this.angle += 0.0999;
+        this.callback(this);
+    }
+
+    updateBB() {
+        const radius = 11;
+        super.updateBB(radius);
+    }
+
+
+}
+

@@ -12,8 +12,11 @@ class CthulhuArrow extends Enemy {
         this.life = 1;
         this.score = 100;
 
+        this.startLaser = Math.random() * 600;
+
         this.canShoot = 0;
-        this.threshHold = 200;
+        this.threshHold = 75;
+        this.bulletPattern = [downSpiral, downSpiralReverse];
 
         this.loadAnimations();
         this.updateBB();
@@ -27,46 +30,42 @@ class CthulhuArrow extends Enemy {
     }
 
     update() {
-
-        this.canShoot++;
-        if (this.canShoot === this.threshHold) {
-            this.canShoot = 0;
-            let center = this.x + (this.width / 2) * this.scale;
-            this.game.addBullet(new CthulhuArrowBullet(this.game, center, this.y + this.height, 1 ))
-            // this.game.addBullet(new )
-        }
-
-
-
-
         const TICK = this.game.clockTick;
-        const VELOCITY = { SUPER_FAST: 150, FAST: 100, REGULAR: 75, SLOW: 50, SUPER_SLOW: 25 }
-        let startLaser = 350;
+        const VELOCITY = { SUPER_FAST: 250, FAST: 100, REGULAR: 75, SLOW: 50, SUPER_SLOW: 25 }
+
 
         this.velocity.y = 0;
         this.velocity.y += VELOCITY.REGULAR;
 
-        if (this.BB.yCenter > PARAMS.HEIGHT - startLaser) {
+        if (this.BB.yCenter > this.startLaser) {
             this.velocity.y += VELOCITY.SUPER_FAST;
             this.animation = 1;
-            // this.bulletPattern();
         }
 
         this.y += this.velocity.y * TICK * this.scale;
 
+        this.canShoot++;
+        this.fireBulletPattern();
         this.updateBB();
         super.checkCollision(this.game.entities.bullets);
         super.remove();
+    }
+
+    fireBulletPattern() {
+        if (this.canShoot === this.threshHold) {
+            this.canShoot = 0;
+            let center = this.x + (this.width / 2) * this.scale;
+
+            this.bulletPattern.forEach(bPattern => {
+                this.game.addBullet(new CthulhuArrowBullet(this.game, center, this.y + this.height / 2, 1, bPattern));
+            })
+        }
     }
 
     updateBB() {
         const radius = 30;
         super.updateBB(radius);
     }
-
-    // bulletPattern() {
-    //     this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2 - 1, this.y + this.height, 10));
-    // }
 
     draw(ctx) {
         super.draw(ctx);
@@ -77,18 +76,23 @@ class CthulhuArrow extends Enemy {
 
 class CthulhuArrowBullet extends Bullet {
     constructor(game, x, y, scale, callback) {
-        const radius = 15;
+        const radius = 10;
         const bulletSpeed = 2;
         const bulletType = 1;
-        super(game, x, y, scale, radius, bulletSpeed, bulletType);
+        super(game, x, y, scale, radius, bulletSpeed, bulletType)
         this.callback = callback;
-        this.angle = -1;
+        this.angle = 0;
+
+        this.x = x;
+        this.y = y;
     }
 
     update() {
         this.updateBB();
         super.checkBounds();
-        this.angle += 0.06;
+        this.y += this.bulletSpeed;
+
+        this.angle += 0.025;
         this.callback(this);
     }
 
@@ -97,7 +101,4 @@ class CthulhuArrowBullet extends Bullet {
         super.updateBB(radius);
     }
 
-    draw(ctx) {
-        ctx.beginPath();
-    }
 }

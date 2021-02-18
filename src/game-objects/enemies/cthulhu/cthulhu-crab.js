@@ -18,6 +18,11 @@ class CthulhuCrab extends Enemy {
         this.life = 2;
         this.score = 100;
 
+        this.canShoot = 0;
+        this.threshHold = 15;
+
+        this.bulletPattern = [downSpiral, downSpiralReverse];
+
         this.startTimer = Date.now();
         this.loadAnimations();
         this.updateBB();
@@ -80,34 +85,30 @@ class CthulhuCrab extends Enemy {
         this.x += this.velocity.x * TICK * this.scale;
         this.y += this.velocity.y * TICK * this.scale;
 
-        this.bulletPattern(200, 250, 50);
+        this.canShoot++;
+
+        this.fireBulletPattern();
+
         this.updateBB();
         super.checkCollision(this.game.entities.bullets);
         super.remove();
     }
 
+
+    fireBulletPattern() {
+        if (this.canShoot === this.threshHold) {
+            this.canShoot = 0;
+            let center = this.x + (this.width / 2) * this.scale;
+            this.bulletPattern.forEach(bPattern => {
+                this.game.addBullet(new CthulhuCrabBullet(this.game, center, this.y + this.height / 2, 1, bPattern));
+            })
+        }
+    }
+
+
     updateBB() {
         const radius = 35;
         super.updateBB(radius);
-    }
-
-    /**
-     * Controls the firing mechanism for minions. There are two different firing modes based on the location
-     * of the minion along the y-coordinate. There is a regular firing pattern in which the minion will fire
-     * at the regular fireInterval rate that is specified in milliseconds. If comes within a certain distance
-     * of the bottom of the canvas then the firing interval is dependent on  fireIntervalSpecial.
-     * @param distance from the bottom of the canvas.
-     * @param fireInterval regular fire interval.
-     * @param fireIntervalSpecial fire interval when minion comes within a certain distance of the bottom of canvas.
-     */
-    bulletPattern(distance, fireInterval, fireIntervalSpecial) {
-        this.endTimer = Date.now();
-        this.elapsedTime = this.startTimer - this.endTimer;
-
-        // Regular fire interval.
-        if (this.elapsedTime % fireInterval === 0) {
-            this.game.addBullet(new CthulhuMinionBullet(this.game, this.x + this.width / 2, this.y + this.height - 15, 1));
-        }
     }
 
     /**
@@ -126,3 +127,38 @@ class CthulhuCrab extends Enemy {
         this.animations[this.animation].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
     }
 }
+
+
+
+class CthulhuCrabBullet extends Bullet {
+    constructor(game, x, y, scale, callback) {
+        const radius = 10;
+        const bulletSpeed = 1;
+        const bulletType = 1;
+        super(game, x, y, scale, radius, bulletSpeed, bulletType)
+        this.callback = callback;
+        this.angle = 0;
+
+        this.x = x;
+        this.y = y;
+    }
+
+    update() {
+        this.updateBB();
+        super.checkBounds();
+        this.y += this.bulletSpeed;
+
+        this.angle += 0.025;
+        this.callback(this);
+    }
+
+    updateBB() {
+        const radius = 10;
+        super.updateBB(radius);
+    }
+
+}
+
+
+
+

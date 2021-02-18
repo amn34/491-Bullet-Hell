@@ -65,6 +65,9 @@ class Cthulhu extends Enemy {
             this.goRight = !this.goRight;
         }
 
+
+
+
         this.canShoot++;
 
         if (this.canShoot === this.threshHold) {
@@ -276,7 +279,7 @@ class Cthulhu extends Enemy {
 
 class CthulhuBullet extends Bullet {
     constructor(game, x, y, scale, callback) {
-        const radius = 8;
+        const radius = 15;
         const bulletSpeed = 3;
         const bulletType = 1; //enemy bullet
         super(game, x, y, scale, radius, bulletSpeed, bulletType);
@@ -293,7 +296,7 @@ class CthulhuBullet extends Bullet {
     };
 
     updateBB() {
-        const radius = 8;
+        const radius = 15;
         super.updateBB(radius);
     };
 }
