@@ -49,8 +49,8 @@ class GameEngine {
         this.score = 0;
         this.displayScore.innerHTML = 0;
         //this.setLevel(new CaveLevel(this));
-        this.setLevel(new FactoryLevel(this));
         this.timer = new Timer();
+        this.setLevel(new FactoryLevel(this));
     };
 
     startInput() {
