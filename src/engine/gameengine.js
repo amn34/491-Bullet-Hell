@@ -189,8 +189,8 @@ class GameEngine {
     };
 
     update() {
-        this.entities.level.update();
         this.entities.player.update();
+        this.entities.level.update();
     
         this.updateEntityList(this.entities.backgrounds);
         this.updateEntityList(this.entities.particles);

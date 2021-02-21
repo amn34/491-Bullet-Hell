@@ -8,7 +8,13 @@ class Level {
         this.enemiesDefeated = 0;
         this.totalEnemies = 0;
         this.level = {};
+
+        this.startTransition = true;
+        this.endTransition = false;
+
         this.startTime = this.game.timer.getGameTime();
+
+        this.levelComplete = false;
 
         //reset the state of the game and remove all entities 
         game.entities.backgrounds = [];
@@ -42,18 +48,19 @@ class Level {
             this.game.reset();
         }
 
-        // Go to the next level if the player completes the map by eliminating all enemies
-        if (this.levelOver()) {
+        if(!this.levelComplete) {
+            if(this.levelOver()) {
+                this.levelComplete = true;
+                this.endTransition = true;
+            }
+        }
+
+        if(this.levelComplete && !this.endTransition) {
             this.game.nextLevel();
         }
     };
 
     levelOver() {
-        // if (this.enemiesDefeated === this.totalEnemies) {
-        //     //this.game.reset();
-        //     return true;
-        // }
-        // return false
         return this.enemiesDefeated === this.totalEnemies;
     }
 
