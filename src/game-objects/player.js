@@ -94,7 +94,6 @@ class Player {
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            // ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
             ctx.beginPath();
             ctx.arc(this.BB.xCenter, this.BB.yCenter, this.BB.radius, 0, Math.PI * 2);
             ctx.stroke();
@@ -102,7 +101,6 @@ class Player {
     }
 
     update() {
-
         const transitioning = this.updateTransition();
         if (transitioning) {
             return;
@@ -146,7 +144,6 @@ class Player {
 
             this.canShoot = 0;
         }
-
 
         this.updateBB();
         this.checkCollision(this.game.entities.enemies);
@@ -217,6 +214,7 @@ class Player {
             if (entity.BB && player.BB.collide(entity.BB)) {
                 if (collideWithEnemyBullet(entity) || collideWithEnemy(entity)) {
                     if (this.canTakeDamage) {
+                        ASSET_MANAGER.playAsset("./res/sfx/Hit.wav");
                         this.canTakeDamage = false;
 
                         if (!PARAMS.INVINCIBLE) {
@@ -235,6 +233,7 @@ class Player {
                         entity.destroy();
                     }
                 } else if (collideWithPowerup(entity)) {
+                    ASSET_MANAGER.playAsset("./res/sfx/PickUp.mp3");
                     this.handlePowerUp(entity);
                     entity.destroy();
                 }

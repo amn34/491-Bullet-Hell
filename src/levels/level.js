@@ -26,6 +26,14 @@ class Level {
         game.entities.player = new Player(this.game);
     }
 
+    updateAudio() {
+        var mute = document.getElementById("mute").checked;
+        var volume = document.getElementById("volume").value;
+
+        ASSET_MANAGER.muteAudio(mute);
+        ASSET_MANAGER.adjustVolume(volume);
+    }
+
     update() {
         PARAMS.DEBUG = document.getElementById("debug").checked;
         PARAMS.INVINCIBLE = document.getElementById("invincible").checked;
@@ -36,6 +44,9 @@ class Level {
         }
 
         const seconds = this.game.timer.getGameTime() - this.startTime;
+      
+        this.updateAudio();
+
         //checks the level entity-creation map to see if there are units to spawn
         if (this.level[seconds]) {
             //spawns all the entities that should be created at this time-stamp
