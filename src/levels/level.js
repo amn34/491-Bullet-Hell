@@ -8,7 +8,14 @@ class Level {
         this.enemiesDefeated = 0;
         this.totalEnemies = 0;
         this.level = {};
-        this.startTime = this.game.timer.getGameTime();
+
+        this.startTransition = true;
+        this.endTransition = false;
+
+        this.startTime = undefined;
+
+        this.levelStart = false;
+        this.levelComplete = false;
 
         //reset the state of the game and remove all entities 
         game.entities.backgrounds = [];
@@ -22,9 +29,13 @@ class Level {
     update() {
         PARAMS.DEBUG = document.getElementById("debug").checked;
         PARAMS.INVINCIBLE = document.getElementById("invincible").checked;
+
+        //Exit if the level hasn't begun yet
+        if(!this.levelRun) {
+            return;
+        }
+
         const seconds = this.game.timer.getGameTime() - this.startTime;
-        //console.log(seconds);
-        // console.log("start time: " + this.startTime);
         //checks the level entity-creation map to see if there are units to spawn
         if (this.level[seconds]) {
             //spawns all the entities that should be created at this time-stamp
@@ -42,21 +53,37 @@ class Level {
             this.game.reset();
         }
 
-        // Go to the next level if the player completes the map by eliminating all enemies
-        if (this.levelOver()) {
+        if(!this.levelComplete) {
+            if(this.levelOver()) {
+                this.levelComplete = true;
+                this.endTransition = true;
+            }
+        }
+
+        if(this.levelComplete && !this.endTransition) {
             this.game.nextLevel();
         }
     };
 
+    /**
+     * Utilized by the Player Object to start the level when finished with the start transition
+     */
+    startLevel() {
+        this.levelRun = true;
+        this.startTime = this.game.timer.getGameTime();
+    }
+
+    /**
+     * Checks if all enemies have been defeated and the level is over
+     */
     levelOver() {
-        // if (this.enemiesDefeated === this.totalEnemies) {
-        //     //this.game.reset();
-        //     return true;
-        // }
-        // return false
         return this.enemiesDefeated === this.totalEnemies;
     }
 
+    /**
+     * 
+     * @param {Object} obj - The entity-creation map 
+     */
     enemyTotal(obj) {
         for (const v of Object.values(obj)) {
             this.totalEnemies += v.length;
