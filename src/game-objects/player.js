@@ -11,15 +11,17 @@ class Player {
         this.speedY = 0;
         this.game = game;
 
-        // The starting corrdinates
-        this.x = 328;
-        this.y = 640;
-
         //size
         this.width = 18;
         this.height = 21;
         this.scale = 3;
         this.center = (this.width * this.scale / 2);
+
+        // The starting coordinates
+        this.x = PARAMS.WIDTH / 2 - (this.width * this.scale / 2);
+        this.y = 740;
+
+
 
         // how many hits left before death
         // 3 = full health | 2 = 2 hits left | 1 = 1 hits left | 0 = dead
@@ -99,6 +101,11 @@ class Player {
     }
 
     update() {
+        const transitioning = this.updateTransition();
+        if (transitioning) {
+            return;
+        }
+
         this.game.slow ? this.calculateSpeed(this.moveSpeedSlow) : this.calculateSpeed(this.moveSpeed);
 
         this.x += this.speedX;
@@ -142,6 +149,38 @@ class Player {
         this.checkCollision(this.game.entities.enemies);
         this.checkCollision(this.game.entities.bullets);
         this.checkCollision(this.game.entities.powerups);
+    }
+
+    updateTransition() {
+
+        //if the player is in the start transition mode
+        if (this.game.entities.level.startTransition) {
+            const targetY = 590;
+            if (this.y >= targetY) {
+                this.y -= Math.min(this.y - targetY, 3);
+                //end transition when the player is in position
+                if (this.y <= targetY) {
+                    this.game.entities.level.startTransition = false;
+                    this.game.entities.level.startLevel();
+                }
+            }
+            return true; //exit to prevent user control
+        } else if (this.game.entities.level.endTransition) {
+            //first move the player to the center, then make them go up offscreen
+            const targetX = PARAMS.WIDTH / 2 - (this.width * this.scale / 2);
+            const targetY = -100;
+            if (this.x !== targetX) {
+                this.x += Math.min(Math.max(targetX - this.x, -3), 3);
+            } else if (this.y >= targetY) {
+                this.y -= 5
+                if (this.y <= targetY) {
+                    this.game.entities.level.endTransition = false;
+                }
+            }
+            return true; //exit to prevent user control
+        } else {
+        }
+        return false;
     }
 
     calculateSpeed(speed) {
