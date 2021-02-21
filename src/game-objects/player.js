@@ -156,8 +156,6 @@ class Player {
 
     updateTransition() {
 
-        console.log('transition', this.game.entities.level.startTransition, this.game.entities.level.endTransition);
-
         //if the player is in the start transition mode
         if (this.game.entities.level.startTransition) {
             const targetY = 590;
@@ -166,6 +164,7 @@ class Player {
                 //end transition when the player is in position
                 if (this.y <= targetY) {
                     this.game.entities.level.startTransition = false;
+                    this.game.entities.level.startLevel();
                 }
             }
             return true; //exit to prevent user control
@@ -178,13 +177,11 @@ class Player {
             } else if (this.y >= targetY) {
                 this.y -= 5
                 if (this.y <= targetY) {
-                    console.log('completed exit');
                     this.game.entities.level.endTransition = false;
                 }
             }
             return true; //exit to prevent user control
         } else {
-            console.log('no transition');
         }
         return false;
     }
