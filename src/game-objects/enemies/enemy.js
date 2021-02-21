@@ -11,9 +11,6 @@ class Enemy {
         // Determines the path of the enemy
         this.goRight = true;
         this.score = 100;
-
-
-        this.audio = await new Audio("./res/sfx/Shoot.wav");
     }
 
     draw(ctx) {
@@ -53,6 +50,7 @@ class Enemy {
         entities.forEach(entity => {
             if (entity.BB && enemy.BB.collide(entity.BB)) {
                 if (collideWithPlayerBullet(entity)) {
+                    ASSET_MANAGER.playAsset("./res/sfx/Shoot.wav");
                     //destroys the bullet
                     entity.destroy();
                     //creates a particle effect

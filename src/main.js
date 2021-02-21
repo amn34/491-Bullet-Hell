@@ -25,19 +25,25 @@ loadSprites();
 
 function loadSounds() {
 	let base = "./res/";
-	let extension = ".wav";
-	let sounds = {
-		"sfx/": ["Shoot.wav", "Brain.wav"]
-	}
+	let extension = [".wav", ".mp3"];
+	let wavs = {
+		"sfx/": ["Shoot", "Brain", "Hit", "Mouth", "Nose"]
+	};
+	let mp3s = {
+		"sfx/": ["PickUp", "IntroExtended"]
+	};
+	let sounds = [wavs, mp3s];
 
-	for (path in sounds) {
-		for (index in sounds[path]) {
-			ASSET_MANAGER.queueDownload(base + path + sounds[path][index] + extension);
+	for (var i = 0; i < sounds.length; i++) {
+		for (path in sounds[i]) {
+			for (index in sounds[i][path]) {
+				ASSET_MANAGER.queueDownload(base + path + sounds[i][path][index] + extension[i]);
+			}
 		}
 	}
 }
 
-loadSprites();
+loadSounds();
 
 
 window.addEventListener('keydown', function (e) {
