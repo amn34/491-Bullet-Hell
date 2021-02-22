@@ -34,6 +34,16 @@ class PowerUp {
             this.destroy();
         }
 
+        //if the player is near the powerup move the powerup towards the player
+        const distX = this.game.entities.player.x - this.x;
+        const distY = this.game.entities.player.y - this.y;
+        const distT = distX * distX + distY * distY;
+        const pickupDist = 60;
+        if(distT < pickupDist * pickupDist) { 
+            this.x += Math.min(Math.max(distX, -3), 3);
+            this.y += Math.min(Math.max(distY, -3), 3);
+        }
+
         this.updateBB(20);
     }
 
