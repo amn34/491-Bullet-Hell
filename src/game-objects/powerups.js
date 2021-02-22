@@ -93,3 +93,9 @@ class MultipleProjectilePowerUp extends PowerUp {
         super(game, x, y, image);
     }
 }
+
+class CompanionPowerUp extends PowerUp {
+    constructor(game, x, y, image) {
+        super(game, x, y, image);
+    }
+}
