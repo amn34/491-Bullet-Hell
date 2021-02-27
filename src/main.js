@@ -30,7 +30,8 @@ function loadSounds() {
 		"sfx/": ["Shoot", "Brain", "Hit", "Mouth", "Nose"]
 	};
 	let mp3s = {
-		"sfx/": ["PickUp", "IntroExtended"]
+		"sfx/": ["PickUp"],
+		"music/": ["IntroExtended"]
 	};
 	let sounds = [wavs, mp3s];
 

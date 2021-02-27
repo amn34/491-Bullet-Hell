@@ -73,9 +73,14 @@ class Enemy {
     }
 
     chanceForDrop() {
-        let powerups = [[IncreaseFireRatePowerUp, "./res/powerups/fire_rate_pu.png"], [AdditionalProjectilePowerUp, "./res/powerups/ap1_pu.png"],
-        [IncreaseHealthPowerUp, "./res/powerups/health_pu.png"], [IncreasePowerPowerUp, "./res/powerups/power_pu.png"],
-        [IncreaseShieldPowerUp, "./res/powerups/shield_pu.png"]];
+        let player = this.game.entities.player;
+        let powerups = [[IncreasePowerPowerUp, "./res/powerups/power_pu.png"]];
+
+        if (player.life !== 3) powerups.push([IncreaseHealthPowerUp, "./res/powerups/health_pu.png"]);
+        if (player.bulletAngles.length !== 18) powerups.push([AdditionalProjectilePowerUp, "./res/powerups/ap1_pu.png"]);
+        if (player.shield < 2) powerups.push([IncreaseShieldPowerUp, "./res/powerups/shield_pu.png"]);
+        if (player.fireRateFromPowerUp < 12) powerups.push([IncreaseFireRatePowerUp, "./res/powerups/fire_rate_pu.png"]);
+        if (player.companions !== 2) powerups.push([CompanionPowerUp, "./res/altPlayer.png"]);
 
         // if roll === 1 drop a powerup
         let roll = Math.floor(Math.random() * 100);

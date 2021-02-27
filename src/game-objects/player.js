@@ -44,6 +44,7 @@ class Player {
         // Stores the angles (in degrees) the bullets will travel in
         // 0 - right, 90 - up, 180 - left, 270 - down
         this.bulletAngles = [90];
+        this.companions = 0;
 
         // The damage the player does to an enemy
         this.damage = 1;
@@ -273,14 +274,22 @@ class Player {
                 this.handleGameMenu('res/powerups/shield_pu.png', 'Shield', 'Grants player a stackable shield')
                 break;
             case AdditionalProjectilePowerUp:
-                if (len === 1) {
-                    this.bulletAngles.push(this.bulletAngles[0] + 20, this.bulletAngles[0] - 20);
-                } else if (len != 17) {
-                    this.bulletAngles.push(this.bulletAngles[len - 2] + 20, this.bulletAngles[len - 1] - 20);
-                } else {
-                    this.bulletAngles.push(this.bulletAngles[len - 1] - 20);
-                }
+                if (len === 1) this.bulletAngles.push(this.bulletAngles[0] + 20, this.bulletAngles[0] - 20);
+                else if (len != 17) this.bulletAngles.push(this.bulletAngles[len - 2] + 20, this.bulletAngles[len - 1] - 20);
+                else this.bulletAngles.push(this.bulletAngles[len - 1] - 20);
                 this.handleGameMenu('res/powerups/ap1_pu.png', 'Bullet', 'Increases number of player projectiles')
+                break;
+            case CompanionPowerUp:
+                // Do not allow more than 2 companions
+                if (this.companions > 1) break;
+
+                // add the first companion to the players left, and the second to the players right
+                if (this.companions === 0) this.game.addPowerup(new Companion(this.game, this, true));
+                else this.game.addPowerup(new Companion(this.game, this, false));
+                this.companions++;
+
+                // Problem displaying altPlayer png since it is a sprite and not a single image
+                this.handleGameMenu('res/altPlayer.png', 'Companion', 'Assists you in defeating enemies with homing shots')
                 break;
             /*
             case MultipleProjectilePowerUp:
@@ -303,68 +312,77 @@ class Player {
     }
 }
 
-class AltPlayer {
-    constructor(game) {
+class Companion {
+    constructor(game, player, left) {
         this.sprite = ASSET_MANAGER.getAsset("./res/altPlayer.png");
         this.animation = new Animator(this.sprite, 0, 1, 32, 30, 8, 0.1, 0, false, true);
-        this.moveSpeed = 3;
-        this.game = game;
-        this.x = 400;
-        this.y = 640;
-
+        
         this.frameWidth = 32;
         this.frameHeight = 30;
-        this.scale = 2;
+        this.scale = 1;
 
         this.width = this.frameWidth * this.scale;
         this.height = this.frameHeight * this.scale;
 
+        this.game = game;
+        this.player = player;
+        this.x = player.x;
+        this.y = player.y;
+        this.left = left;
+        
         this.speedX = 0;
         this.speedY = 0;
+        this.moveSpeed = 3;
 
+        // Can shoot once this reaches 60
+        this.canShoot = 0;
+        this.threshHold = 60;
 
-        // how many hits left before death
-        // 0 - full health,
-        // 1 - 2 hits left,
-        // 2 - 1 hit left,
-        // 3 - dead
-        this.life = 0;
-
-        // currently has a powerup
-        // 0 - powerup, 1 - no powerup
-        this.powerup = 1;
-
-        // Can shoot once this reaches 10
-        this.canShoot = 69;
-        this.threshHold = 70;
-
-        this.damage = 2;
+        this.damage = 0.5;
+        this.updateBB();
     }
 
     draw(ctx) {
-        this.canShoot++;
-        if (this.canShoot == this.threshHold) {
-            let center = this.x + (this.width / 2) - 5;
-            this.game.addEntity(new AltPlayerBullet(this.game, center, this.y, 1, this.damage));
-            this.canShoot = 0;
-        }
-
         this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.beginPath();
+            ctx.arc(this.BB.xCenter, this.BB.yCenter, this.BB.radius, 0, Math.PI * 2);
+            ctx.stroke();
+        }
     }
 
     update() {
-        this.speedX -= this.game.left ? this.moveSpeed : 0;
-        this.speedX += this.game.right ? this.moveSpeed : 0;
+        // Get the center of the player
+        const playerXCenter = this.player.x + this.player.width / 2;
+        const playerYCenter = this.player.y + this.player.height / 2;
 
-        this.speedY -= this.game.up ? this.moveSpeed : 0;
-        this.speedY += this.game.down ? this.moveSpeed : 0;
+        // determine if the companion goes to the left or right of the player
+        // refactor later to add acceleration / drag for the companion
+        if (this.left) {
+            this.x = playerXCenter - 80;
+            this.y = playerYCenter + 40;
+        } else {
+            this.x = playerXCenter + 80;
+            this.y = playerYCenter + 40;
+        }
 
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        this.speedX *= 0.8;
-        this.speedY *= 0.8;
+        if (this.canShoot === this.threshHold) {
+            this.canShoot = 0;
+            this.game.addBullet(new CompanionBullet(this.game, this.x + (this.height * this.scale) / 2, this.y, 1, this.damage))
+        }
+        
+        this.canShoot++;
+        this.updateBB();
     }
+
+    updateBB() {
+        const xCenter = this.x + (this.width / 2);
+        const yCenter = this.y + (this.height / 2);
+        const radius = 12;
+        this.BB = new BoundingCircle(xCenter, yCenter, radius);
+    };
 }
 
 class PlayerBullet extends Bullet {
@@ -403,9 +421,9 @@ class PlayerBullet extends Bullet {
         // var radial = context.createRadialGradient(startX, startY, startRadius, endX, endY, endRadius);
         // create radial gradient
         var radial = ctx.createRadialGradient(this.BB.xCenter, this.BB.yCenter, this.BB.radius - 10, this.BB.xCenter, this.BB.yCenter, this.BB.radius - 1);
+        
         // dark green
         radial.addColorStop(0, '#015115');
-
         // green
         radial.addColorStop(1, '#33f45d');
 
@@ -414,37 +432,116 @@ class PlayerBullet extends Bullet {
         ctx.stroke();
         ctx.closePath();
 
-        if (PARAMS.DEBUG) {
-            this.drawBB(ctx);
-        }
+        if (PARAMS.DEBUG) this.drawBB(ctx);
     }
 
 }
 
-
-class AltPlayerBullet extends Bullet {
+class CompanionBullet extends Bullet {
     constructor(game, x, y, scale, damage) {
-        const width = 10;
-        const height = 30;
-        const bulletSpeed = 12;
-        const bulletType = 2; //player bullet 
-        super(game, x, y, scale, width, height, bulletSpeed, bulletType);
+        const radius = 7;
+        const bulletSpeed = 4;
+        const bulletType = 2;
+        super(game, x, y, scale, radius, bulletSpeed, bulletType);
         this.damage = damage;
-    }
+        this.target = null;
+        this.timeToLive = 200;
 
-    draw(ctx) {
-        // Use yellow rectangles to keep the theme of the sprite
-        ctx.fillStyle = "black";
-        ctx.fillRect(this.x, this.y, this.width * this.scale, this.height * this.scale);
-
-        if (PARAMS.DEBUG) {
-            this.drawBB(ctx);
-        }
-
+        this.dx = 0;
+        this.dy = 0;
     }
 
     update() {
-        this.y -= this.bulletSpeed;
-        super.update();
+        // If we have a target, chase it down until we hit it
+        if (this.target) {
+            const targetX = this.target.x + (this.target.width * this.target.scale / 2);
+            const targetY = this.target.y + (this.target.height * this.target.scale / 2);
+
+            const flipX = targetX < this.x;
+            const flipY = targetY < this.y;
+
+            // The distance between the bulelt and the enemy
+            const distX = Math.abs(this.x - targetX);
+            const distY = Math.abs(this.y - targetY);
+            
+            // The angle we must follow to hit the target
+            const angle = Math.atan(distY / distX);
+
+            this.dx = Math.cos(angle) * this.bulletSpeed;
+            this.dy = Math.sin(angle) * this.bulletSpeed;
+            
+            // Reverse the direction the bullet travels in if we overshot it
+            if (flipX) this.dx *= -1;
+            if (flipY) this.dy *= -1;
+
+            this.x += this.dx;
+            this.y += this.dy;
+        } else {
+
+            // find the closest target using mahattan distanace
+            let enemies = this.game.entities.enemies;
+            for(let i=0; i<enemies.length; i++) {
+                // if we have not picked a target yet, set it to the first enemy we find
+                if (i === 0) this.target = enemies[i];
+                else {
+                    // Use manhattan distance to find the current closest enemy
+                    // we use the center coordinates of the enemies so the bullets will not clip the top right corner missing all the shots
+                    const potentialTarget = enemies[i];
+                    
+                    // Current targets center position
+                    const targetXCenter = this.target.x + (this.target.width * this.target.scale / 2);
+                    const targetYCenter = this.target.y + (this.target.height * this.target.scale / 2);
+                    
+                    // Potential targets center position
+                    const potentialTargetXCenter = potentialTarget.x + (potentialTarget.width * potentialTarget.scale / 2);
+                    const potentialTargetYCenter = potentialTarget.y + (potentialTarget.height * potentialTarget.scale / 2);
+                    
+                    // Distances between targets
+                    const distFromCurrentTarget = Math.abs(this.x - targetXCenter) + Math.abs(this.y - targetYCenter);
+                    const distFromPotentialTarget = Math.abs(this.x - potentialTargetXCenter) + Math.abs(this.y - potentialTargetYCenter);
+                    
+                    // If the potential target is closer, make it the new target. Otherwise, keep the same target.
+                    this.target =  distFromCurrentTarget > distFromPotentialTarget ? potentialTarget : this.target;
+                }
+            }
+
+            // Remove the bullet if there is no target
+            if (!this.target) {
+                this.removeFromWorld = true;
+            }
+        }
+
+        this.timeToLive--;
+        if (this.timeToLive === 0) this.removeFromWorld = true;
+        this.checkBounds();
+        this.updateBB();
+    }
+
+    updateBB() {
+        const radius = 10;
+        super.updateBB(radius);
+    }
+
+    draw(ctx) {
+        ctx.beginPath();
+        ctx.arc(this.BB.xCenter, this.BB.yCenter, this.BB.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'Yellow';
+        ctx.fill();
+
+        // create radial gradient
+        var radial = ctx.createRadialGradient(this.BB.xCenter, this.BB.yCenter, this.BB.radius - 10, this.BB.xCenter, this.BB.yCenter, this.BB.radius - 1);
+        
+        // dark yellow
+        radial.addColorStop(0, '#605B0E');
+
+        // yellow
+        radial.addColorStop(1, '#FEE12B');
+
+        ctx.fillStyle = radial;
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+
+        if (PARAMS.DEBUG) this.drawBB(ctx);
     }
 }
