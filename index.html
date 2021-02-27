@@ -7,6 +7,10 @@
 
     <title>What The Shmup</title>
     <link rel="stylesheet" href="game-menu.css">
+    <link rel="stylesheet" href="controls.css">
+    <link rel="stylesheet" href="enemy.css">
+    <link rel="stylesheet" href="level-select.css">
+    <link rel="stylesheet" href="powerups.css">
     <link rel="stylesheet" href="style.css">
     <script defer src="src/loadFiles.js"></script>
 </head>
@@ -40,23 +44,59 @@
             <img id='pu-img' src="res/powerups/health_pu.png" alt="Image of power up">
             <p id='pu-desc'>Restores one bar of player health</p>
         </div>
-        <input type="checkbox" id="debug" checked> Debug
+
+
+	<input type="checkbox" id="debug" checked> Debug
         <input type="checkbox" id="invincible"> Invincible
-        <input type="checkbox" id="mute"> Mute
-        <input type="range" id="volume" min="0" max="1" value="0.1" step="0.05"> Volume
+	<div>
+		<label for="volume">Volume</label>
+		<input type="range" id="volume" min="0" max="1" value="0.1" step="0.05"> 
+	</div>
+	<div>
+		<input type="checkbox" id="mute"> Mute
+	</div>
     </div>
 
     <div class="main-menu">
 
         <div class="menu-bar">
-            <p>Paused</p>
+            <p id="paused-label">Paused</p>
+            <p id="start-label">Start</p>
         </div>
 
         <h1>What the Schmup?</h1>
-        <button id="control-btn">Controls</button>
+
+        <div class="top-container">
+
+            <div class="game-menu">
+                <p id='player-1'>Player 1</p>
+                <img id='player-img' src="res/player.png" alt="Image player ship">
+                <p id='player-desc'>Player ship</p>
+            </div>
+
+
+            <div class="enemy-powerup-container">
+                <button id="enemy-btn">Enemies</button>
+                <button id="powerup-btn">Power ups</button>
+            </div>
+
+        </div>
+
+
+
+        <div class="controls-levels-container">
+            <button id="control-btn">Controls</button>
+            <button id="level-select-btn">Level Select</button>
+        </div>
+
         <p id="pause-info">Press P to unpause</p>
         <p id="credits">Credits</p>
+
+
     </div>
+
+
+
 
     <div class="main-menu control-menu">
         <div class="menu-bar">
@@ -124,8 +164,10 @@
             <p id="pause">Pause</p>
             <p>P to pause and unpause game</p>
         </div>
-
     </div>
+
+
+
 </body>
 
 </html>
