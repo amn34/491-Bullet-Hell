@@ -46,11 +46,11 @@
     left: 5px;
 }
 
-#nav-back {
+.nav-back {
     position: relative;
     right: 300px;
 }
-#nav-back {
+.nav-back {
     cursor: pointer;
 }
 

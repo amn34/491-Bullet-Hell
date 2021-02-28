@@ -1,0 +1,20 @@
+.img-container {
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	width: 200px;
+	height: 200px;
+}
+
+.powerup-img {
+	width: 100px;
+	height: 100px;
+	align-self: center;
+}
+
+.pu-label {
+	font-size:2em;
+}
+
+
