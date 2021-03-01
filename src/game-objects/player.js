@@ -504,17 +504,16 @@ class CompanionBullet extends Bullet {
                     this.target =  distFromCurrentTarget > distFromPotentialTarget ? potentialTarget : this.target;
                 }
             }
-
-            // Remove the bullet if there is no target
-            if (!this.target) {
-                this.removeFromWorld = true;
-            }
         }
 
         this.timeToLive--;
-        if (this.timeToLive === 0) this.removeFromWorld = true;
         this.checkBounds();
         this.updateBB();
+
+        // Remove the bullet if there is no target
+        if (this.target == null || this.target.removeFromWorld || this.timeToLive == 0) {
+            this.removeFromWorld = true;
+        }
     }
 
     updateBB() {
