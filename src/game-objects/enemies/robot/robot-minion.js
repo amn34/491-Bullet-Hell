@@ -5,8 +5,9 @@ class RobotMinion extends Enemy {
         const height = 32;
         super(game, x, y, width, height, scale);
 
-        this.sprite = ASSET_MANAGER.getAsset("./res/enemies/eye.png");
-        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 8, 0.2, 0, false, true));
+        this.sprite = ASSET_MANAGER.getAsset("./res/enemies/joypad.png");
+        // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
+        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 13, 0.2, 0, false, true));
 
         // For movement
         this.velocity = { x: 0, y: 0 };

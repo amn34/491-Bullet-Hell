@@ -3,12 +3,14 @@ class HomingRobot extends Enemy {
     constructor(game, x, y) {
         const scale = 3;
         const width = 32;
-        const height = 28;
+        const height = 32;
         super(game, x, y, width, height, scale);
 
-        this.sprite = ASSET_MANAGER.getAsset("./res/enemies/finger_gun_dude.png");
-        this.loadAnimations();
-        this.animationIndex = 0;
+        this.sprite = ASSET_MANAGER.getAsset("./res/enemies/robothand.png");
+        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 11, 0.2, 0, false, true));
+
+        //this.loadAnimations();
+        //this.animationIndex = 0;
 
         this.life = 10;
         this.canShoot = 0;
@@ -17,14 +19,10 @@ class HomingRobot extends Enemy {
         this.score = 200;
     };
 
-    loadAnimations() {
+    /*loadAnimations() {
         // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
         // Idle Animation
-        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 3, 1, 0, false, false));
-        // Finger 1 
-        this.animations.push(new Animator(this.sprite, 0, 32, this.width, this.height, 0.3, 1, 0, false, false));
-        // Finger 2
-        this.animations.push(new Animator(this.sprite, 32, 32, this.width, this.height, 0.3, 1, 0, false, false));
+        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 11, 0.2, 0, false, false));
     };
 
     draw(ctx) {
@@ -42,7 +40,7 @@ class HomingRobot extends Enemy {
         if (this.animations[this.animationIndex].isDone()) {
             this.animationIndex = (this.animationIndex + 1) % 3;
         }
-    };
+    }; */
 
     update() {
         this.updateBB();
