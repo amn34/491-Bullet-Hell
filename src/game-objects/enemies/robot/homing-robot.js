@@ -7,10 +7,8 @@ class HomingRobot extends Enemy {
         super(game, x, y, width, height, scale);
 
         this.sprite = ASSET_MANAGER.getAsset("./res/enemies/robothand.png");
-        this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 11, 0.2, 0, false, true));
-
-        //this.loadAnimations();
-        //this.animationIndex = 0;
+        this.loadAnimations();
+        this.animationIndex = 0;
 
         this.life = 10;
         this.canShoot = 0;
@@ -19,10 +17,13 @@ class HomingRobot extends Enemy {
         this.score = 200;
     };
 
-    /*loadAnimations() {
+    loadAnimations() {
         // Animator(this.sprite, x, y, width, height, framesCount, duration, padding, reverse, loop));
         // Idle Animation
         this.animations.push(new Animator(this.sprite, 0, 0, this.width, this.height, 11, 0.2, 0, false, false));
+
+        // Shooting animation
+        this.animations.push(new Animator(this.sprite, this.width * 11, 0, this.width, this.height, 11, 0.2, 0, false, false));
     };
 
     draw(ctx) {
@@ -30,28 +31,23 @@ class HomingRobot extends Enemy {
         this.animations[this.animationIndex].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
 
         if (this.animationIndex === 1) {
-            this.animations[0] = new Animator(this.sprite, 0, 0, this.width, this.height, 3, 1, 0, false, false);
-        } else if (this.animationIndex === 2) {
-            this.animations[1] = new Animator(this.sprite, 0, 32, this.width, this.height, 0.3, 1, 0, false, false);
+            this.animations[0] = new Animator(this.sprite, 0, 0, this.width, this.height, 11, 0.2, 0, false, false);
         } else {
-            this.animations[2] = new Animator(this.sprite, 32, 32, this.width, this.height, 0.3, 1, 0, false, false);
+            this.animations[1] = new Animator(this.sprite, this.width * 11, 0, this.width, this.height, 11, 0.2, 0, false, false);
         }
 
         if (this.animations[this.animationIndex].isDone()) {
-            this.animationIndex = (this.animationIndex + 1) % 3;
+            this.animationIndex = (this.animationIndex + 1) % 2;
         }
-    }; */
+    };
 
     update() {
         this.updateBB();
         super.checkCollision(this.game.entities.bullets);
 
-
         this.canShoot++;
 
-
-
-        if (this.canShoot == 100) {
+        if (this.canShoot == 175) {
             let center = this.x + (this.width / 1.5);
             this.game.addBullet(new HomingBullet(this.game, center, this.y + this.height * 3, -5, -5, 1));
             this.game.addBullet(new HomingBullet(this.game, center, this.y + this.height * 3, -4, -5, 1));
@@ -70,7 +66,7 @@ class HomingRobot extends Enemy {
     };
 
     updateBB() {
-        const radius = 57;
+        const radius = 47;
         super.updateBB(radius);
     };
 }
@@ -88,9 +84,6 @@ class HomingBullet extends Bullet {
     };
 
     update() {
-        // this.y += this.bulletSpeed;
-        // this.x += Math.sin(this.y * this.bulletSpeed / 90) * 4;
-
         //set the bullets to move towards the player
         if (this.timer <= 45) {
             this.timer++;
@@ -127,7 +120,7 @@ class HomingBullet extends Bullet {
         ctx.arc(this.BB.xCenter, this.BB.yCenter, this.BB.radius, 0, Math.PI * 2);
         if (this.homing) {
             ctx.fillStyle = 'Red';
-            // var radial = context.createRadialGradient(startX, startY, startRadius, endX, endY, endRadius);
+
             // create radial gradient
             var radial = ctx.createRadialGradient(this.BB.xCenter, this.BB.yCenter, this.BB.radius - 10, this.BB.xCenter, this.BB.yCenter, this.BB.radius - 1);
 

@@ -95,8 +95,8 @@ ASSET_MANAGER.downloadAll(function () {
 
 	gameEngine.setLevel(new CaveLevel(gameEngine));
 	//gameEngine.setLevel(new FactoryLevel(gameEngine));
-	// gameEngine.setLevel(new SpaceLevel(gameEngine));
-	// gameEngine.setLevel(new TestLevel(gameEngine));
+	//gameEngine.setLevel(new SpaceLevel(gameEngine));
+	//gameEngine.setLevel(new TestLevel(gameEngine));
 
 	gameEngine.start();
 });
