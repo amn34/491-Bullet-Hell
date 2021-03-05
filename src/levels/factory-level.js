@@ -1,6 +1,6 @@
 class FactoryLevel extends Level {
-    constructor(game) {
-        super(game);
+    constructor(game, newPlayer) {
+        super(game, newPlayer);
 
         this.createLevel();
         super.enemyTotal(this.level);

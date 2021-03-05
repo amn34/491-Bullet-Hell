@@ -54,19 +54,18 @@ class GameEngine {
         this.score = 0;
         this.displayScore.innerHTML = 0;
         this.timer = new Timer();
-        this.setLevel(new this.levels[this.currentLevel](this));
+        this.setLevel(new this.levels[this.currentLevel](this, true));
     };
 
     nextLevel() {
         this.timer.displayTotalTime();
-        this.entities = [];
         this.timer = new Timer();
         this.score = 0;
         this.displayScore.innerHTML = 0;
 
         // loop back to start once last level is reached
         this.currentLevel = (this.currentLevel + 1) % this.levels.length;
-        this.setLevel(new this.levels[this.currentLevel](this));
+        this.setLevel(new this.levels[this.currentLevel](this, false));
     }
 
     startInput() {
