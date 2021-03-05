@@ -1,5 +1,5 @@
 class Level {
-    constructor(game) {
+    constructor(game, newPlayer) {
         this.game = game;
         this.life = 3;
         this.totalLife = 3;
@@ -23,7 +23,17 @@ class Level {
         game.entities.particles = [];
         game.entities.bullets = [];
         game.entities.powerups = [];
-        game.entities.player = new Player(this.game);
+
+        if(newPlayer) {
+            game.entities.player = new Player(this.game);
+        } else {
+            const player = game.entities.player;
+            console.log("Player: " + player);
+            player.x = PARAMS.WIDTH / 2 - (player.width * player.scale / 2);
+            player.y = 740;
+        }
+
+
     }
 
     updateAudio() {
