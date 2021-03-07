@@ -55,6 +55,9 @@
 	<div>
 		<input type="checkbox" id="mute"> Mute
 	</div>
+        <div>
+            <p>Press P for Main Menu</p>
+        </div>
     </div>
 
     <div class="main-menu">
@@ -64,7 +67,7 @@
             <p id="start-label">Start</p>
         </div>
 
-        <h1>What the Schmup?</h1>
+        <h1>What the Shmup?</h1>
 
         <div class="top-container">
 
@@ -90,8 +93,6 @@
 
 	<p id='play-info'>Press P to Play</p>
         <p id="pause-info">Press P to unpause</p>
-        <p id="credits">Credits</p>
-
     </div>
 
 
@@ -216,84 +217,80 @@
         </div>
 
         <div class='enemy-menu-container'>
-
             <div id='cthulhu' class='img-container'>
                 <p class='enemy-title'>Cthulhu Boss</p>
                 <img class='enemy-img' id='c-boss-img' src="res/enemies/cthulhuSprite.png"
                      alt="Cthulhu boss">
-                <p class='enemy-desc'>Cthulhu boss</p>
             </div>
 
             <div id='cthulhu-minion' class='img-container'>
                 <p class='enemy-title'>Minion</p>
                 <img class='enemy-img' id='c-minion-img' src="res/enemies/cth_minion_attack.png"
-                     alt="Cthulhu minion">
-                <p class='enemy-desc'>General Cthulhu minion</p>
+                         alt="Cthulhu minion">
             </div>
 
             <div id='cthulhu-crab' class='img-container'>
                 <p class='enemy-title'>Crab</p>
                 <img class='enemy-img' id='c-crab-img' src="res/enemies/cthulhuCrab.png"
                      alt="Cthulhu Crab">
-                <p class='enemy-desc'>Cthulhu crab minion</p>
             </div>
 
             <div id='cthulhu-squid' class='img-container'>
                 <p class='enemy-title'>Squid</p>
                 <img class='enemy-img' id='c-squid-img' src="res/enemies/cthulhuSquid.png"
                      alt="Cthulhu squid">
-                <p class='enemy-desc'>Cthulhu squid minion</p>
             </div>
 
             <div id='cthulhu-triangle' class='img-container'>
                 <p class='enemy-title'>Triangle</p>
                 <img class='enemy-img' id='c-triangle-img' src="res/enemies/cthulhuTriangle.png"
                      alt="Cthulhu triangle">
-                <p class='enemy-desc'>Cthulhu triangle minion</p>
             </div>
 
             <div id='brain' class='img-container'>
                 <p class='enemy-title'>Brain</p>
                 <img class='enemy-img' id='brain-img' src="res/enemies/brain.png"
                      alt="Brain image">
-                <p class='enemy-desc'>Brain Boss</p>
             </div>
 
             <div id='eye' class='img-container'>
                 <p class='enemy-title'>Eye</p>
                 <img class='enemy-img' id='eye-img' src="res/enemies/eye.png"
                      alt="Eye image">
-                <p class='enemy-desc'>Eye image</p>
             </div>
 
             <div id='mouth' class='img-container'>
                 <p class='enemy-title'>Mouth</p>
                 <img class='enemy-img' id='mouth-img' src="res/enemies/mouth.png"
                      alt="Mouth image">
-                <p class='enemy-desc'>mouth image</p>
             </div>
 
             <div id='nose' class='img-container'>
                 <p class='enemy-title'>Nose</p>
                 <img class='enemy-img' id='nose-img' src="res/enemies/nose.png"
                      alt="Nose image">
-                <p class='enemy-desc'>nose minion</p>
             </div>
-
 
             <div id='finger-gun' class='img-container'>
                 <p class='enemy-title'>Finger Gun Dude</p>
                 <img class='enemy-img' id='finger-gun-img' src="res/enemies/finger_gun_dude.png"
                      alt="Finger gun">
-                <p class='enemy-desc'>finger gun dude</p>
+            </div>
+
+            <div id='joy-pad' class='img-container'>
+                <p class='enemy-title'>Joy pad</p>
+                <img class='enemy-img' id='joy-pad-img' src="res/enemies/joypad.png"
+                     alt="Joy pad image">
             </div>
 
 
+            <div id='robot-hand' class='img-container'>
+                <p class='enemy-title'>Robot Hand</p>
+                <img class='enemy-img' id='robot-hand-img' src="res/enemies/robothand.png"
+                     alt="Robot hand">
+            </div>
 
         </div>
-
-
-
     </div>
 
 
@@ -302,11 +299,22 @@
             <p class="nav-back">Back</p>
             <p>Paused</p>
         </div>
-	    <p>Level select</p>
+        <div id='cave-container' class='img-container'>
+            <p class='level-title'>Cave Level</p>
+            <img class='level-img' id='cave-img' src="res/cavebg.png"
+                 alt="cave image">
+        </div>
+        <div id='factory-container' class='img-container'>
+            <p class='level-title'>Factory Level</p>
+            <img class='level-img' id='factory-img' src="res/factorybg.png"
+                 alt="factory image">
+        </div>
+        <div id='space-container' class='img-container'>
+            <p class='level-title'>Space Level</p>
+            <img class='level-img' id='space-img' src="res/spacebg.png"
+                 alt="space image">
+        </div>
     </div>
 
-
-
 </body>
-
 </html>
