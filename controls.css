@@ -1,0 +1,56 @@
+
+.directional {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: rgba(40, 40, 40, 0);
+}
+
+.directions {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: rgba(40, 40, 40, 0);
+}
+
+.diagonals {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-left: 70px;
+    padding-left: 13px;
+    background-color: rgba(40, 40, 40, 0);
+}
+
+.arrows {
+    display: flex;
+    flex-direction: row;
+    background-color: rgba(40, 40, 40, 0);
+}
+
+.align {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: rgba(40, 40, 40, 0);
+}
+
+#shift {
+    position: relative;
+    right: 8px;
+}
+
+#pause {
+    position: relative;
+    left: 5px;
+}
+
+.nav-back {
+    position: relative;
+    right: 300px;
+}
+.nav-back {
+    cursor: pointer;
+}
+

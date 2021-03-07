@@ -7,6 +7,10 @@
 
     <title>What The Shmup</title>
     <link rel="stylesheet" href="game-menu.css">
+    <link rel="stylesheet" href="controls.css">
+    <link rel="stylesheet" href="enemy.css">
+    <link rel="stylesheet" href="level-select.css">
+    <link rel="stylesheet" href="powerups.css">
     <link rel="stylesheet" href="style.css">
     <script defer src="src/loadFiles.js"></script>
 </head>
@@ -40,27 +44,62 @@
             <img id='pu-img' src="res/powerups/health_pu.png" alt="Image of power up">
             <p id='pu-desc'>Restores one bar of player health</p>
         </div>
-        <input type="checkbox" id="debug" checked> Debug
+
+
+	<input type="checkbox" id="debug" checked> Debug
         <input type="checkbox" id="invincible"> Invincible
-        <input type="checkbox" id="mute"> Mute
-        <input type="range" id="volume" min="0" max="1" value="0.1" step="0.05"> Volume
+	<div>
+		<label for="volume">Volume</label>
+		<input type="range" id="volume" min="0" max="1" value="0.1" step="0.05"> 
+	</div>
+	<div>
+		<input type="checkbox" id="mute"> Mute
+	</div>
     </div>
 
     <div class="main-menu">
 
         <div class="menu-bar">
-            <p>Paused</p>
+            <p id="paused-label">Paused</p>
+            <p id="start-label">Start</p>
         </div>
 
         <h1>What the Schmup?</h1>
-        <button id="control-btn">Controls</button>
+
+        <div class="top-container">
+
+            <div id='player-display' class="game-menu">
+                <p id='player-1'>Player 1</p>
+                <img id='player-img' src="res/player.png" alt="Image player ship">
+            </div>
+
+
+            <div class="enemy-powerup-container">
+                <button id="enemy-btn">Enemies</button>
+                <button id="powerup-btn">Power ups</button>
+            </div>
+
+        </div>
+
+
+
+        <div class="controls-levels-container">
+            <button id="control-btn">Controls</button>
+            <button id="level-select-btn">Level Select</button>
+        </div>
+
+	<p id='play-info'>Press P to Play</p>
         <p id="pause-info">Press P to unpause</p>
         <p id="credits">Credits</p>
+
     </div>
 
+
+
     <div class="main-menu control-menu">
+
         <div class="menu-bar">
-            <p id="nav-back">Back</p>
+            <p class="nav-back">Back</p>
             <p>Paused</p>
         </div>
 
@@ -124,8 +163,150 @@
             <p id="pause">Pause</p>
             <p>P to pause and unpause game</p>
         </div>
+    </div>
+
+
+    <div class='main-menu powerup-menu'>
+
+	<div class="menu-bar">
+		<p class="nav-back">Back</p>
+		<p>Paused</p>
+	</div>
+
+	<div class='powerup-menu-container'>
+		<div id='player-health' class='img-container'>
+			<p class='pu-title'>Player Health</p>
+			<img class='powerup-img' id='health-pu-img' src="res/powerups/health_pu.png"
+					alt="Health image">
+			<p class='pu-desc'>Restores one bar of players health</p>
+		</div>
+		<div id='bullet' class='img-container'>
+			<p class='pu-title'>Bullet</p>
+			<img class='powerup-img' id='ap1-pu-img' src="res/powerups/ap1_pu.png"
+					alt="Ap power up 1 image">
+			<p class='pu-desc'>Increases the number of player projectiles</p>
+		</div>
+		<div id='fire-rate' class='img-container'>
+			<p class='pu-title'>Fire Rate</p>
+			<img class='powerup-img' id='fire-rate-pu-img' src="res/powerups/fire_rate_pu.png"
+					alt="Health image">
+			<p class='pu-desc'>Increases player fire rate</p>
+		</div>
+		<div id='power-up' class='img-container'>
+			<p class='pu-title'>Damage</p>
+			<img class='powerup-img' id='power-up-img' src="res/powerups/power_pu.png"
+					alt="Health image">
+			<p class='pu-desc'>Increases damage against bosses</p>
+		</div>
+		<div id='shield' class='img-container'>
+			<p class='pu-title'>Shield</p>
+			<img class='powerup-img' id='shield-pu-img' src="res/powerups/shield_pu.png"
+					alt="Health image">
+			<p class='pu-desc'>Grants player a stackable shield</p>
+		</div>
+	</div>
 
     </div>
+
+
+    <div class='main-menu enemies-menu'>
+        <div class="menu-bar">
+            <p class="nav-back">Back</p>
+            <p>Paused</p>
+        </div>
+
+        <div class='enemy-menu-container'>
+
+            <div id='cthulhu' class='img-container'>
+                <p class='enemy-title'>Cthulhu Boss</p>
+                <img class='enemy-img' id='c-boss-img' src="res/enemies/cthulhuSprite.png"
+                     alt="Cthulhu boss">
+                <p class='enemy-desc'>Cthulhu boss</p>
+            </div>
+
+            <div id='cthulhu-minion' class='img-container'>
+                <p class='enemy-title'>Minion</p>
+                <img class='enemy-img' id='c-minion-img' src="res/enemies/cth_minion_attack.png"
+                     alt="Cthulhu minion">
+                <p class='enemy-desc'>General Cthulhu minion</p>
+            </div>
+
+            <div id='cthulhu-crab' class='img-container'>
+                <p class='enemy-title'>Crab</p>
+                <img class='enemy-img' id='c-crab-img' src="res/enemies/cthulhuCrab.png"
+                     alt="Cthulhu Crab">
+                <p class='enemy-desc'>Cthulhu crab minion</p>
+            </div>
+
+            <div id='cthulhu-squid' class='img-container'>
+                <p class='enemy-title'>Squid</p>
+                <img class='enemy-img' id='c-squid-img' src="res/enemies/cthulhuSquid.png"
+                     alt="Cthulhu squid">
+                <p class='enemy-desc'>Cthulhu squid minion</p>
+            </div>
+
+            <div id='cthulhu-triangle' class='img-container'>
+                <p class='enemy-title'>Triangle</p>
+                <img class='enemy-img' id='c-triangle-img' src="res/enemies/cthulhuTriangle.png"
+                     alt="Cthulhu triangle">
+                <p class='enemy-desc'>Cthulhu triangle minion</p>
+            </div>
+
+            <div id='brain' class='img-container'>
+                <p class='enemy-title'>Brain</p>
+                <img class='enemy-img' id='brain-img' src="res/enemies/brain.png"
+                     alt="Brain image">
+                <p class='enemy-desc'>Brain Boss</p>
+            </div>
+
+            <div id='eye' class='img-container'>
+                <p class='enemy-title'>Eye</p>
+                <img class='enemy-img' id='eye-img' src="res/enemies/eye.png"
+                     alt="Eye image">
+                <p class='enemy-desc'>Eye image</p>
+            </div>
+
+            <div id='mouth' class='img-container'>
+                <p class='enemy-title'>Mouth</p>
+                <img class='enemy-img' id='mouth-img' src="res/enemies/mouth.png"
+                     alt="Mouth image">
+                <p class='enemy-desc'>mouth image</p>
+            </div>
+
+            <div id='nose' class='img-container'>
+                <p class='enemy-title'>Nose</p>
+                <img class='enemy-img' id='nose-img' src="res/enemies/nose.png"
+                     alt="Nose image">
+                <p class='enemy-desc'>nose minion</p>
+            </div>
+
+
+            <div id='finger-gun' class='img-container'>
+                <p class='enemy-title'>Finger Gun Dude</p>
+                <img class='enemy-img' id='finger-gun-img' src="res/enemies/finger_gun_dude.png"
+                     alt="Finger gun">
+                <p class='enemy-desc'>finger gun dude</p>
+            </div>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+    <div class='main-menu level-select-menu'>
+        <div class="menu-bar">
+            <p class="nav-back">Back</p>
+            <p>Paused</p>
+        </div>
+	    <p>Level select</p>
+    </div>
+
+
+
 </body>
 
 </html>

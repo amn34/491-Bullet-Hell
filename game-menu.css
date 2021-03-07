@@ -9,7 +9,6 @@
     border: 1px solid rgba(40, 40, 40, 0.9);
     display: none;
     flex-direction: column;
-
 }
 
 .menu-bar {
@@ -26,8 +25,9 @@ h1 {
     text-align: center;
     font-size: 4em;
     position: relative;
-    top: 50px;
+    bottom: 10px;
     background-color: rgba(40, 40, 40, 0);
+    margin-bottom: 5px;
 }
 
 p {
@@ -40,7 +40,7 @@ button {
     color: black;
     background: rgba(228, 230, 235, 0.5) none;
     border: 2px solid black;
-    border-radius: 50px;
+    border-radius: 20px;
     text-align: center;
     font-size: 1.5em;
     width: 300px;
@@ -51,76 +51,77 @@ button:hover {
     cursor: pointer;
 }
 
-#control-btn {
+#player-display {
+	border: none;
+	position: relative;
+	left: 23px;
+	width: 250px;
+	height: 300px;
+}
+
+#player-1 {
+	font-size: 2em;
+}
+
+#player-img {
+	width: 200px;
+	height: 200px;
+}
+
+.top-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.enemy-powerup-container {
+	position: relative;
+	right: 1px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#powerup-btn {
+	position: relative;
+}
+
+.controls-levels-container {
     position: relative;
-    top: 170px;
+    top: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#paused-label {
+    display: none;
+}
+
+/*#control-btn {*/
+/*    position: relative;*/
+/*    top: 300px;*/
+/*    align-self: center;*/
+/*}*/
+
+
+#play-info {
+    position: relative;
+    font-size: 1.7em;
+    top: 100px;
     align-self: center;
 }
 
 #pause-info {
+	display: none;
     position: relative;
-    top: 230px;
+    font-size: 1.7em;
+    top: 90px;
     align-self: center;
 }
 
 #credits {
     position: relative;
-    top: 360px;
+    top: 100px;
     align-self: center;
 }
-
-.directional {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    background-color: rgba(40, 40, 40, 0);
-}
-
-.directions {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    background-color: rgba(40, 40, 40, 0);
-}
-
-.diagonals {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    margin-left: 70px;
-    padding-left: 13px;
-    background-color: rgba(40, 40, 40, 0);
-}
-
-.arrows {
-    display: flex;
-    flex-direction: row;
-    background-color: rgba(40, 40, 40, 0);
-}
-
-.align {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    background-color: rgba(40, 40, 40, 0);
-}
-
-#shift {
-    position: relative;
-    right: 8px;
-}
-
-#pause {
-    position: relative;
-    left: 5px;
-}
-
-#nav-back {
-    position: relative;
-    right: 300px;
-}
-#nav-back {
-    cursor: pointer;
-}
-

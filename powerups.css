@@ -1,0 +1,60 @@
+.img-container {
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	width: 190px;
+	height: 190px;
+}
+
+.powerup-img {
+	width: 75px;
+	height: 75px;
+	align-self: center;
+}
+
+.pu-title {
+	font-size: 1.15em;
+	margin-top: 0;
+}
+
+.pu-desc {
+	font-size: 0.75em;
+	padding: 5px;
+}
+
+#player-health {
+	position: absolute;
+	left: 150px;
+	top: 100px;
+	background-color: rgba(40, 40, 40, 0);
+}
+
+#bullet {
+	position: absolute; 
+	left: 100px;
+	top: 400px;
+	background-color: rgba(40, 40, 40, 0);
+}
+
+#fire-rate {
+	position: absolute;
+	left: 300px;
+	top: 400px;
+	background-color: rgba(40, 40, 40, 0);
+}
+
+#power-up { 
+	position: absolute;
+	left: 500px;
+	top: 400px;
+	background-color: rgba(40, 40, 40, 0);
+}
+
+#shield {
+	position: absolute;
+	left: 450px;
+	top: 100px;
+	background-color: rgba(40, 40, 40, 0);
+}
+	

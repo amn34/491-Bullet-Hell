@@ -54,6 +54,9 @@ window.addEventListener('keydown', function (e) {
 				PARAMS.PAUSED = false;
 				document.querySelector('.main-menu').style.display = 'none';
 				document.querySelector('.control-menu').style.display = 'none';
+				document.querySelector('.enemies-menu').style.display = 'none';
+				document.querySelector('.level-select-menu').style.display = 'none';
+				document.querySelector('.powerup-menu').style.display = 'none';
 				document.querySelector('#gameWorld').focus();
 
 			} else {
@@ -65,16 +68,35 @@ window.addEventListener('keydown', function (e) {
 	}
 })
 
+document.querySelectorAll('.nav-back').forEach(function(element) {
+	element.addEventListener('click', () => {
+		document.querySelector('.powerup-menu').style.display = 'none';
+		document.querySelector('.control-menu').style.display = 'none';
+		document.querySelector('.enemies-menu').style.display = 'none';
+		document.querySelector('.level-select-menu').style.display = 'none';
+		document.querySelector('.main-menu').style.display = 'flex';
+	})
+})
+
 document.querySelector('#control-btn').addEventListener('click', () => {
 	document.querySelector('.main-menu').style.display = 'none';
 	document.querySelector('.control-menu').style.display = 'flex';
 })
 
-document.querySelector('#nav-back').addEventListener('click', () => {
-	document.querySelector('.control-menu').style.display = 'none';
-	document.querySelector('.main-menu').style.display = 'flex';
+document.querySelector('#powerup-btn').addEventListener('click', () => {
+	document.querySelector('.main-menu').style.display = 'none';
+	document.querySelector('.powerup-menu').style.display = 'flex';
 })
 
+document.querySelector('#enemy-btn').addEventListener('click', () => {
+	document.querySelector('.main-menu').style.display = 'none';
+	document.querySelector('.enemies-menu').style.display = 'flex';
+})
+
+document.querySelector('#level-select-btn').addEventListener('click', () => {
+	document.querySelector('.main-menu').style.display = 'none';
+	document.querySelector('.level-select-menu').style.display = 'flex';
+})
 
 
 ASSET_MANAGER.downloadAll(function () {

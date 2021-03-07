@@ -73,6 +73,7 @@ canvas:focus {
     padding: 5px;
 }
 
+
 @media screen and (max-width: 900px) {
     .screen {
         text-align: center;
