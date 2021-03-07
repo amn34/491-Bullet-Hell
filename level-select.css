@@ -1,0 +1,46 @@
+.img-container {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 250px;
+    height: 250px;
+}
+
+.level-img {
+    width: 200px;
+    height: 200px;
+    align-self: center;
+    cursor: pointer;
+}
+
+.level-title {
+    font-size: 1.15em;
+    margin-top: 0;
+}
+
+.level-desc {
+    font-size: 0.75em;
+    padding: 5px;
+}
+
+#cave-container {
+    position: absolute;
+    left: 100px;
+    top: 125px;
+    background-color: rgba(40, 40, 40, 0);
+}
+
+#factory-container {
+    position: absolute;
+    left: 440px;
+    top: 125px;
+    background-color: rgba(40, 40, 40, 0);
+}
+
+#space-container {
+    position: absolute;
+    left: 290px;
+    top: 400px;
+    background-color: rgba(40, 40, 40, 0);
+}

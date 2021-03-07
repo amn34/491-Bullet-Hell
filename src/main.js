@@ -47,18 +47,15 @@ function loadSounds() {
 loadSounds();
 
 
-window.addEventListener('keydown', function (e) {
+window.addEventListener('keydown', (e) => {
+	pauseGame(e);
+})
+
+function pauseGame(e) {
 	switch (e.code) {
 		case 'KeyP':
 			if (PARAMS.PAUSED) {
-				PARAMS.PAUSED = false;
-				document.querySelector('.main-menu').style.display = 'none';
-				document.querySelector('.control-menu').style.display = 'none';
-				document.querySelector('.enemies-menu').style.display = 'none';
-				document.querySelector('.level-select-menu').style.display = 'none';
-				document.querySelector('.powerup-menu').style.display = 'none';
-				document.querySelector('#gameWorld').focus();
-
+				resumeGame();
 			} else {
 				PARAMS.PAUSED = true;
 				document.querySelector('.main-menu').style.display = 'flex';
@@ -66,7 +63,17 @@ window.addEventListener('keydown', function (e) {
 			}
 			break;
 	}
-})
+}
+
+function resumeGame() {
+	PARAMS.PAUSED = false;
+	document.querySelector('.main-menu').style.display = 'none';
+	document.querySelector('.control-menu').style.display = 'none';
+	document.querySelector('.enemies-menu').style.display = 'none';
+	document.querySelector('.level-select-menu').style.display = 'none';
+	document.querySelector('.powerup-menu').style.display = 'none';
+	document.querySelector('#gameWorld').focus();
+}
 
 document.querySelectorAll('.nav-back').forEach(function(element) {
 	element.addEventListener('click', () => {
@@ -97,6 +104,26 @@ document.querySelector('#level-select-btn').addEventListener('click', () => {
 	document.querySelector('.main-menu').style.display = 'none';
 	document.querySelector('.level-select-menu').style.display = 'flex';
 })
+
+
+document.querySelector('#cave-img').addEventListener('click', (e) => {
+	gameEngine.setLevel(new CaveLevel(gameEngine, true))
+	resumeGame();
+})
+
+document.querySelector('#factory-img').addEventListener('click', (e) => {
+	gameEngine.setLevel(new FactoryLevel(gameEngine, true))
+	resumeGame();
+})
+
+document.querySelector('#space-img').addEventListener('click', () => {
+	gameEngine.setLevel(new SpaceLevel(gameEngine, true))
+	resumeGame();
+
+})
+
+
+
 
 
 ASSET_MANAGER.downloadAll(function () {
