@@ -91,7 +91,13 @@ class Player {
 
     draw(ctx) {
         let animationIndex = this.life == 0 ? 0 : this.totalLife - this.life;
+
+        if(!this.canTakeDamage) {
+            ctx.globalAlpha = 0.35;
+        }
+
         this.animations[animationIndex][this.powerup].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        ctx.globalAlpha = 1.0;
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
