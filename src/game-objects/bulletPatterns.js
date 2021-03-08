@@ -19,13 +19,13 @@ function downSpiralReverseAlternative(bullet) {
 }
 
 function archimedes(bullet) {
-    bullet.x += Math.cos(bullet.angle) * (bullet.angle);
-    bullet.y += Math.sin(bullet.angle) * (bullet.angle);
+    bullet.x += Math.cos(bullet.angle) * (bullet.bulletSpeed);
+    bullet.y += Math.sin(bullet.angle) * (bullet.bulletSpeed);
 }
 
 function archimedesReverse(bullet) {
-    bullet.x -= Math.cos(bullet.angle) * (bullet.angle);
-    bullet.y -= Math.sin(bullet.angle) * (bullet.angle);
+    bullet.x -= Math.cos(bullet.angle) * (bullet.bulletSpeed);
+    bullet.y -= Math.sin(bullet.angle) * (bullet.bulletSpeed);
 }
 
 function line(bullet) {
@@ -52,6 +52,13 @@ function rosePetal(bullet) {
     const xSquared = Math.pow(Math.cos(bullet.angle), 2);
     const ySquared = Math.pow(Math.sin(bullet.angle), 2);
     bullet.x += Math.cos(bullet.angle) / Math.sqrt(xSquared + ySquared) - (2 * Math.sqrt(xSquared + ySquared));
+    bullet.y -= Math.sin(bullet.angle) * bullet.bulletSpeed;
+}
+
+function rosePetalReverse(bullet) {
+    const xSquared = Math.pow(Math.cos(bullet.angle), 2);
+    const ySquared = Math.pow(Math.sin(bullet.angle), 2);
+    bullet.x -= Math.cos(bullet.angle) / Math.sqrt(xSquared + ySquared) - (2 * Math.sqrt(xSquared + ySquared));
     bullet.y += Math.sin(bullet.angle) * bullet.bulletSpeed;
 }
 

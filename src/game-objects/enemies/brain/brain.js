@@ -24,6 +24,12 @@ class Brain extends Enemy {
 
         this.canShoot = 0;
         this.threshHold = 36;
+
+        this.currentPattern = downSpiral;
+        this.currentBullet = BrainBullet;
+        this.moveDown = false;
+        this.goUp = false;
+        this.angle = 0;
     };
 
     draw(ctx) {
@@ -47,18 +53,56 @@ class Brain extends Enemy {
 
         this.canShoot++;
 
-        if (this.canShoot === this.threshHold) {
+        if (this.canShoot >= this.threshHold) {
+
             let center = this.x + (this.width / 2) * this.scale;
-            this.game.addBullet(new BrainBullet(this.game, center, this.y + this.height, 1, downSpiral));
-            this.game.addBullet(new BrainBullet(this.game, center, this.y + this.height, 1, downSpiralReverse));
+            
+            if (this.currentPattern == downSpiral) {
+                this.game.addBullet(new this.currentBullet(this.game, center, this.y + this.height, 1, downSpiral));
+                this.game.addBullet(new this.currentBullet(this.game, center, this.y + this.height, 1, downSpiralReverse));
+            } else if (this.currentPattern != archimedes) {
+                this.game.addBullet(new this.currentBullet(this.game, this.angle, center, this.y + this.height, 1, this.currentPattern));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 60, center, this.y + this.height, 1, this.currentPattern));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 120, center, this.y + this.height, 1, this.currentPattern));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 180, center, this.y + this.height, 1, this.currentPattern));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 240, center, this.y + this.height, 1, this.currentPattern));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 300, center, this.y + this.height, 1, this.currentPattern));
+            } else {
+                this.game.addBullet(new this.currentBullet(this.game, this.angle, center, this.y + this.height, 1, archimedes));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 60, center, this.y + this.height, 1, archimedes));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 120, center, this.y + this.height, 1, archimedes));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 180, center, this.y + this.height, 1, archimedes));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 240, center, this.y + this.height, 1, archimedes));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 300, center, this.y + this.height, 1, archimedes));
+
+                this.game.addBullet(new this.currentBullet(this.game, this.angle, center, this.y + this.height, 1, archimedesReverse));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 60, center, this.y + this.height, 1, archimedesReverse));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 120, center, this.y + this.height, 1, archimedesReverse));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 180, center, this.y + this.height, 1, archimedesReverse));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 240, center, this.y + this.height, 1, archimedesReverse));
+                this.game.addBullet(new this.currentBullet(this.game, this.angle + 300, center, this.y + this.height, 1, archimedesReverse));
+            }
+
+            this.angle = (this.angle + 12) % 360;
             this.canShoot = 0;
         }
 
-        if (this.x === this.startX + 50 && this.goRight) {
+        if (this.x === this.startX + 70 && this.goRight) {
             this.goRight = !this.goRight;
 
-        } else if (this.x === this.startX - 50 && !this.goRight) {
+        } else if (this.x === this.startX - 70 && !this.goRight) {
             this.goRight = !this.goRight;
+        }
+
+
+        if (this.moveDown && this.y < this.startY + 230) {
+            this.y += 2;
+        }
+
+        if (this.goRight) {
+            this.x++;
+        } else {
+            this.x--;
         }
 
         // Timer that determines spawning intervals.
@@ -77,12 +121,26 @@ class Brain extends Enemy {
         } else if (this.life >= this.totalLife * 1 / 2) {
             this.spawnFrequency = 9;
             this.spawnMax = 5;
+
+            // when the brain gets 50% health change firing pattern
+            this.currentBullet = MadBrainBullet;
+            this.currentPattern = sideHelix;
+
+            // allow the brain to take up the center of the screen
+            this.moveDown = true;
+
         } else if (this.life >= this.totalLife * 1 / 4) {
             this.spawnFrequency = 8;
             this.spawnMax = 5;
+
+            this.currentPattern = line;
+            this.threshHold = 26;
         } else if (this.life >= this.totalLife * 1 / 8) { // Life very low - go crazy.
             this.spawnFrequency = 5; // Ultimate
             this.spawnMax = 5; // Ultimate
+
+            this.currentPattern = archimedes;
+            this.threshHold = 16;
         }
 
         // Randomize x-coordinate for minion.
@@ -135,4 +193,34 @@ class BrainBullet extends Bullet {
         super.updateBB(radius);
     };
 
+}
+
+class MadBrainBullet extends Bullet {
+    constructor(game, angle, x, y, scale, callback) {
+        const radius = 15;
+        const bulletSpeed = 5;
+        const bulletType = 1; //enemy bullet
+        super(game, x, y, scale, radius, bulletSpeed, bulletType);
+        this.callback = callback;
+        this.angle = angle;
+        this.timeToLive = 800;
+    };
+
+    update() {
+        this.updateBB();
+        super.checkBounds();
+        // this.angle = this.boss.angle;
+        // this.angle += 0.04;
+        this.timeToLive--;
+        // this.x = this.boss.x;
+        // this.y = this.boss.y;
+        this.callback(this);
+
+        if (this.timeToLive == 0) this.removeFromWorld = true;
+    };
+
+    updateBB() {
+        const radius = 10;
+        super.updateBB(radius);
+    };
 }
