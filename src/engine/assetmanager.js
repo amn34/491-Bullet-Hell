@@ -18,8 +18,8 @@ class AssetManager {
     downloadAll(callback) {
         if (this.downloadQueue.length === 0) setTimeout(callback, 10);
         for (var i = 0; i < this.downloadQueue.length; i++) {
-            var img = new Image();
-            var aud = new Audio();
+
+
             var that = this;
 
             var path = this.downloadQueue[i];
@@ -28,6 +28,7 @@ class AssetManager {
 
             switch (ext) {
                 case 'png':
+                    var img = new Image();
                     img.addEventListener("load", function () {
                         console.log("Loaded " + this.src);
                         that.successCount++;
@@ -45,6 +46,7 @@ class AssetManager {
                     break;
                 case 'mp3':
                 case 'wav':
+                    var aud = new Audio();
                     aud.addEventListener("loadeddata", function () {
                         console.log("Loaded " + this.src);
                         that.successCount++;
@@ -57,13 +59,15 @@ class AssetManager {
                         if (that.isDone()) callback();
                     });
 
-                    aud.addEventListener("ended", function () {
-                        aud.pause();
-                        aud.currentTime = 0;
-                    });
+                    // aud.addEventListener("ended", function () {
+                    //     aud.pause();
+                    //     aud.currentTime = 0;
+                    //     console.log('ended: ', path);
+                    // });
 
                     aud.src = path;
                     aud.load()
+                    console.log(aud);
 
                     this.cache[path] = aud;
                     break;
@@ -110,9 +114,18 @@ class AssetManager {
         }
     };
 
+    playBackgroundMusic(path) {
+        var aud = this.cache[path];
+        aud.currentTime = 0;
+        aud.play();
+        aud.addEventListener("ended", function () {
+            aud.play();
+        });
+    }
+
     autoRepeat(path) {
         var aud = this.cache[path];
-        aud.ddEventListener("ended", function () {
+        aud.addEventListener("ended", function () {
             aud.play();
         });
     };
