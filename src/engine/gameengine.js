@@ -169,6 +169,9 @@ class GameEngine {
      * @param {Level} level - Level to start playing 
      */
     setLevel(level) {
+        if(this.entities.level) {
+            this.entities.level.bgMusic.pause();
+        }
         this.entities.level = level;
     }
 
