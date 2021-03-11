@@ -78,7 +78,7 @@ class CthulhuMinion extends Enemy {
         this.y += this.velocity.y * TICK * this.scale;
 
         this.updateBB();
-        this.bulletPattern(200, 250, 50);
+        this.bulletPattern(200, 113, 211);
         super.checkCollision(this.game.entities.bullets);
         super.remove();
     }

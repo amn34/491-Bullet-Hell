@@ -53,6 +53,15 @@ class Bullet {
     }
 
     draw(ctx) {
+
+        if(this.BB.xCenter - this.BB.radius <= 0 || this.BB.xCenter + this.BB.radius >= PARAMS.WIDTH) {
+            return;
+        }
+        if(this.BB.yCenter - this.BB.radius <= 0 || this.BB.yCenter + this.BB.radius >= PARAMS.HEIGHT) {
+            return;
+        }
+
+
         ctx.beginPath();
         ctx.arc(this.BB.xCenter, this.BB.yCenter, this.BB.radius, 0, Math.PI * 2);
         ctx.fillStyle = 'Red';

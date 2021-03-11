@@ -28,7 +28,7 @@ class Cthulhu extends Enemy {
         this.restoreCount = 0;
 
         // Life of enemy
-        this.life = 5000;
+        this.life = 1000;
         this.totalLife = this.life;
 
         this.velocity = { x: 0, y: 0 };
@@ -45,6 +45,11 @@ class Cthulhu extends Enemy {
         this.canShoot = 0;
         this.threshHold = 60;
         this.bulletPattern = [];
+        this.bPattern = archimedes;
+
+        this.boss = true;
+
+        this.angle = 0;
         this.updateBB();
     }
 
@@ -105,15 +110,76 @@ class Cthulhu extends Enemy {
         if (this.canShoot === this.threshHold) {
             this.canShoot = 0;
             let center = this.x + (this.width / 2) * this.scale;
-            this.bulletPattern.forEach(bPattern => {
-                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, bPattern));
-            });
+
+            if (this.bPattern == archimedes) {
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, bPattern, this.angle + offset));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, bPattern, this.angle + offset));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, bPattern, this.angle + offset));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, bPattern, this.angle + offset));
+
+            } else if (this.bPattern == archimedesReverse) {
+                let offset = 0;
+
+                for (let i=0; i<5; i++) {
+                    this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, archimedes, this.angle + offset));
+                    this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, archimedesReverse, this.angle + offset));
+                    offset += 10;
+                }
+            } else if (this.bPattern == line) {
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle + 120));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle - 120));
+                
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle + 30));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle - 30));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle - 180));
+                
+            } else if (this.bPattern == sideHelix) {
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle + 15));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle - 15));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle + 30));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle - 30));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle + 45));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle - 45));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle + 60));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle - 60));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle + 75));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle - 75));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle + 90));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle - 90));
+                
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle + 135));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle - 135));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle + 150));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle + 150));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle - 165));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle + 165));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle - 180));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, line, this.angle + 180));
+                
+            } else if (this.bPattern == fortress) {
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, fortress, this.angle + 30));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, fortress, this.angle - 30));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, fortress, this.angle + 60));
+                this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, fortress, this.angle - 60));
+
+                let offset = 0;
+
+                for (let i=0; i<5; i++) {
+                    this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, archimedes, this.angle + offset));
+                    this.game.addBullet(new CthulhuBullet(this.game, center, this.y + this.height / 2, 1, archimedesReverse, this.angle + offset));
+                    offset += 10;
+                }
+            }
+
+            this.angle = (this.angle + 72) % 360;
         }
+
 
         // Randomize x-coordinate for minion.
         this.xMinionPosition = Math.floor((Math.random() * PARAMS.WIDTH - 96) + 96);
 
-        this.spawnTrainCreature(100, 2);
+        this.spawnTrainCreature(65, 5);
 
         /* If you want to modify spawn behavior, mess with parameters for spawnBehavior() */
         if (this.typeCounter < 5 || this.spawnTrain) { // Spawn regular minion
@@ -162,31 +228,22 @@ class Cthulhu extends Enemy {
                 this.spawnFrequency = freqStage1;
                 this.spawnMax = maxStage1;
             }
-
-            if (this.bulletPattern.length === 0) {
-                this.bulletPattern.push(archimedesReverse);
-            }
+            
+            this.bPattern = archimedesReverse;
         } else if (this.life >= this.totalLife / 2) {
             this.spawnFrequency = freqStage2;
             this.spawnMax = maxStage2;
-
-            if (this.bulletPattern.length === 1) {
-                this.bulletPattern.push(archimedes);
-            }
+            this.bPattern = line;
         } else if (this.life >= this.totalLife / 4) {
             this.spawnFrequency = freqStage3;
-            this.spawnMax =maxStage3;
-
-            if (this.bulletPattern.length === 2) {
-                this.bulletPattern.push(downSpiral);
-            }
+            this.spawnMax = maxStage3;
+            this.bPattern = sideHelix;
+            this.threshHold = 45;
         } else if (this.life >= this.totalLife / 8) {
             this.spawnFrequency = freqStage4;
             this.spawnMax = maxStage4;
-
-            if (this.bulletPattern.length === 3) {
-                this.bulletPattern.push(downSpiralReverse);
-            }
+            this.bPattern = fortress;
+            
         }
     }
 
@@ -302,33 +359,42 @@ class Cthulhu extends Enemy {
         super.draw(ctx);
 
         let health = 150;
-        let modifier = this.width/2 - health/2;
+        // let modifier = this.width/2 - health/2;
+        let modifier = this.BB.xCenter / 2;
         let distanceFromHead = 10;
 
-        ctx.fillStyle = "black";
-        ctx.fillRect(this.x + modifier -1 , this.y - 1 - distanceFromHead, health + 1, 7);
+
+        let healthCenter = this.BB.xCenter - (health / 2);
+
+        ctx.fillStyle = "white";
+        // ctx.fillRect(this.x, this.y - distanceFromHead, health, 5);
+        ctx.fillRect(healthCenter, this.y - distanceFromHead, health, 5);
+        // ctx.fillRect(this.x + modifier -1 , this.y - 1 - distanceFromHead, health + 1, 7);
         ctx.fillStyle = "red";
-        ctx.fillRect(this.x + modifier, this.y - distanceFromHead, - health * (this.totalLife/5000 - this.life/5000) + health, 5);
+        ctx.fillRect(healthCenter, this.y - distanceFromHead, health * (this.life / this.totalLife), 5);
+        // ctx.fillRect(this.x + modifier, this.y - distanceFromHead, - health * (this.totalLife/5000 - this.life/5000) + health, 5);
         ctx.stroke();
+
+
     }
 }
 
 
 class CthulhuBullet extends Bullet {
-    constructor(game, x, y, scale, callback) {
+    constructor(game, x, y, scale, callback, angle) {
         const radius = 15;
         const bulletSpeed = 3;
         const bulletType = 1; //enemy bullet
         super(game, x, y, scale, radius, bulletSpeed, bulletType);
         this.callback = callback;
-        this.angle = 0;
+        this.angle = angle;
     }
 
     update() {
         this.updateBB();
         super.checkBounds();
 
-        this.angle += 0.04;
+        // this.angle += 0.04;
         this.callback(this);     
     }
 

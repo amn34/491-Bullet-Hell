@@ -23,7 +23,7 @@ class Brain extends Enemy {
         this.score = 250;
 
         this.canShoot = 0;
-        this.threshHold = 36;
+        this.threshHold = 48;
 
         this.currentPattern = downSpiral;
         this.currentBullet = BrainBullet;
@@ -134,13 +134,13 @@ class Brain extends Enemy {
             this.spawnMax = 5;
 
             this.currentPattern = line;
-            this.threshHold = 26;
+            this.threshHold = 36;
         } else if (this.life >= this.totalLife * 1 / 8) { // Life very low - go crazy.
             this.spawnFrequency = 5; // Ultimate
             this.spawnMax = 5; // Ultimate
 
             this.currentPattern = archimedes;
-            this.threshHold = 16;
+            this.threshHold = 30;
         }
 
         // Randomize x-coordinate for minion.

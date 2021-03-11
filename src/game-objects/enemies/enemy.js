@@ -57,7 +57,7 @@ class Enemy {
                     this.game.addParticle(new BulletExplosion(this.game, entity.x, entity.y));
                     this.life -= entity.damage;
                     if (this.life <= 0 || this.life === NaN) {
-                        this.chanceForDrop();
+                        if ( !(this instanceof CthulhuMinion) ) this.chanceForDrop();
                         this.destroy();
 
                         if (this instanceof NoseMinion) {

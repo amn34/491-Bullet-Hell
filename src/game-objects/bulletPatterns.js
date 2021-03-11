@@ -28,6 +28,17 @@ function archimedesReverse(bullet) {
     bullet.y -= Math.sin(bullet.angle) * (bullet.bulletSpeed);
 }
 
+function archimedesAngle(bullet) {
+    bullet.x += Math.cos(bullet.angle) * (bullet.angle);
+    bullet.y += Math.sin(bullet.angle) * (bullet.angle);
+}
+
+function archimedesAngleReverse(bullet) {
+    bullet.x -= Math.cos(bullet.angle) * bullet.angle;
+    bullet.y -= Math.sin(bullet.angle) * bullet.angle;
+}
+
+
 function line(bullet) {
     bullet.x += Math.cos(bullet.angle * Math.PI / 180) * bullet.bulletSpeed;
     bullet.y -= Math.sin(bullet.angle * Math.PI / 180) * bullet.bulletSpeed;

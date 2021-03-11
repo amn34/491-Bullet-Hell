@@ -19,7 +19,7 @@ class CthulhuCrab extends Enemy {
         this.score = 100;
 
         this.canShoot = 0;
-        this.threshHold = 15;
+        this.threshHold = 60;
 
         this.bulletPattern = [downSpiral, downSpiralReverse];
 

@@ -5,6 +5,7 @@ class SpaceLevel extends Level {
 		this.createLevel();
 		super.enemyTotal(this.level);
 
+
 		this.bgMusicAdjust = 0.07;
         super.setBGMusic("./res/music/evapotranspiration.mp3");
 	}
@@ -14,6 +15,7 @@ class SpaceLevel extends Level {
 		if(this.game.timer.getGameTime() - this.startTime == 65) {
 			super.setBGMusic("./res/music/tropicofcancer.mp3");
 		}
+
 	}
 
 	createLevel() {
@@ -25,7 +27,6 @@ class SpaceLevel extends Level {
 			new CthulhuArrow(this.game, 100, -50),
 			new CthulhuArrow(this.game, 500, -50),
 			new CthulhuArrow(this.game, 600, -50)
-
 		];
 		this.level[3] = [
 			new CthulhuArrow(this.game, 100, -50),
