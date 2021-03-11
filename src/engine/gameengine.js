@@ -39,9 +39,6 @@ class GameEngine {
     };
 
     start() {
-
-        ASSET_MANAGER.playBackgroundMusic("./res/music/ror2bg.mp3");
-
         var that = this;
         (function gameLoop() {
             if (!PARAMS.PAUSED) {
