@@ -32,8 +32,6 @@ class Level {
             player.x = PARAMS.WIDTH / 2 - (player.width * player.scale / 2);
             player.y = 740;
         }
-        ASSET_MANAGER.playBackgroundMusic("./res/music/ror2bg.mp3");
-
     }
 
     updateAudio() {

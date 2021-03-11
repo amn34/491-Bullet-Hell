@@ -4,6 +4,7 @@ class CaveLevel extends Level {
 
         this.createLevel()
         super.enemyTotal(this.level);
+        ASSET_MANAGER.playBackgroundMusic("./res/music/ror2bg.mp3");
     }
 
     createLevel() {

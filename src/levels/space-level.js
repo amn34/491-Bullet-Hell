@@ -4,6 +4,7 @@ class SpaceLevel extends Level {
 
 		this.createLevel();
 		super.enemyTotal(this.level);
+		ASSET_MANAGER.playBackgroundMusic("./res/music/Chicks-Pain.mp3");
 	}
 
 	createLevel() {

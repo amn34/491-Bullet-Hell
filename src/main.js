@@ -31,7 +31,7 @@ function loadSounds() {
 	};
 	let mp3s = {
 		"sfx/": ["PickUp"],
-		"music/": ["IntroExtended", "ror2bg"]
+		"music/": ["IntroExtended", "ror2bg", "Chicks-Pain"]
 	};
 	let sounds = [wavs, mp3s];
 
