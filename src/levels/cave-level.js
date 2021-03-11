@@ -4,6 +4,9 @@ class CaveLevel extends Level {
 
         this.createLevel()
         super.enemyTotal(this.level);
+
+        this.bgMusicAdjust = 0;
+        super.setBGMusic("./res/music/ror2bg.mp3");
     }
 
     createLevel() {

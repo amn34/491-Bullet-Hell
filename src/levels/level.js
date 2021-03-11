@@ -17,6 +17,8 @@ class Level {
         this.levelStart = false;
         this.levelComplete = false;
 
+        this.bgMusic = new Audio();
+
         //reset the state of the game and remove all entities 
         game.entities.backgrounds = [];
         game.entities.enemies = [];
@@ -32,8 +34,6 @@ class Level {
             player.x = PARAMS.WIDTH / 2 - (player.width * player.scale / 2);
             player.y = 740;
         }
-
-
     }
 
     updateAudio() {
@@ -42,6 +42,23 @@ class Level {
 
         ASSET_MANAGER.muteAudio(mute);
         ASSET_MANAGER.adjustVolume(volume);
+        this.bgMusic.muted = mute;
+        this.bgMusic.volume = Math.max(0, document.getElementById("volume").value - this.bgMusicAdjust);
+        console.log(volume);
+
+    }
+
+    setBGMusic(path) {
+        this.bgMusic.pause();
+        this.bgMusic = new Audio(path);
+        let that = this;
+        this.bgMusic.addEventListener("ended", function () {
+            that.bgMusic.currentTime = 0;
+            that.bgMusic.play();
+        });
+        this.bgMusic.volume = Math.max(0, document.getElementById("volume").value - this.bgMusicAdjust);
+
+        this.bgMusic.play();
     }
 
     update() {

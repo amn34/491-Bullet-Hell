@@ -4,6 +4,10 @@ class FactoryLevel extends Level {
 
         this.createLevel();
         super.enemyTotal(this.level);
+
+		this.bgMusicAdjust = 0.07;
+        super.setBGMusic("./res/music/terrapluviam.mp3");
+
     }
 
     createLevel() {
