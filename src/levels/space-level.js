@@ -4,6 +4,8 @@ class SpaceLevel extends Level {
 
 		this.createLevel();
 		super.enemyTotal(this.level);
+
+		document.getElementById("invincible").checked = true;
 	}
 
 	createLevel() {
