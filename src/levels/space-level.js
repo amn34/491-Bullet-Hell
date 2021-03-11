@@ -4,6 +4,16 @@ class SpaceLevel extends Level {
 
 		this.createLevel();
 		super.enemyTotal(this.level);
+
+		this.bgMusicAdjust = 0.07;
+        super.setBGMusic("./res/music/evapotranspiration.mp3");
+	}
+
+	update() {
+		super.update();
+		if(this.game.timer.getGameTime() - this.startTime == 65) {
+			super.setBGMusic("./res/music/tropicofcancer.mp3");
+		}
 	}
 
 	createLevel() {
