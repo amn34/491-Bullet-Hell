@@ -50,6 +50,7 @@ class GameEngine {
 
     // TODO - make reset dynamic based upon current level. switch statement ? Or ?
     reset() {
+        this.entities.level.bgMusic.pause();
         this.entities = [];
         this.score = 0;
         this.displayScore.innerHTML = 0;
