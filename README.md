@@ -8,4 +8,5 @@ Ever wanted to play a bullet hell game in space? Well now you can because this g
 - [Anthony Nguyen](https://github.com/amn34)
 
 ## [Game](https://amn34.github.io/491-Bullet-Hell/)
+https://amn34.github.io/491-Bullet-Hell/
 - WASD / Arrow Keys to move
